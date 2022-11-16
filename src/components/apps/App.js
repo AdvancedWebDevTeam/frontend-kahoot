@@ -53,6 +53,7 @@ function App() {
           <Route path="/login" element={<LoginForm onHandleChange={onChangeUser}/>} />
           <Route path="/register" element={<RegisterForm onHandleChange={onChangeUser} />} />
           <Route path="/:id/verify/:token" element={<VerifyForm/>}/>
+          {/* <Route path="/verify" element={<VerifyForm/>}/> */}
         </Routes>
       </div>
       {/* <ReactQueryDevtools  initialIsOpen={true}/> */}
