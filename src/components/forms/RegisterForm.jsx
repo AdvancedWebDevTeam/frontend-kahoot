@@ -15,39 +15,40 @@ export default function RegisterForm(props) {
     const navigate = useNavigate();
 
     const [status, setStatus] = useState(0)
+    const [isVerify, setIsVerify] = useState(-1);
 
-    const {mutate, isLoading} = useMutation(
+    const { mutate, isLoading } = useMutation(
 
         async (data) => {
-            await axios.post('https://my-backend-register.herokuapp.com/users',
-            {
-                username: data.username,
-                email: data.email,
-                password: data.password,
-            })
-            .then(res => {
-                props.onHandleChange(res.data.user)
-                localStorage.setItem("user", JSON.stringify(res.data.user))
-                setStatus(res.status)
-            })
-            .catch(error => {
-                console.log(error)
-                setStatus(error.response.status)
-            })
+            await axios.post(`${process.env.REACT_APP_API_URL}/users`,
+                {
+                    username: data.username,
+                    email: data.email,
+                    password: data.password,
+                })
+                .then(res => {
+                    //localStorage.setItem("user", JSON.stringify(res.data.user))
+                    setStatus(res.status)
+                    setIsVerify(0);
+                })
+                .catch(error => {
+                    console.log(error)
+                    setStatus(error.response.status)
+                })
         }
     )
 
     const onHandleSubmit = (data) => {
-       mutate(data);
+        mutate(data);
     }
 
     const buttonLogin_Clicked = () => {
         navigate("/login");
     }
 
-    if(isLoading){
-        return(<div className='center'><div className='ring'><div className='decorate'>Loading...</div></div></div>)
-    } 
+    // if (isLoading) {
+    //     return (<div className='center'><div className='ring'><div className='decorate'>Loading...</div></div></div>)
+    // }
 
     return (
         <Container type='fluid'>
@@ -79,6 +80,11 @@ export default function RegisterForm(props) {
                     {status === 401 &&
                         <Form.Text className="text-danger">
                             <h4>Your account already exists</h4>
+                        </Form.Text>
+                    }
+                    {isVerify === 0 &&
+                        <Form.Text className="text-danger">
+                            <h4>An email has sent to verify your account</h4>
                         </Form.Text>
                     }
                     <div className='allign'>
