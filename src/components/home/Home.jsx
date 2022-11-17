@@ -2,19 +2,56 @@ import Container from "react-bootstrap/Container";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useQuery } from "react-query";
+import axios from "axios";
 
 import "./Home.css";
 
-export default function Home(props) {
+export default function Home() {
+
+
+  const [user, setUser] = useState({
+    users_id: "",
+    users_name: "",
+    email: ""
+  })
+
   const buttonSignOut_Clicked = () => {
     const newUser = {
       users_id: "",
       users_name: "",
       email: ""
     };
-    localStorage.removeItem("user");
-    props.onHandleChange(newUser);
+    setUser(newUser);
+    localStorage.removeItem("accessToken");
   };
+
+
+  const fetchData = async () => {
+    const token = localStorage.getItem("accessToken");
+    if (token !== null) {
+      const axiosIntance = axios.create({
+        baseURL: `${process.env.REACT_APP_API_URL}`,
+        headers: {
+          'Authorization': `Bearer ${JSON.parse(token)}`
+        }
+      });
+
+      await axiosIntance.get(`/auth/profile`)
+        .then((res) => {
+          console.log(res);
+          setUser(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }
+
+  useEffect(() => {
+    fetchData();
+  }, [])
 
   return (
     <Navbar bg="dark" variant="dark">
@@ -40,7 +77,7 @@ export default function Home(props) {
               Cart
             </Link>
           </Navbar.Brand>
-          {props.user.userID !== "" && (
+          {user.users_id !== "" && (
             <Navbar.Brand>
               <Link className="textstyle" to="/">
                 Account
@@ -50,7 +87,7 @@ export default function Home(props) {
         </Nav>
         <Navbar.Toggle />
         <Navbar.Collapse className="justify-content-end">
-          {props.user.userID !== "" ? (
+          {user.users_id !== "" ? (
             <div>
               <div className="allign1">
                 <Navbar.Brand>

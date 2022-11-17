@@ -7,7 +7,7 @@ import { useMutation } from "react-query";
 import "./Forms.css";
 import { Form, Button, Container } from "react-bootstrap";
 
-export default function RegisterForm(props) {
+export default function RegisterForm() {
   const {
     register,
     handleSubmit,
@@ -26,7 +26,6 @@ export default function RegisterForm(props) {
         password: data.password
       })
       .then((res) => {
-        // localStorage.setItem("user", JSON.stringify(res.data.user))
         setStatus(res.status);
         setIsVerify(0);
       })
@@ -44,9 +43,15 @@ export default function RegisterForm(props) {
     navigate("/login");
   };
 
-  // if (isLoading) {
-  //     return (<div className='center'><div className='ring'><div className='decorate'>Loading...</div></div></div>)
-  // }
+  if (isLoading) {
+    return (
+      <div className="center">
+        <div className="ring">
+          <div className="decorate">Loading...</div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <Container type="fluid">
