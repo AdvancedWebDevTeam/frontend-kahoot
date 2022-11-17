@@ -28,28 +28,6 @@ export default function Home() {
   };
 
 
-
-  // const { isLoading, isFetching, error, data, status } = useQuery(["user"], async () => {
-  //   const token = localStorage.getItem("accessToken");
-  //   if (token !== null) {
-  //     const axiosIntance = axios.create({
-  //       baseURL: `${process.env.REACT_APP_API_URL}`,
-  //       headers: {
-  //         'Authorization': `Bearer ${JSON.parse(token)}`
-  //       }
-  //     });
-
-  //     await axiosIntance.get(`/auth/profile`)
-  //       .then((res) => {
-  //         console.log(res);
-  //         setUser(res.data);
-  //       })
-  //       .catch((err) => {
-  //         console.log(err);
-  //       });
-  //   }
-  // });
-
   const fetchData = async () => {
     const token = localStorage.getItem("accessToken");
     if (token !== null) {

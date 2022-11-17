@@ -44,7 +44,13 @@ export default function RegisterForm() {
   };
 
   if (isLoading) {
-      return (<div className='center'><div className='ring'><div className='decorate'>Loading...</div></div></div>)
+    return (
+      <div className="center">
+        <div className="ring">
+          <div className="decorate">Loading...</div>
+        </div>
+      </div>
+    );
   }
 
   return (
