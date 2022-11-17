@@ -1,8 +1,6 @@
-import { Routes, Route, useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
-
+import { Routes, Route} from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "react-query";
-// import { ReactQueryDevtools } from 'react-query/devtools'
+import { ReactQueryDevtools } from 'react-query/devtools'
 
 import "./App.css";
 import RegisterForm from "../forms/RegisterForm";
@@ -13,58 +11,27 @@ import VerifyForm from "../forms/VerifyForm";
 const queryClient = new QueryClient();
 
 function App() {
-  const navigate = useNavigate();
-
-  const [user, setUser] = useState({
-    userID: "",
-    username: "",
-    email: ""
-  });
-
-  useEffect(() => {
-    const stringUser = localStorage.getItem("user");
-    if (stringUser !== null) {
-      const newUser = JSON.parse(stringUser);
-      const cloneUser = {
-        userID: newUser.users_id,
-        username: newUser.users_name,
-        email: newUser.email
-      };
-      setUser(cloneUser);
-    }
-  }, []);
-
-  const onChangeUser = (newUser) => {
-    const cloneUser = {
-      userID: newUser.users_id,
-      username: newUser.users_name,
-      email: newUser.email
-    };
-    setUser(cloneUser);
-    navigate("/");
-  };
-
+  
   return (
     <QueryClientProvider client={queryClient}>
       <div>
         <Routes>
           <Route
             path="/"
-            element={<Home user={user} onHandleChange={onChangeUser} />}
+            element={<Home />}
           />
           <Route
             path="/login"
-            element={<LoginForm onHandleChange={onChangeUser} />}
+            element={<LoginForm/>}
           />
           <Route
             path="/register"
-            element={<RegisterForm onHandleChange={onChangeUser} />}
+            element={<RegisterForm/>}
           />
           <Route path="/:id/verify/:token" element={<VerifyForm />} />
-          {/* <Route path="/verify" element={<VerifyForm/>}/> */}
         </Routes>
       </div>
-      {/* <ReactQueryDevtools  initialIsOpen={true}/> */}
+      <ReactQueryDevtools  initialIsOpen={false}/>
     </QueryClientProvider>
   );
 }

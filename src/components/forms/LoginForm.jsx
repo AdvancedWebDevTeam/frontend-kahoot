@@ -7,7 +7,7 @@ import { useMutation } from "react-query";
 import "./Forms.css";
 import { Form, Button, Container } from "react-bootstrap";
 
-export default function LoginForm(props) {
+export default function LoginForm() {
   const {
     register,
     handleSubmit,
@@ -24,9 +24,10 @@ export default function LoginForm(props) {
         password: data.password
       })
       .then((res) => {
-        props.onHandleChange(res.data.user);
-        // localStorage.setItem("user", JSON.stringify(res.data.user))
+        console.log(res);
+        localStorage.setItem("accessToken", JSON.stringify(res.data))
         setStatus(res.status);
+        navigate("/");
       })
       .catch((error) => {
         console.log(error);
@@ -87,7 +88,7 @@ export default function LoginForm(props) {
           )}
           {status === 401 && (
             <Form.Text className="text-danger">
-              <h4>Your account already exists</h4>
+              <h4>Your account is not exists</h4>
             </Form.Text>
           )}
           <div className="allign">
