@@ -9,13 +9,11 @@ import axios from "axios";
 import "./Home.css";
 
 export default function Home() {
-
-
   const [user, setUser] = useState({
     users_id: "",
     users_name: "",
     email: ""
-  })
+  });
 
   const buttonSignOut_Clicked = () => {
     const newUser = {
@@ -27,18 +25,18 @@ export default function Home() {
     localStorage.removeItem("accessToken");
   };
 
-
   const fetchData = async () => {
     const token = localStorage.getItem("accessToken");
     if (token !== null) {
       const axiosIntance = axios.create({
         baseURL: `${process.env.REACT_APP_API_URL}`,
         headers: {
-          'Authorization': `Bearer ${JSON.parse(token)}`
+          Authorization: `Bearer ${JSON.parse(token)}`
         }
       });
 
-      await axiosIntance.get(`/auth/profile`)
+      await axiosIntance
+        .get(`/auth/profile`)
         .then((res) => {
           console.log(res);
           setUser(res.data);
@@ -47,11 +45,11 @@ export default function Home() {
           console.log(err);
         });
     }
-  }
+  };
 
   useEffect(() => {
     fetchData();
-  }, [])
+  }, []);
 
   return (
     <Navbar bg="dark" variant="dark">
