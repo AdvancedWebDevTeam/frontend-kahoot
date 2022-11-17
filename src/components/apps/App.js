@@ -2,12 +2,12 @@ import { Routes, Route, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 
 import { QueryClient, QueryClientProvider } from "react-query";
-//import { ReactQueryDevtools } from 'react-query/devtools'
+// import { ReactQueryDevtools } from 'react-query/devtools'
 
-import './App.css';
-import RegisterForm from '../forms/RegisterForm';
-import LoginForm from '../forms/LoginForm';
-import Home from '../home/Home';
+import "./App.css";
+import RegisterForm from "../forms/RegisterForm";
+import LoginForm from "../forms/LoginForm";
+import Home from "../home/Home";
 import VerifyForm from "../forms/VerifyForm";
 
 const queryClient = new QueryClient();
@@ -48,10 +48,19 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <div>
         <Routes>
-          <Route path="/" element={<Home user={user} onHandleChange={onChangeUser}/>} />
-          <Route path="/login" element={<LoginForm onHandleChange={onChangeUser}/>} />
-          <Route path="/register" element={<RegisterForm onHandleChange={onChangeUser} />} />
-          <Route path="/:id/verify/:token" element={<VerifyForm/>}/>
+          <Route
+            path="/"
+            element={<Home user={user} onHandleChange={onChangeUser} />}
+          />
+          <Route
+            path="/login"
+            element={<LoginForm onHandleChange={onChangeUser} />}
+          />
+          <Route
+            path="/register"
+            element={<RegisterForm onHandleChange={onChangeUser} />}
+          />
+          <Route path="/:id/verify/:token" element={<VerifyForm />} />
           {/* <Route path="/verify" element={<VerifyForm/>}/> */}
         </Routes>
       </div>
