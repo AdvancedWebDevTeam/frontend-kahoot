@@ -3,7 +3,6 @@ import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { useQuery } from "react-query";
 import axios from "axios";
 
 import "./Home.css";
@@ -96,7 +95,14 @@ export default function Home() {
               </div>
               <div className="allign1" onClick={buttonSignOut_Clicked}>
                 <Navbar.Text>
-                  <div className="textstyle box1" to="/myaccount">
+                  <div className="textstyle box1">
+                    {user.users_name}
+                  </div>
+                </Navbar.Text>
+              </div>
+              <div className="allign1" onClick={buttonSignOut_Clicked}>
+                <Navbar.Text>
+                  <div className="textstyle box1">
                     Sign Out
                   </div>
                 </Navbar.Text>

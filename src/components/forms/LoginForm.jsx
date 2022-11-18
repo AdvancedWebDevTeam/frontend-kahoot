@@ -43,6 +43,10 @@ export default function LoginForm() {
     navigate("/register");
   };
 
+  const buttonRegisterByGoogle_Clicked = () => {
+    window.open(`${process.env.REACT_APP_API_URL}/auth/login/google`, "_self")
+  };
+
   if (isLoading) {
     return (
       <div className="center">
@@ -108,6 +112,16 @@ export default function LoginForm() {
               onClick={buttonRegister_Clicked}
             >
               Sign Up
+            </Button>
+          </div>
+          <div className="allign">
+            <Button
+              variant="primary"
+              type="button"
+              style={{ marginTop: "10px" }}
+              onClick={buttonRegisterByGoogle_Clicked}
+            >
+              Sign in with google
             </Button>
           </div>
         </Form>

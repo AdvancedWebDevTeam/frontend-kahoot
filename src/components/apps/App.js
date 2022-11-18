@@ -7,6 +7,8 @@ import RegisterForm from "../forms/RegisterForm";
 import LoginForm from "../forms/LoginForm";
 import Home from "../home/Home";
 import VerifyForm from "../forms/VerifyForm";
+import LoginGoogleSuccess from "../forms/GoogleSuccess";
+import LoginGoogleFail from "../forms/GoogleFailure";
 
 const queryClient = new QueryClient();
 
@@ -19,6 +21,8 @@ function App() {
           <Route path="/login" element={<LoginForm />} />
           <Route path="/register" element={<RegisterForm />} />
           <Route path="/:id/verify/:token" element={<VerifyForm />} />
+          <Route path="/login/google/success/:token" element={<LoginGoogleSuccess />} />
+          <Route path="/login/google/failure" element={<LoginGoogleFail />} />
         </Routes>
       </div>
       <ReactQueryDevtools initialIsOpen={false} />
