@@ -6,6 +6,9 @@
     text-decoration: underline;
 }
 
+.textstyledrop{
+    text-decoration-color: white;
+}
 .box1 {
     padding: 10px;
     border: 1px transparent;
@@ -20,4 +23,12 @@
 .allign1 {
     display: inline-flex;
     justify-content: flex-end;
+}
+
+.box5 {
+    padding: 10px;
+    border: 1px transparent;
+    background-color: white;
+    border-radius: 10%;
+    text-decoration-color: white;
 }
