@@ -16,7 +16,7 @@ export default function LoginGoogleSuccess()
             alt="success_img"
             style={{ margin: "0px auto", display: "block" }}
           />
-          <h1 style={{ textAlign: "center" }}>An email has sent to verify</h1>
+          <h1 style={{ textAlign: "center" }}>Login successfully</h1>
           <Link to="/">
             <button
               className="green_btn"
