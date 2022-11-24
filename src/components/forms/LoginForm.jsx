@@ -44,7 +44,7 @@ export default function LoginForm() {
   };
 
   const buttonRegisterByGoogle_Clicked = () => {
-    window.open(`${process.env.REACT_APP_API_URL}/auth/login/google`, "_self")
+    window.open(`${process.env.REACT_APP_API_URL}/auth/login/google`, "_self");
   };
 
   if (isLoading) {
