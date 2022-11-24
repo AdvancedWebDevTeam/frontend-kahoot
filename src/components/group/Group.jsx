@@ -13,7 +13,7 @@ function Group() {
         <Col lg={3} sm={4} xs={5} style={{ backgroundColor: "green" }}>
           <GroupSideBar className="group-sidebar" />
         </Col>
-        <Col lg={9} sm={8} xs={7} style={{ backgroundColor: "black" }}>
+        <Col lg={9} sm={8} xs={7} style={{ backgroundColor: "whitesmoke" }}>
           <Routes className="group-body">
             <Route path="/" element={<MyGroup />} />
             <Route path=":groupId" element={<GroupDetail />} />
