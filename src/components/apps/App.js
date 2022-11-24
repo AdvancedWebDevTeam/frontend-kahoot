@@ -1,6 +1,5 @@
 import { Routes, Route } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "react-query";
-import { ReactQueryDevtools } from "react-query/devtools";
 
 import "./App.css";
 import RegisterForm from "../forms/RegisterForm";
@@ -17,15 +16,17 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <div>
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/*" element={<Home />} />
           <Route path="/login" element={<LoginForm />} />
           <Route path="/register" element={<RegisterForm />} />
           <Route path="/:id/verify/:token" element={<VerifyForm />} />
-          <Route path="/login/google/success/:token" element={<LoginGoogleSuccess />} />
+          <Route
+            path="/login/google/success/:token"
+            element={<LoginGoogleSuccess />}
+          />
           <Route path="/login/google/failure" element={<LoginGoogleFail />} />
         </Routes>
       </div>
-      <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   );
 }

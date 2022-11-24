@@ -1,10 +1,13 @@
 import Container from "react-bootstrap/Container";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
-import { Link } from "react-router-dom";
+import { Link, Routes, Route } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
 
+import Welcome from "./Welcome";
+import Profile from "../profile/Profile";
+import Group from "../group/Group";
 import "./Home.css";
 
 export default function Home() {
@@ -51,79 +54,89 @@ export default function Home() {
   }, []);
 
   return (
-    <Navbar bg="dark" variant="dark">
-      <Container>
-        <Navbar.Brand>
-          <Link to="/">
-            <img alt="home" src="home-button.png" style={{ height: "50px" }} />
-          </Link>
-        </Navbar.Brand>
-        <Nav className="me-auto">
+    <div>
+      <Navbar bg="dark" variant="dark">
+        <Container>
           <Navbar.Brand>
-            <Link className="textstyle" to="/">
-              Home
+            <Link to="/">
+              <img
+                alt="home"
+                src="home-button.png"
+                style={{ height: "50px" }}
+              />
             </Link>
           </Navbar.Brand>
-          <Navbar.Brand>
-            <Link className="textstyle" to="/">
-              Product
-            </Link>
-          </Navbar.Brand>
-          <Navbar.Brand>
-            <Link className="textstyle" to="/">
-              Cart
-            </Link>
-          </Navbar.Brand>
-          {user.users_id !== "" && (
+          <Nav className="me-auto">
             <Navbar.Brand>
               <Link className="textstyle" to="/">
-                Account
+                Home
               </Link>
             </Navbar.Brand>
-          )}
-        </Nav>
-        <Navbar.Toggle />
-        <Navbar.Collapse className="justify-content-end">
-          {user.users_id !== "" ? (
-            <div>
-              <div className="allign1">
-                <Navbar.Brand>
-                  <Link to="/">
-                    <img alt="user" src="user.png" style={{ height: "30px" }} />
+            {user.users_id !== "" && (
+              <Navbar.Brand>
+                <Link className="textstyle" to="/group">
+                  My group
+                </Link>
+              </Navbar.Brand>
+            )}
+            {user.users_id !== "" && (
+              <Navbar.Brand>
+                <Link className="textstyle" to="/profile">
+                  My profile
+                </Link>
+              </Navbar.Brand>
+            )}
+          </Nav>
+          <Navbar.Toggle />
+          <Navbar.Collapse className="justify-content-end">
+            {user.users_id !== "" ? (
+              <div>
+                <div className="allign1">
+                  <Navbar.Brand>
+                    <Link to="/">
+                      <img
+                        alt="user"
+                        src="user.png"
+                        style={{ height: "30px" }}
+                      />
+                    </Link>
+                  </Navbar.Brand>
+                </div>
+                <div className="allign1" onClick={buttonSignOut_Clicked}>
+                  <Navbar.Text>
+                    <div className="textstyle box1">{user.users_name}</div>
+                  </Navbar.Text>
+                </div>
+                <div className="allign1" onClick={buttonSignOut_Clicked}>
+                  <Navbar.Text>
+                    <div className="textstyle box1">Sign Out</div>
+                  </Navbar.Text>
+                </div>
+              </div>
+            ) : (
+              <div>
+                <Navbar.Text>
+                  <Link className="textstyle box1" to="/login">
+                    Sign In
                   </Link>
-                </Navbar.Brand>
-              </div>
-              <div className="allign1" onClick={buttonSignOut_Clicked}>
+                </Navbar.Text>
                 <Navbar.Text>
-                  <div className="textstyle box1">
-                    {user.users_name}
-                  </div>
+                  <Link className="textstyle box1" to="/register">
+                    Sign Up
+                  </Link>
                 </Navbar.Text>
               </div>
-              <div className="allign1" onClick={buttonSignOut_Clicked}>
-                <Navbar.Text>
-                  <div className="textstyle box1">
-                    Sign Out
-                  </div>
-                </Navbar.Text>
-              </div>
-            </div>
-          ) : (
-            <div>
-              <Navbar.Text>
-                <Link className="textstyle box1" to="/login">
-                  Sign In
-                </Link>
-              </Navbar.Text>
-              <Navbar.Text>
-                <Link className="textstyle box1" to="/register">
-                  Sign Up
-                </Link>
-              </Navbar.Text>
-            </div>
-          )}
-        </Navbar.Collapse>
-      </Container>
-    </Navbar>
+            )}
+          </Navbar.Collapse>
+        </Container>
+      </Navbar>
+      <div>
+        <Routes>
+          <Route index element={<Welcome />} />
+          <Route path="group" element={<Group />} />
+          <Route path="profile" element={<Profile />} />
+        </Routes>
+      </div>
+    </div>
   );
 }
