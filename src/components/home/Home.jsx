@@ -130,13 +130,11 @@ export default function Home() {
           </Navbar.Collapse>
         </Container>
       </Navbar>
-      <div>
-        <Routes>
-          <Route index element={<Welcome />} />
-          <Route path="group" element={<Group />} />
-          <Route path="profile" element={<Profile />} />
-        </Routes>
-      </div>
+      <Routes>
+        <Route index element={<Welcome />} />
+        <Route path="group" element={<Group />} />
+        <Route path="profile" element={<Profile />} />
+      </Routes>
     </div>
   );
 }
