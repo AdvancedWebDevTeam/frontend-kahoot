@@ -95,16 +95,12 @@ export default function Home() {
               </div>
               <div className="allign1" onClick={buttonSignOut_Clicked}>
                 <Navbar.Text>
-                  <div className="textstyle box1">
-                    {user.users_name}
-                  </div>
+                  <div className="textstyle box1">{user.users_name}</div>
                 </Navbar.Text>
               </div>
               <div className="allign1" onClick={buttonSignOut_Clicked}>
                 <Navbar.Text>
-                  <div className="textstyle box1">
-                    Sign Out
-                  </div>
+                  <div className="textstyle box1">Sign Out</div>
                 </Navbar.Text>
               </div>
             </div>
