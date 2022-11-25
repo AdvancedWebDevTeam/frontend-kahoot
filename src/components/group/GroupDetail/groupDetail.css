@@ -1,0 +1,21 @@
+.group-detail .title {
+    font-weight: bold;
+    margin-bottom: .5rem;
+}
+
+.member-list {
+    margin-top: 2rem;
+}
+
+.member-list .title {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-bottom: .5rem;
+}
+
+.member-list .button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: .5em;
+}

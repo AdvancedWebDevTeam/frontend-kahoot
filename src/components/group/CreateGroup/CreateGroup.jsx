@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { Alert, Button, Form } from "react-bootstrap";
 import { getPotentialMembersForOwner } from "../../../usecase/group";
 import { postCreateGroupRequest } from "../../../fetch/groupFetch";
+import "./createGroup.css";
 
 function getUserId() {
   const accessToken = localStorage.getItem("accessToken");
@@ -55,7 +56,7 @@ function CreateGroup() {
   );
 
   return (
-    <>
+    <div className="create-group">
       <h1>Create new group</h1>
       {showAlert && alert}
       <Form>
@@ -93,11 +94,15 @@ function CreateGroup() {
             multiple
           </Form.Text>
         </Form.Group>
-        <Button variant="primary" type="submit" onClick={submitGroup}>
+        <Button
+          variant="primary"
+          type="submit"
+          onClick={!isCreatingGroup ? submitGroup : null}
+        >
           {isCreatingGroup ? "Creating..." : "Create Group"}
         </Button>
       </Form>
-    </>
+    </div>
   );
 }
 

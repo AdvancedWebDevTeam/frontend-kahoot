@@ -2,11 +2,27 @@
     margin: 1rem 3rem;
 }
 
+/* SIDEBAR ********************************/
+
 .group-sidebar .nav{
     display: flex;
     flex-direction: column;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+
+.group-sidebar .nav-item:first-child{
+    margin-bottom: .5rem;
 }
 
 .group-sidebar .nav * {
     border-bottom: 1px solid #ccc;
+}
+
+.group-sidebar .nav-item:last-child * {
+    border-bottom: none;
+}
+
+/* GROUP BODY *****************************/
+.group-body {
+    margin-left: 1rem;
 }
