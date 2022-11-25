@@ -1,18 +1,24 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Card, Nav } from "react-bootstrap";
+import "./group.css";
 
-function GroupSideBar() {
+function GroupSideBar({ groups }) {
   return (
-    <div style={{ backgroundColor: "red" }}>
-      <ul>
-        <li>
-          <Link to="create">Create New Group</Link>
-        </li>
-        <li>
-          <Link to="">My Group</Link>
-        </li>
-      </ul>
-    </div>
+    <Card className="group-sidebar">
+      <Nav variant="pills">
+        <Nav.Item>
+          <Nav.Link eventKey="create">Create New Group</Nav.Link>
+        </Nav.Item>
+        <Nav.Item>
+          <Nav.Link eventKey="my-groups">My Group</Nav.Link>
+        </Nav.Item>
+        {groups.map((group) => (
+          <Nav.Item key={group.groups_id}>
+            <Nav.Link eventKey={group.groups_id}>{group.groups_name}</Nav.Link>
+          </Nav.Item>
+        ))}
+      </Nav>
+    </Card>
   );
 }
 

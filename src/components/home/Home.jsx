@@ -132,7 +132,7 @@ export default function Home() {
       </Navbar>
       <Routes>
         <Route index element={<Welcome />} />
-        <Route path="group/*" element={<Group />} />
+        <Route path="group/*" element={<Group userId={user.users_id} />} />
         <Route path="profile" element={<Profile />} />
       </Routes>
     </div>

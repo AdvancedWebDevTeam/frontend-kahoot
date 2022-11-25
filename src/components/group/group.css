@@ -1,0 +1,12 @@
+.group-container {
+    margin: 1rem 3rem;
+}
+
+.group-sidebar .nav{
+    display: flex;
+    flex-direction: column;
+}
+
+.group-sidebar .nav * {
+    border-bottom: 1px solid #ccc;
+}
