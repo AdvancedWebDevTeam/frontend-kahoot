@@ -4,11 +4,12 @@ import Nav from "react-bootstrap/Nav";
 import { Link, Routes, Route } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 import Welcome from "./Welcome";
-import Profile from "../profile/Profile";
 import Group from "../group/Group";
 import "./Home.css";
+import UserProfile from "../profile/UserProfile";
 
 export default function Home() {
   const [user, setUser] = useState({
@@ -16,6 +17,8 @@ export default function Home() {
     users_name: "",
     email: ""
   });
+
+  const navigate = useNavigate();
 
   const buttonSignOut_Clicked = () => {
     const newUser = {
@@ -25,6 +28,7 @@ export default function Home() {
     };
     setUser(newUser);
     localStorage.removeItem("accessToken");
+    navigate("/");
   };
 
   const fetchData = async () => {
@@ -134,7 +138,7 @@ export default function Home() {
         <Routes>
           <Route index element={<Welcome />} />
           <Route path="group" element={<Group />} />
-          <Route path="profile" element={<Profile />} />
+          <Route path="profile" element={<UserProfile />} />
         </Routes>
       </div>
     </div>
