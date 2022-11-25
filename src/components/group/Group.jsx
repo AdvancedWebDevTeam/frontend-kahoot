@@ -26,7 +26,7 @@ function Group() {
       <Tab.Container
         fluid="lg"
         id="list-group-tabs"
-        defaultActiveKey="my-group"
+        defaultActiveKey="my-groups"
       >
         <Row>
           <Col lg={2} sm={3} xs={4} style={{ backgroundColor: "green" }}>
@@ -34,11 +34,11 @@ function Group() {
           </Col>
           <Col lg={10} sm={9} xs={8} style={{ backgroundColor: "yellowgreen" }}>
             <Tab.Content className="group-body">
-              <Tab.Pane eventKey="my-groups">
-                <MyGroup />
-              </Tab.Pane>
               <Tab.Pane eventKey="create">
                 <CreateGroup />
+              </Tab.Pane>
+              <Tab.Pane eventKey="my-groups">
+                <MyGroup />
               </Tab.Pane>
               {groups.map((group) => (
                 <Tab.Pane key={group.groups_id} eventKey={group.groups_id}>
