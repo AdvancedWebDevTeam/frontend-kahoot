@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
 import { Col, Tab, Row } from "react-bootstrap";
-  import CreateGroup from "./CreateGroup/CreateGroup";
+import CreateGroup from "./CreateGroup/CreateGroup";
 import { getGroupsOfUser } from "../../fetch/groupFetch";
 import GroupSideBar from "./GroupSideBar";
 import "./group.css";
 import GroupDetail from "./GroupDetail/GroupDetail";
-import {getAllAvailableRoles} from "../../fetch/roleFetch";
+import { getAllAvailableRoles } from "../../fetch/roleFetch";
 
 function getUserId() {
   const accessToken = localStorage.getItem("accessToken");
@@ -37,6 +37,7 @@ function Group() {
           <Col lg={2} sm={3} xs={4}>
             <GroupSideBar groups={groups} />
           </Col>
+
           <Col lg={6} sm={9} xs={8}>
             <Tab.Content className="group-body">
               <Tab.Pane eventKey="create">
