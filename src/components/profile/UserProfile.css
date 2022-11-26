@@ -1,0 +1,20 @@
+Form {
+    margin: 10px;
+}
+
+.card {
+    margin-left: 10%;
+    margin-right: 10%;
+}
+
+.class {
+    height: auto;
+}
+
+.group{
+    position: relative;
+}
+
+.cancel {
+    margin-left: 5px;
+}
