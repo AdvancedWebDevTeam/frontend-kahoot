@@ -5,6 +5,7 @@ import { getGroupsOfUser } from "../../fetch/groupFetch";
 import GroupSideBar from "./GroupSideBar";
 import "./group.css";
 import GroupDetail from "./GroupDetail/GroupDetail";
+import {getAllAvailableRoles} from "../../fetch/roleFetch";
 
 function getUserId() {
   const accessToken = localStorage.getItem("accessToken");
@@ -13,11 +14,15 @@ function getUserId() {
 
 function Group() {
   const [groups, setGroups] = React.useState([]);
+  const [availableRoles, setAvailableRoles] = React.useState([]);
 
   useEffect(() => {
     const userId = getUserId();
     getGroupsOfUser(userId).then((data) => {
       setGroups(data);
+    });
+    getAllAvailableRoles().then((roles) => {
+      setAvailableRoles(roles);
     });
   }, []);
 
@@ -40,7 +45,7 @@ function Group() {
               <Tab.Pane eventKey="my-groups" />
               {groups.map((group) => (
                 <Tab.Pane key={group.groups_id} eventKey={group.groups_id}>
-                  <GroupDetail group={group} />
+                  <GroupDetail group={group} roles={availableRoles} />
                 </Tab.Pane>
               ))}
             </Tab.Content>
