@@ -16,6 +16,8 @@ function Group() {
   const [groups, setGroups] = React.useState([]);
   const [availableRoles, setAvailableRoles] = React.useState([]);
 
+  console.debug(groups);
+
   useEffect(() => {
     const userId = getUserId();
     getGroupsOfUser(userId).then((data) => {
@@ -25,6 +27,10 @@ function Group() {
       setAvailableRoles(roles);
     });
   }, []);
+
+  function addNewGroup(group) {
+    setGroups([...groups, group]);
+  }
 
   return (
     <div className="group-container">
@@ -41,7 +47,7 @@ function Group() {
           <Col lg={6} sm={9} xs={8}>
             <Tab.Content className="group-body">
               <Tab.Pane eventKey="create">
-                <CreateGroup />
+                <CreateGroup addNewGroup={addNewGroup} />
               </Tab.Pane>
               <Tab.Pane eventKey="my-groups" />
               {groups.map((group) => (

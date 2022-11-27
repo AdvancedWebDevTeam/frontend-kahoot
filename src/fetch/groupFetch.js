@@ -14,7 +14,7 @@ export async function postCreateGroupRequest(groupName, ownerId, memberIds) {
     memberIds
   };
   const result = await postRequest(url, data);
-  return result.status === 200;
+  return { status: result.status === 200, data: result.data };
 }
 
 export async function getMembersInGroup(groupId) {
