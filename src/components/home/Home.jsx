@@ -139,7 +139,7 @@ export default function Home() {
         <Route index element={<Welcome />} />
         <Route path="group/*" element={<Group userId={user.users_id} />} />
         <Route path="profile" element={<UserProfile />} />
-		<Route path="*" element={<JoinGroup />} />
+		    <Route path="*" element={<JoinGroup />} />
       </Routes>
     </div>
   );
