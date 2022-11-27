@@ -10,6 +10,7 @@ import Welcome from "./Welcome";
 import Group from "../group/Group";
 import "./Home.css";
 import UserProfile from "../profile/UserProfile";
+import JoinGroup from "../joinGroup/JoinGroup";
 
 export default function Home() {
   const [user, setUser] = useState({
@@ -139,6 +140,7 @@ export default function Home() {
           <Route index element={<Welcome />} />
           <Route path="group" element={<Group />} />
           <Route path="profile" element={<UserProfile />} />
+          <Route path="*" element={<JoinGroup />} />
         </Routes>
       </div>
     </div>

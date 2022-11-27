@@ -33,7 +33,7 @@ export default function UserProfile() {
     groups_name: [],
     roles_name: [],
     users_name: "",
-    users_passwords: ""
+    users_password: ""
   });
 
   const fetchData = async () => {
@@ -61,12 +61,12 @@ export default function UserProfile() {
     await axios
       .put(`${process.env.REACT_APP_API_URL}/users/update`, {
         users_id: parseJwt(token).user.users_id,
-        users_name: data.username,
-        email: data.email
+        users_name: data.users_name,
+        email: data.email,
+        password: data.users_password === undefined ? user.users_password : data.users_password
       })
-      .then((res) => {
+      .then(() => {
         window.location.reload(false);
-        console.log(res);
       })
       .catch((error) => {
         console.log(error);
@@ -82,8 +82,12 @@ export default function UserProfile() {
   const {
     register: register2,
     handleSubmit: handleSubmit2,
+    watch,
     formState: { errors: errors2 }
   } = useForm();
+
+  const nowChangePassword = watch("NewPs", "");
+  const inputPassword = watch("nowPassword","");
 
   const onSubmit = (data) => {
     setIsEdit(!isEdit);
@@ -99,10 +103,24 @@ export default function UserProfile() {
   }
 
   const onChangePassword = (data) => {
-    console.log(data);
     let newUserInfo = user;
-    newUserInfo.password = data.CfNewPs;
+    newUserInfo.users_password = data.CfNewPs;
     setUser(newUserInfo);
+    mutate(user);
+  }
+
+  const checkPassword = async(value) => {
+    const token = localStorage.getItem("accessToken");
+    await axios
+      .get(`${process.env.REACT_APP_API_URL}/users/${parseJwt(token).user.users_id}/checkpass`, {
+        password: "1234"
+      })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   return (
@@ -115,16 +133,14 @@ export default function UserProfile() {
               <Form.Group className="mb-3">
                 <Form.Label>Username: </Form.Label>
                 {isEdit === false ? <Form.Control
-                  id="username"
-                  type="username"
+                  id="users_name"
                   placeholder="Enter username"
                   value={user.users_name}
-                  {...register("username", { required: true })}
+                  {...register("users_name", { required: true })}
                   disabled /> : <Form.Control
-                  id="username"
-                  type="username"
+                  id="users_name"
                   placeholder="Enter username"
-                  {...register("username", { required: true })}
+                  {...register("users_name", { required: true })}
                 />}
               </Form.Group>
               <Form.Group className="mb-3">
@@ -186,15 +202,17 @@ export default function UserProfile() {
               <Form onSubmit={handleSubmit2((data) => onChangePassword(data))}>
                 <Row>
                   <Col>
-                    <Form.Control placeholder="Enter now password" />
+                    <Form.Control placeholder="Enter now password" id="nowPassword" {...register2("nowPassword", { required: "Please fill out your now password", validate: value => true || "Does not match!" })} />
+                    <Form.Text className='error'>{errors2.nowPassword?.message}</Form.Text>
                   </Col>
                   <Col>
-                    <Form.Control placeholder="Enter new password" id="NewPs" {...register2("NewPs", { required: true })}/>
+                    <Form.Control placeholder="Enter new password" id="NewPs" {...register2("NewPs", { required: "You must specify a new password" })} />
                   </Col>
                   <Col>
                     <Form.Control placeholder="Confirm new password" id="CfNewPs"
                       type="CfNewPs"
-                      {...register2("CfNewPs", { required: true })} />
+                      {...register2("CfNewPs", { required: "You must specify a confirm new password", validate: value => value === nowChangePassword || "Does not match with new password!" })} />
+                    <Form.Text className='error'>{errors2.CfNewPs?.message}</Form.Text>
                   </Col>
                 </Row>
                 <Button variant="primary" type='submit'>

@@ -18,3 +18,7 @@ Form {
 .cancel {
     margin-left: 5px;
 }
+
+.error {
+    color: #bf1650;
+}
