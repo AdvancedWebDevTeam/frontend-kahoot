@@ -9,6 +9,7 @@ function GroupSideBar({ groups }) {
       <Nav variant="pills">
         <Nav.Item>
           <Nav.Link eventKey="create">Create New Group</Nav.Link>
+          <Nav.Link eventKey="join">Invite User to Group</Nav.Link>
         </Nav.Item>
         <Nav.Item>
           <Nav.Link eventKey="my-groups" disabled>

@@ -6,6 +6,7 @@ import GroupSideBar from "./GroupSideBar";
 import "./group.css";
 import GroupDetail from "./GroupDetail/GroupDetail";
 import { getAllAvailableRoles } from "../../fetch/roleFetch";
+import JoinGroup from "./joinGroup/JoinGroup";
 
 function getUserId() {
   const accessToken = localStorage.getItem("accessToken");
@@ -42,6 +43,9 @@ function Group() {
             <Tab.Content className="group-body">
               <Tab.Pane eventKey="create">
                 <CreateGroup />
+              </Tab.Pane>
+              <Tab.Pane eventKey="join">
+                <JoinGroup />
               </Tab.Pane>
               <Tab.Pane eventKey="my-groups" />
               {groups.map((group) => (

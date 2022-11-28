@@ -12,7 +12,7 @@ function parseJwt(token) {
     return JSON.parse(jsonPayload);
 }
 
-export default function JoinGroup() {
+export default function JoinGroupByLink() {
     const navigate = useNavigate();
 
     const handle = async () => {

@@ -2,7 +2,6 @@ import React from 'react'
 import './UserProfile.css'
 import axios from "axios";
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useMutation } from "react-query";
 import { Form, Button, Row, Col, Accordion, Container } from "react-bootstrap";
@@ -19,19 +18,12 @@ function parseJwt(token) {
 }
 
 export default function UserProfile() {
-
   const [isEdit, setIsEdit] = useState(false);
 
-  const navigate = useNavigate();
-
-  const [listGroup, setListGroup] = useState([<></>]);
+  const [isMatch, setIsMatch] = useState(false);
 
   const [user, setUser] = useState({
-    create_at: "",
     email: "",
-    expire_at: "",
-    groups_name: [],
-    roles_name: [],
     users_name: "",
     users_password: ""
   });
@@ -40,13 +32,6 @@ export default function UserProfile() {
     const token = localStorage.getItem("accessToken");
     await axios.get(`${process.env.REACT_APP_API_URL}/users/${parseJwt(token).user.users_id}`).then((response) => {
       setUser(response.data);
-      if (response.data.groups_name[0] !== null) {
-        let result = [];
-        for (let i = 0; i < response.data.groups_name.length; i++) {
-          result.push(<p>{response.data.groups_name[i] + ' <=> ' + response.data.roles_name[i]}</p>);
-        }
-        setListGroup(result);
-      }
     }).catch((err) => {
       console.log(err);
     });
@@ -87,7 +72,6 @@ export default function UserProfile() {
   } = useForm();
 
   const nowChangePassword = watch("NewPs", "");
-  const inputPassword = watch("nowPassword","");
 
   const onSubmit = (data) => {
     setIsEdit(!isEdit);
@@ -109,14 +93,18 @@ export default function UserProfile() {
     mutate(user);
   }
 
-  const checkPassword = async(value) => {
+  const checkPassword = async (e) => {
     const token = localStorage.getItem("accessToken");
     await axios
-      .get(`${process.env.REACT_APP_API_URL}/users/${parseJwt(token).user.users_id}/checkpass`, {
-        password: "1234"
-      })
+      .get(`${process.env.REACT_APP_API_URL}/users/${parseJwt(token).user.users_id}/${e.target.value}`)
       .then((res) => {
-        console.log(res);
+        console.log(res.data);
+        if (res.data === 'Right password') {
+          setIsMatch(true);
+        }
+        else {
+          setIsMatch(false);
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -160,26 +148,6 @@ export default function UserProfile() {
                   )
                 }
               </Form.Group>
-              <Row className='mb-3'>
-                <Form.Group as={Col}>
-                  <Form.Label>Create/Update At:</Form.Label>
-                  <Form.Control type="createAt" placeholder="Date" disabled value={user.create_at} />
-                </Form.Group>
-                <Form.Group as={Col}>
-                  <Form.Label>Expire At:</Form.Label>
-                  <Form.Control type="Expire At" placeholder="Date" disabled value={user.expire_at} />
-                </Form.Group>
-              </Row>
-              <Form.Group className="mb-3">
-                <Accordion className='group'>
-                  <Accordion.Item eventKey="0">
-                    <Accordion.Header>Group-Role</Accordion.Header>
-                    <Accordion.Body>
-                      {listGroup}
-                    </Accordion.Body>
-                  </Accordion.Item>
-                </Accordion>
-              </Form.Group>
               {isEdit === true ? (<>
                 <Button variant="primary" type="submit">
                   Submit
@@ -202,11 +170,12 @@ export default function UserProfile() {
               <Form onSubmit={handleSubmit2((data) => onChangePassword(data))}>
                 <Row>
                   <Col>
-                    <Form.Control placeholder="Enter now password" id="nowPassword" {...register2("nowPassword", { required: "Please fill out your now password", validate: value => true || "Does not match!" })} />
+                    <Form.Control placeholder="Enter now password" id="nowPassword" {...register2("nowPassword", { required: "Please fill out your now password", validate: value => isMatch || "Does not match!" })} onChange={(e) => checkPassword(e)} />
                     <Form.Text className='error'>{errors2.nowPassword?.message}</Form.Text>
                   </Col>
                   <Col>
                     <Form.Control placeholder="Enter new password" id="NewPs" {...register2("NewPs", { required: "You must specify a new password" })} />
+                    <Form.Text className='error'>{errors2.NewPs?.message}</Form.Text>
                   </Col>
                   <Col>
                     <Form.Control placeholder="Confirm new password" id="CfNewPs"
