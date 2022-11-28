@@ -22,3 +22,7 @@ Form {
 .error {
     color: #bf1650;
 }
+
+.btnChangePass {
+    margin-top: 10px;
+}

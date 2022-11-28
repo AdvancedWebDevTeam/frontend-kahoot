@@ -9,7 +9,7 @@ function getUserId() {
   return JSON.parse(atob(accessToken.split(".")[1])).user.users_id;
 }
 
-function CreateGroup() {
+function CreateGroup({ addNewGroup }) {
   const currentUserId = getUserId();
   const [groupName, setGroupName] = React.useState("");
   const [members, setMembers] = React.useState([]);
@@ -32,11 +32,12 @@ function CreateGroup() {
     e.preventDefault();
     setIsCreatingGroup(true);
     postCreateGroupRequest(groupName, currentUserId, members)
-      .then((success) => {
+      .then((result) => {
         setIsCreatingGroup(false);
-        setFailedToCreateGroup(!success);
+        setFailedToCreateGroup(!result.status);
         setShowAlert(true);
         resetForm();
+        addNewGroup(result.data);
       })
       .catch(() => {
         setIsCreatingGroup(false);
