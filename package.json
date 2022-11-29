@@ -2,6 +2,7 @@
   "name": "register-frontend",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://AdvancedWebDevTeam.github.io/frontend-kahoot",
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
@@ -26,7 +27,9 @@
     "_lint": "eslint --config ./.eslintrc.json --ext js --ext jsx --ext tsx --ext ts",
     "lint": "npm run _lint -- ./src/",
     "lint:fix": "npm run _lint -- --fix ./src/",
-    "format": "prettier --write './**/*.{js,jsx,ts,tsx,css,scss,md,json}"
+    "format": "prettier --write './**/*.{js,jsx,ts,tsx,css,scss,md,json}",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
@@ -55,6 +58,7 @@
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-react": "^7.31.10",
     "eslint-plugin-react-hooks": "^4.6.0",
+    "gh-pages": "^4.0.0",
     "prettier": "^2.7.1"
   }
 }
