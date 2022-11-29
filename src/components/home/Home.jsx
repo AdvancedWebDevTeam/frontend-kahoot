@@ -12,6 +12,9 @@ import "./Home.css";
 import UserProfile from "../profile/UserProfile";
 import JoinGroupByLink from "../group/joinGroup/JoinGroupByLink";
 
+import userImage from "./user.png";
+import homeImage from "./home-button.png";
+
 export default function Home() {
   const [user, setUser] = useState({
     users_id: "",
@@ -66,7 +69,7 @@ export default function Home() {
             <Link to="/">
               <img
                 alt="home"
-                src="home-button.png"
+                src={homeImage}
                 style={{ height: "50px" }}
               />
             </Link>
@@ -96,17 +99,6 @@ export default function Home() {
           <Navbar.Collapse className="justify-content-end">
             {user.users_id !== "" ? (
               <div>
-                <div className="allign1">
-                  <Navbar.Brand>
-                    <Link to="/">
-                      <img
-                        alt="user"
-                        src="user.png"
-                        style={{ height: "30px" }}
-                      />
-                    </Link>
-                  </Navbar.Brand>
-                </div>
                 <div className="allign1" onClick={buttonSignOut_Clicked}>
                   <Navbar.Text>
                     <div className="textstyle box1">{user.users_name}</div>
