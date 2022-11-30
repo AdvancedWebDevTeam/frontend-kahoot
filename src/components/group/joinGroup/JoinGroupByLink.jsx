@@ -23,12 +23,12 @@ export default function JoinGroupByLink() {
         else {
             await axios.put(`${process.env.REACT_APP_API_URL}/roles${window.location.pathname}/${parseJwt(token).user.users_id}`)
                 .then((response) => {
-                    if (response.data.roles_id !== 3) {
+                    if (response.data.alreadyJoined) {
                         alert("You were in the group!");
                     } else {
                         alert("JoinGroup success!");
                     }
-                    navigate("/");
+                    navigate("/group");
                 }).catch((error) => console.error(error));
         }
     };
@@ -37,6 +37,6 @@ export default function JoinGroupByLink() {
         handle();
     }, []);
     return (
-        <div>JoinGroup</div>
+        <div></div>
     )
 }
