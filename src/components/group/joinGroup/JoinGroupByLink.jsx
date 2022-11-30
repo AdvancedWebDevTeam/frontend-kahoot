@@ -29,7 +29,9 @@ export default function JoinGroupByLink() {
                         alert("JoinGroup success!");
                     }
                     navigate("/group");
-                }).catch((error) => console.error(error));
+                }).catch((error) => {
+                    console.error(error)
+                });
         }
     };
 
