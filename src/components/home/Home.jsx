@@ -12,6 +12,7 @@ import "./Home.css";
 import UserProfile from "../profile/UserProfile";
 import JoinGroupByLink from "../group/joinGroup/JoinGroupByLink";
 import Presentation from "../presentation/Presentation";
+import Slide from "../slide/Slide";
 
 import userImage from "./user.png";
 import homeImage from "./home-button.png";
@@ -133,6 +134,7 @@ export default function Home() {
         <Route path="profile" element={<UserProfile />} />
 		    <Route path="invite/*" element={<JoinGroupByLink />} />
         <Route path="presentations/:groupId" element={<Presentation/>} />
+        <Route path="slides/:groupId/show/:presentId" element={<Slide/>} />
       </Routes>
     </div>
   );

@@ -57,6 +57,7 @@ export default function Presentation() {
 
     const ViewSlide_Click = (e) => {
         console.log(e.target.id);
+        navigate( `/slides/${params.groupId}/show/${e.target.id}`)
     }
 
     const Delete_Click = (e) => {
