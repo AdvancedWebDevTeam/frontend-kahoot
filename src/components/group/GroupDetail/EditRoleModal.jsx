@@ -37,7 +37,7 @@ function EditRoleModal({
             const isSelected = role.roles_name === roleName;
             return (
               <option
-                key={role.rols_id}
+                key={role.roles_id}
                 value={role.roles_name}
                 selected={isSelected}
               >
