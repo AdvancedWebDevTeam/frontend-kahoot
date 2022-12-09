@@ -50,8 +50,6 @@
 
 .boxSlide4 {
     width: fit-content;
-    border-bottom: 1px solid gray;
-    border-right: 1px solid gray;
     padding: 5px;
   }
 
@@ -63,8 +61,6 @@
 
 .clicked {
     width: fit-content;
-    border-bottom: 1px solid gray;
-    border-right: 1px solid gray;
     padding: 5px;
     background-color: lightblue;
   }
@@ -73,4 +69,16 @@
     .box {
       width: 100%;
     }
+}
+
+.boxSlide5 {
+  height: 1000px;
+  border-right: 1px solid rgb(72, 68, 68);
+  border-left: 1px solid rgb(72, 68, 68);
+}
+
+@media screen and (max-width: 860px) {
+  .box {
+    width: 100%;
+  }
 }
