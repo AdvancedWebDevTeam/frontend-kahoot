@@ -4,18 +4,24 @@ import { getMembersInGroup } from "../../../fetch/groupFetch";
 import { capitalizeFirstLetter } from "../../../util/string";
 import "./groupDetail.css";
 import { requestMemberRoleChange } from "../../../fetch/roleFetch";
-import { Alert } from "react-bootstrap";
+import { Alert, Button } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 
 function GroupDetail({ group, roles }) {
   const [members, setMembers] = React.useState([]);
   const [showAlert, setShowAlert] = React.useState(false);
   const [alertSuccess, setAlertSuccess] = React.useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     getMembersInGroup(group.groups_id).then((data) => {
       setMembers(data);
     });
   }, []);
+
+  const viewPresent_Click = () => {
+    navigate(`/presentations/${group.groups_id}`);
+  }
 
   function changeMemberRole(userId, newRoleName) {
     const { roles_id } = roles.find((role) => role.roles_name === newRoleName);
@@ -64,6 +70,9 @@ function GroupDetail({ group, roles }) {
         changeMemberRole={changeMemberRole}
         roles={roles}
       />
+      <div>
+        <Button onClick={viewPresent_Click}>View Presetation</Button>
+      </div>
     </div>
   );
 }

@@ -11,6 +11,7 @@ import Group from "../group/Group";
 import "./Home.css";
 import UserProfile from "../profile/UserProfile";
 import JoinGroupByLink from "../group/joinGroup/JoinGroupByLink";
+import Presentation from "../presentation/Presentation";
 
 import userImage from "./user.png";
 import homeImage from "./home-button.png";
@@ -48,7 +49,6 @@ export default function Home() {
       await axiosIntance
         .get(`/auth/profile`)
         .then((res) => {
-          console.log(res);
           setUser(res.data);
         })
         .catch((err) => {
@@ -132,6 +132,7 @@ export default function Home() {
         <Route path="group/*" element={<Group userId={user.users_id} />} />
         <Route path="profile" element={<UserProfile />} />
 		    <Route path="invite/*" element={<JoinGroupByLink />} />
+        <Route path="presentations/:groupId" element={<Presentation/>} />
       </Routes>
     </div>
   );
