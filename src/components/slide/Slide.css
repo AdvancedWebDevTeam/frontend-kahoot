@@ -1,0 +1,76 @@
+.boxSlide {
+    height: 400px; 
+    width: 600px; 
+    border: 2px solid rgb(72, 68, 68);
+    margin: auto;
+  }
+
+  @media screen and (max-width: 860px) {
+    .box {
+      width: 100%;
+    }
+}
+
+.boxSlide1 {
+    width: 100%;
+    border: transparent;
+    padding: 10px;
+    border-bottom: 1px solid gray;
+  }
+
+  @media screen and (max-width: 860px) {
+    .box {
+      width: 100%;
+    }
+}
+
+.boxSlide2 {
+    height: 100px; 
+    width: 150px;
+    border: 2px solid rgb(72, 68, 68);
+  }
+
+  @media screen and (max-width: 860px) {
+    .box {
+      width: 100%;
+    }
+}
+
+.boxSlide3 {
+    height: 1000px;
+    border-right: 1px solid rgb(72, 68, 68);
+    border-left: 1px solid rgb(72, 68, 68);
+  }
+
+  @media screen and (max-width: 860px) {
+    .box {
+      width: 100%;
+    }
+}
+
+.boxSlide4 {
+    width: fit-content;
+    border-bottom: 1px solid gray;
+    border-right: 1px solid gray;
+    padding: 5px;
+  }
+
+  @media screen and (max-width: 860px) {
+    .box {
+      width: 100%;
+    }
+}
+
+.clicked {
+    width: fit-content;
+    border-bottom: 1px solid gray;
+    border-right: 1px solid gray;
+    padding: 5px;
+    background-color: lightblue;
+  }
+
+  @media screen and (max-width: 860px) {
+    .box {
+      width: 100%;
+    }
+}
