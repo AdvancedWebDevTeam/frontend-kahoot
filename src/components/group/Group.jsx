@@ -17,8 +17,6 @@ function Group() {
   const [groups, setGroups] = React.useState([]);
   const [availableRoles, setAvailableRoles] = React.useState([]);
 
-  console.debug(groups);
-
   useEffect(() => {
     const userId = getUserId();
     getGroupsOfUser(userId).then((data) => {

@@ -1,13 +1,12 @@
 .boxSlide {
-    height: 400px; 
-    width: 600px; 
-    border: 2px solid rgb(72, 68, 68);
-    margin: auto;
-  }
+    min-height: 100%;
+    border: 1px solid rgb(110, 110, 110);
+    background-color: whitesmoke;
+}
 
-  @media screen and (max-width: 860px) {
+@media screen and (max-width: 860px) {
     .box {
-      width: 100%;
+        width: 100%;
     }
 }
 
@@ -15,47 +14,58 @@
     width: 100%;
     border: transparent;
     padding: 10px;
-    border-bottom: 1px solid gray;
-  }
+    border-bottom: 2px solid rgb(224, 224, 224);
+}
 
-  @media screen and (max-width: 860px) {
+@media screen and (max-width: 860px) {
     .box {
-      width: 100%;
+        width: 100%;
     }
 }
 
+.boxSlide1 .title {
+    font-size: 1.6rem;
+    font-weight: bold;
+    color: rgb(72, 68, 68);
+}
+
+.boxSlide1 .credit {
+    font-size: 1rem;
+    color: rgb(72, 68, 68);
+    font-style: italic;
+}
+
 .boxSlide2 {
-    height: 100px; 
+    height: 100px;
     width: 150px;
     border: 2px solid rgb(72, 68, 68);
-  }
+}
 
-  @media screen and (max-width: 860px) {
+@media screen and (max-width: 860px) {
     .box {
-      width: 100%;
+        width: 100%;
     }
 }
 
 .boxSlide3 {
-    height: 1000px;
-    border-right: 1px solid rgb(72, 68, 68);
-    border-left: 1px solid rgb(72, 68, 68);
-  }
+    max-height: 100vh;
+    overflow: scroll;
+}
 
-  @media screen and (max-width: 860px) {
+@media screen and (max-width: 860px) {
     .box {
-      width: 100%;
+        width: 100%;
     }
 }
 
 .boxSlide4 {
     width: fit-content;
     padding: 5px;
-  }
+}
 
-  @media screen and (max-width: 860px) {
+@media screen and (max-width: 860px) {
     .box {
-      width: 100%;
+        width: 100%;
     }
 }
 
@@ -63,22 +73,30 @@
     width: fit-content;
     padding: 5px;
     background-color: lightblue;
-  }
+}
 
-  @media screen and (max-width: 860px) {
+@media screen and (max-width: 860px) {
     .box {
-      width: 100%;
+        width: 100%;
     }
 }
 
 .boxSlide5 {
-  height: 1000px;
-  border-right: 1px solid rgb(72, 68, 68);
-  border-left: 1px solid rgb(72, 68, 68);
+    max-height: 100vh;
+    overflow: scroll;
 }
 
 @media screen and (max-width: 860px) {
-  .box {
-    width: 100%;
-  }
+    .box {
+        width: 100%;
+    }
+}
+
+.slide-header {
+    display: flex;
+    gap: 1rem;
+}
+
+.slide-header .back-btn {
+    font-size: 1.2rem;
 }
