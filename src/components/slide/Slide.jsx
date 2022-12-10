@@ -4,30 +4,20 @@ import { Button, Modal, Form, Alert } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import {getAllSlides, getNameAndCreator } from "../../fetch/slideFetch"
+import {getAllSlides, getNameAndCreator, getSlideTypes } from "../../fetch/slideFetch"
 import EditSlide from "./EditSlide";
 import MainView from "./MainView";
 import "./Slide.css";
 
 export default function Slide()
 {
-
     const [listOfSlides, setListOfSlides] = useState([]);
     const [presentInfo, setPresentInfo] = useState([]);
+    const [listOfSlideTypes, setListofSlideTypes] = useState([]);
     const [selectedIndex, setSelectedIndex] = useState(0);
-    const [selectedItem, setSelectedItem] = useState();
-
-
-    
-    //const [mainView, setMainView] = useState()
-
     
     const handleClick = (index) => {
         setSelectedIndex(index);
-    }
-
-    const handleChange = (e) => {
-        setTypeName(e.target.value);
     }
 
     const navigate = useNavigate();
@@ -35,6 +25,14 @@ export default function Slide()
 
     useEffect(() => {
         
+        getSlideTypes()
+        .then((data) => {
+            setListofSlideTypes(data);
+        })
+        .catch((err) => {
+            console.log(err);
+        })
+
         getNameAndCreator(params.presentId)
         .then((data) => {
             setPresentInfo(data);
@@ -51,9 +49,6 @@ export default function Slide()
             console.log(err);
         })
     }, [])
-
-    //setMainView(data[0]);
-    //setTypeName(data[0]["type.types_name"]);
 
     const BackToPresent_Click = () => {
         navigate(`/presentations/${params.groupId}`);
@@ -78,7 +73,12 @@ export default function Slide()
                                         <h5>{i + 1}</h5>
                                     </div>
                                     <div className="boxSlide2" style={{display: "inline-block", marginLeft: "3px"}}>
-                                        <h5>{slide.slides_id}</h5>
+                                        {slide.types_id === 0 &&
+                                            <div>Blank</div>
+                                        }
+                                        {slide.types_id === 1 &&
+                                            <div>Multiple</div>
+                                        }
                                     </div>
                                 </div>
                             )}
@@ -94,6 +94,7 @@ export default function Slide()
                         <EditSlide
                         selectedIndex={selectedIndex}
                         listOfSlides={listOfSlides}
+                        listOfSlideTypes={listOfSlideTypes}
                         />
                     </Col>
                 </Row>
