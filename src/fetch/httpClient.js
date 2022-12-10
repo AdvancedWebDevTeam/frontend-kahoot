@@ -11,3 +11,8 @@ export async function postRequest(url, data) {
 export async function putRequest(url, data) {
   return axios.put(url, data);
 }
+
+export async function patchRequest(url, data) {
+  return axios.patch(url, data);
+}
+
