@@ -7,12 +7,10 @@ import "./Slide.css";
 export default function EditSlide({ selectedIndex, listOfSlides, listOfSlideTypes }) {
     const [typeName, setTypeName] = useState();
     const [typeId, setTypeId] = useState(0);
-    const [content, setContent] = useState(null);
+    const [content, setContent] = useState({});
     
     const {
-        register,
         handleSubmit,
-        formState: { errors }
     } = useForm();
 
     const len = listOfSlides.length;
@@ -26,19 +24,31 @@ export default function EditSlide({ selectedIndex, listOfSlides, listOfSlideType
                 setContent(JSON.parse(listOfSlides[selectedIndex].content));
             }
             else {
-                setContent(null);
+                setContent({});
             }
         }
 
     }, [len, selectedIndex])
 
     const handleChange = (e) => {
-        setTypeName(e.target.value)
-        setTypeId(e.target.options.selectedIndex)
+        setTypeName(e.target.value);
+        setTypeId(e.target.options.selectedIndex);
+        listOfSlides[selectedIndex]["type.types_name"] = e.target.value;
+        listOfSlides[selectedIndex].types_id = e.target.options.selectedIndex;
     }
 
     const onHandleSubmit = (data) => {
 
+    }
+
+    const AddOption_click = () => {
+        const newContent = {...content};
+        let newKey = `option${Object.keys(newContent).length + 1}`;
+        if(newContent.hasOwnProperty(newKey)){
+            newKey = newKey + " duplicate";
+        }
+        newContent[newKey] = 0;
+        setContent(newContent);  
     }
 
     const DeleteOption_click = (e) => {
@@ -79,6 +89,7 @@ export default function EditSlide({ selectedIndex, listOfSlides, listOfSlideType
                                                             <InputGroup.Text>{content[keyName]}</InputGroup.Text>
                                                             <Form.Control
                                                                 placeholder={keyName}
+                                                                id={keyName}
                                                             />
                                                             <Button onClick={e => DeleteOption_click(e)} id={keyName} variant="outline-secondary">
                                                                 Delete
@@ -88,7 +99,7 @@ export default function EditSlide({ selectedIndex, listOfSlides, listOfSlideType
                                                 ))}
                                             </div>
                                         }
-                                        <Button style={{ marginTop: "5px" }}>Add option</Button>
+                                        <Button onClick={AddOption_click} style={{ marginTop: "5px" }}>Add option</Button>
                                     </div>
                                 }
                             </div>
