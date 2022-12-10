@@ -15,7 +15,7 @@ import {
     Legend,
 } from "chart.js";
 
-import { getAllSlides, getNameAndCreator, getSlideTypes } from "../../fetch/slideFetch"
+import { getAllSlides, getNameAndCreator, getSlideTypes, addSlide } from "../../fetch/slideFetch"
 import EditSlide from "./EditSlide";
 import MainView from "./MainView";
 import "./Slide.css";
@@ -34,6 +34,7 @@ export default function Slide() {
     const [presentInfo, setPresentInfo] = useState([]);
     const [listOfSlideTypes, setListofSlideTypes] = useState([]);
     const [selectedIndex, setSelectedIndex] = useState(0);
+    const [isFetch, setIsFetch] = useState(false);
 
     const handleClick = (index) => {
         setSelectedIndex(index);
@@ -43,22 +44,25 @@ export default function Slide() {
     const params = useParams();
 
     useEffect(() => {
-
-        getSlideTypes()
+        if(listOfSlideTypes.length === 0){
+            getSlideTypes()
             .then((data) => {
                 setListofSlideTypes(data);
             })
             .catch((err) => {
                 console.log(err);
             })
+        }
 
-        getNameAndCreator(params.presentId)
+        if(presentInfo.length === 0){
+            getNameAndCreator(params.presentId)
             .then((data) => {
                 setPresentInfo(data);
             })
             .catch((err) => {
                 console.log(err)
             })
+        }
 
         getAllSlides(params.presentId)
             .then((data) => {
@@ -67,11 +71,31 @@ export default function Slide() {
             .catch((err) => {
                 console.log(err);
             })
-    }, [])
+    }, [isFetch])
 
     const BackToPresent_Click = () => {
         navigate(`/presentations/${params.groupId}`);
     }
+
+    const onChangeType = (typeId, typeName) => {
+        listOfSlides[selectedIndex].types_id = typeId;
+        listOfSlides[selectedIndex]["type.types_name"] = typeName;
+    }
+
+    const CreateSlide_Click = () => {
+        addSlide(params.presentId, 0, "")
+        .catch((err) => {
+            console.log(err);
+        });
+        const flag = !isFetch;
+        setIsFetch(flag)
+    }
+
+    const FetchListOfSlide = () => {
+        const flag = !isFetch
+        setIsFetch(flag);
+    }
+
     return (
         <div>
             <div className="boxSlide1">
@@ -79,7 +103,7 @@ export default function Slide() {
                 <span style={{ marginLeft: "8px" }}>Created by {presentInfo["user.users_name"]}</span>
             </div>
             <div className="boxSlide1">
-                <Button style={{ marginLeft: "5px" }}>Create slide</Button>
+                <Button style={{ marginLeft: "5px" }} onClick={CreateSlide_Click}>Create slide</Button>
                 <Button style={{ marginLeft: "5px" }} onClick={BackToPresent_Click}>Back to presentation</Button>
             </div>
             <div>
@@ -97,26 +121,23 @@ export default function Slide() {
                                         }
                                         {slide.types_id === 1 &&
                                             <Bar
-                                                width={"5%"}
+                                                width={"150px"}
+                                                height={"100px"}
                                                 data={{
-                                                    labels: [
-                                                        "Africa",
-                                                        "Asia",
-                                                        "Euruesd",
-                                                        "adsad",
-                                                    ],
+                                                    labels: Object.keys(listOfSlides[i].options),
                                                     datasets: [
                                                         {
-                                                            label: "",
+                                                            label: listOfSlides[i].question,
                                                             backgroundColor: [
                                                                 "#3e95cd",
                                                                 "#8e5ea2",
                                                             ],
-                                                            data: [0, 12, 2, 1]
+                                                            data: Object.values(listOfSlides[i].options)
                                                         }
                                                     ]
                                                 }}
                                                 options={{
+                                                    responsive: true,
                                                     legend: { display: false },
                                                     maintainAspectRatio: false
                                                 }}
@@ -138,6 +159,8 @@ export default function Slide() {
                             selectedIndex={selectedIndex}
                             listOfSlides={listOfSlides}
                             listOfSlideTypes={listOfSlideTypes}
+                            onChangeType={onChangeType}
+                            FetchListOfSlide={FetchListOfSlide}
                         />
                     </Col>
                 </Row>

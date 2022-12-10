@@ -1,16 +1,20 @@
+import axios from "axios";
 import { useState, useEffect } from "react";
 import { Button, Modal, Form, Alert, InputGroup } from "react-bootstrap";
 import { useForm } from "react-hook-form";
-
+import { updateSlide } from "../../fetch/slideFetch"
 import "./Slide.css";
 
-export default function EditSlide({ selectedIndex, listOfSlides, listOfSlideTypes }) {
+export default function EditSlide({ selectedIndex, listOfSlides, listOfSlideTypes, onChangeType, FetchListOfSlide }) {
     const [typeName, setTypeName] = useState();
     const [typeId, setTypeId] = useState(0);
-    const [content, setContent] = useState({});
-    
+    const [options, setOptions] = useState({});
+    const [question, setQuestion] = useState("");
+
     const {
+        register,
         handleSubmit,
+        formState: { errors }
     } = useForm();
 
     const len = listOfSlides.length;
@@ -20,11 +24,13 @@ export default function EditSlide({ selectedIndex, listOfSlides, listOfSlideType
         if (len > 0) {
             setTypeName(listOfSlides[selectedIndex]["type.types_name"])
             setTypeId(listOfSlides[selectedIndex].types_id)
-            if (listOfSlides[selectedIndex].content !== null) {
-                setContent(JSON.parse(listOfSlides[selectedIndex].content));
+            if (listOfSlides[selectedIndex].content !== "") {
+                setOptions(listOfSlides[selectedIndex].options)
+                setQuestion(listOfSlides[selectedIndex].question)
             }
             else {
-                setContent({});
+                setOptions({})
+                setQuestion("")
             }
         }
 
@@ -33,28 +39,64 @@ export default function EditSlide({ selectedIndex, listOfSlides, listOfSlideType
     const handleChange = (e) => {
         setTypeName(e.target.value);
         setTypeId(e.target.options.selectedIndex);
-        listOfSlides[selectedIndex]["type.types_name"] = e.target.value;
-        listOfSlides[selectedIndex].types_id = e.target.options.selectedIndex;
+        onChangeType(e.target.options.selectedIndex, e.target.value);
     }
 
     const onHandleSubmit = (data) => {
+        const newData = {...data};
 
+        switch(typeId)
+        {
+            case 0:
+                {            
+                    updateSlide(listOfSlides[selectedIndex].slides_id, listOfSlides[selectedIndex].presents_id, typeId, "")
+                    .catch((err) => {
+                        console.log(err);
+                    })
+
+                    break;
+                }
+            case 1:
+                {
+                    const question = newData.question;
+                    delete newData["question"];
+                    const content = {question: question};
+            
+                    Object.values(newData).map((option) => {
+                        if(option !== ""){
+                            content[option] = 0;
+                        }
+                    });
+            
+                    updateSlide(listOfSlides[selectedIndex].slides_id, listOfSlides[selectedIndex].presents_id, typeId, JSON.stringify(content))
+                    .catch((err) => {
+                        console.log(err);
+                    })
+                }
+        }
+        data = {};
+        
+        setOptions({});
+        setQuestion("");
+        FetchListOfSlide()
     }
 
     const AddOption_click = () => {
-        const newContent = {...content};
-        let newKey = `option${Object.keys(newContent).length + 1}`;
-        if(newContent.hasOwnProperty(newKey)){
+        const newOptions = { ...options };
+
+        let newKey = `option${Object.keys(newOptions).length + 1}`;
+
+        if (newOptions.hasOwnProperty(newKey)) {
             newKey = newKey + " duplicate";
         }
-        newContent[newKey] = 0;
-        setContent(newContent);  
+        newOptions[newKey] = 0;
+        setOptions(newOptions);
     }
 
     const DeleteOption_click = (e) => {
-        const newContent = {...content};
-        delete newContent[e.target.id];
-        setContent(newContent);
+        const newOptions = { ...options };
+        delete newOptions[e.target.id];
+        setOptions(newOptions);
     }
 
     return (
@@ -80,25 +122,42 @@ export default function EditSlide({ selectedIndex, listOfSlides, listOfSlideType
                         {listOfSlides[selectedIndex].types_id === 1 &&
                             <div>
                                 {typeId === 1 &&
-                                    <div>
-                                        {content !== null &&
-                                            <div style={{ marginTop: "10px" }}>
-                                                {Object.keys(content).map((keyName, i) => (
-                                                    <div key={i}>
-                                                        <InputGroup className="mb-3">
-                                                            <InputGroup.Text>{content[keyName]}</InputGroup.Text>
-                                                            <Form.Control
-                                                                placeholder={keyName}
-                                                                id={keyName}
-                                                            />
-                                                            <Button onClick={e => DeleteOption_click(e)} id={keyName} variant="outline-secondary">
-                                                                Delete
-                                                            </Button>
-                                                        </InputGroup>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        }
+                                    <div style={{ marginTop: "10px" }}>
+                                        <InputGroup className="mb-3">
+                                            <InputGroup.Text>Question</InputGroup.Text>
+                                            <Form.Control
+                                                placeholder={question}
+                                                id="question"
+                                                {...register("question", { required: true })}
+                                            />
+                                        </InputGroup>
+                                        {errors.question?.type === "required" && (
+                                            <Form.Text className="text-danger">
+                                                <div>required</div>
+                                            </Form.Text>
+                                        )}
+                                        <div style={{ marginTop: "10px" }}>
+                                            {Object.keys(options).map((keyName, i) => (
+                                                <div key={i}>
+                                                    <InputGroup className="mb-3">
+                                                        <InputGroup.Text>{options[keyName]}</InputGroup.Text>
+                                                        <Form.Control
+                                                            placeholder={keyName}
+                                                            id={keyName}
+                                                            {...register(`${keyName}`, { required: true })}
+                                                        />
+                                                        <Button onClick={e => DeleteOption_click(e)} id={keyName} variant="outline-secondary">
+                                                            Delete
+                                                        </Button>
+                                                    </InputGroup>
+                                                    {errors[keyName]?.type === "required" && (
+                                                            <Form.Text className="text-danger">
+                                                                <div>required</div>
+                                                            </Form.Text>
+                                                    )}
+                                                </div>
+                                            ))}
+                                        </div>
                                         <Button onClick={AddOption_click} style={{ marginTop: "5px" }}>Add option</Button>
                                     </div>
                                 }
