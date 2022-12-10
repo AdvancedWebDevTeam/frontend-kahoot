@@ -78,8 +78,12 @@ export default function Slide() {
     }
 
     const onChangeType = (typeId, typeName) => {
-        listOfSlides[selectedIndex].types_id = typeId;
-        listOfSlides[selectedIndex]["type.types_name"] = typeName;
+        const newList = [...listOfSlides]
+
+        newList[selectedIndex].types_id = typeId;
+        newList[selectedIndex]["type.types_name"] = typeName;
+
+        setListOfSlides(newList);
     }
 
     const CreateSlide_Click = () => {
@@ -104,7 +108,9 @@ export default function Slide() {
             </div>
             <div className="boxSlide1">
                 <Button style={{ marginLeft: "5px" }} onClick={CreateSlide_Click}>Create slide</Button>
-                <Button style={{ marginLeft: "5px" }} onClick={BackToPresent_Click}>Back to presentation</Button>
+                <Button style={{ marginLeft: "5px" }}>Delete slide</Button>
+                <Button style={{ marginLeft: "5px", float: "right" }} onClick={BackToPresent_Click}>Back to presentation</Button>
+                <Button style={{ marginLeft: "5px", float: "right" }}>Present slides</Button>
             </div>
             <div>
                 <Row>

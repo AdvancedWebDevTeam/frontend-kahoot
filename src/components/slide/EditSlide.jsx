@@ -14,6 +14,7 @@ export default function EditSlide({ selectedIndex, listOfSlides, listOfSlideType
     const {
         register,
         handleSubmit,
+        reset,
         formState: { errors }
     } = useForm();
 
@@ -33,7 +34,6 @@ export default function EditSlide({ selectedIndex, listOfSlides, listOfSlideType
                 setQuestion("")
             }
         }
-
     }, [len, selectedIndex])
 
     const handleChange = (e) => {
@@ -43,16 +43,15 @@ export default function EditSlide({ selectedIndex, listOfSlides, listOfSlideType
     }
 
     const onHandleSubmit = (data) => {
-        const newData = {...data};
+        const newData = { ...data };
 
-        switch(typeId)
-        {
+        switch (typeId) {
             case 0:
-                {            
+                {
                     updateSlide(listOfSlides[selectedIndex].slides_id, listOfSlides[selectedIndex].presents_id, typeId, "")
-                    .catch((err) => {
-                        console.log(err);
-                    })
+                        .catch((err) => {
+                            console.log(err);
+                        })
 
                     break;
                 }
@@ -60,24 +59,20 @@ export default function EditSlide({ selectedIndex, listOfSlides, listOfSlideType
                 {
                     const question = newData.question;
                     delete newData["question"];
-                    const content = {question: question};
-            
+                    const content = { question: question };
+
                     Object.values(newData).map((option) => {
-                        if(option !== ""){
+                        if (option !== "") {
                             content[option] = 0;
                         }
                     });
-            
+
                     updateSlide(listOfSlides[selectedIndex].slides_id, listOfSlides[selectedIndex].presents_id, typeId, JSON.stringify(content))
-                    .catch((err) => {
-                        console.log(err);
-                    })
+                        .catch((err) => {
+                            console.log(err);
+                        })
                 }
         }
-        data = {};
-        
-        setOptions({});
-        setQuestion("");
         FetchListOfSlide()
     }
 
@@ -99,72 +94,92 @@ export default function EditSlide({ selectedIndex, listOfSlides, listOfSlideType
         setOptions(newOptions);
     }
 
+    const ResetButton_click = () => {
+        switch (typeId) 
+        {
+            case 0:
+                {
+                    break;
+                }
+            case 1:
+                {
+                    reset();
+                    break;
+                }
+        }
+    }
+
     return (
         <div className="boxSlide3">
             {len > 0 &&
-                <Form onSubmit={handleSubmit((data) => onHandleSubmit(data))}>
-                    <Button type="submit" style={{ marginTop: "5px" }}>Save changes</Button>
-                    <Form.Select value={typeName} onChange={e => handleChange(e)} style={{ marginTop: "5px" }}>
-                        {listOfSlideTypes.map((type) => {
-                            const isSelected = type.types_name === typeName;
-                            return (
-                                <option
-                                    key={type.types_id}
-                                    value={type.types_name}
-                                    selected={isSelected}
-                                >
-                                    {type.types_name}
-                                </option>
-                            );
-                        })}
-                    </Form.Select>
-                    <div>
-                        {listOfSlides[selectedIndex].types_id === 1 &&
-                            <div>
-                                {typeId === 1 &&
-                                    <div style={{ marginTop: "10px" }}>
-                                        <InputGroup className="mb-3">
-                                            <InputGroup.Text>Question</InputGroup.Text>
-                                            <Form.Control
-                                                placeholder={question}
-                                                id="question"
-                                                {...register("question", { required: true })}
-                                            />
-                                        </InputGroup>
-                                        {errors.question?.type === "required" && (
-                                            <Form.Text className="text-danger">
-                                                <div>required</div>
-                                            </Form.Text>
-                                        )}
+                <div>
+                    <Form onSubmit={handleSubmit((data) => onHandleSubmit(data))}>
+                        <Button type="submit" style={{ marginTop: "5px" }}>Save changes</Button>
+                        <Button onClick={ResetButton_click} style={{ marginTop: "5px", marginLeft: "5px" }}>Reset form</Button>
+                        <Form.Select value={typeName} onChange={e => handleChange(e)} style={{ marginTop: "5px" }}>
+                            {listOfSlideTypes.map((type) => {
+                                const isSelected = type.types_name === typeName;
+                                return (
+                                    <option
+                                        key={type.types_id}
+                                        value={type.types_name}
+                                        selected={isSelected}
+                                    >
+                                        {type.types_name}
+                                    </option>
+                                );
+                            })}
+                        </Form.Select>
+                        <div>
+                            {listOfSlides[selectedIndex].types_id === 1 &&
+                                <div>
+                                    {typeId === 1 &&
                                         <div style={{ marginTop: "10px" }}>
-                                            {Object.keys(options).map((keyName, i) => (
-                                                <div key={i}>
-                                                    <InputGroup className="mb-3">
-                                                        <InputGroup.Text>{options[keyName]}</InputGroup.Text>
-                                                        <Form.Control
-                                                            placeholder={keyName}
-                                                            id={keyName}
-                                                            {...register(`${keyName}`, { required: true })}
-                                                        />
-                                                        <Button onClick={e => DeleteOption_click(e)} id={keyName} variant="outline-secondary">
-                                                            Delete
-                                                        </Button>
-                                                    </InputGroup>
-                                                    {errors[keyName]?.type === "required" && (
+                                            <InputGroup className="mb-3">
+                                                <InputGroup.Text>Question</InputGroup.Text>
+                                                <Form.Control
+                                                    placeholder={question}
+                                                    id="question"
+                                                    defaultValue=""
+                                                    {...register("question", { required: true })}
+                                                />
+                                            </InputGroup>
+                                            {errors.question?.type === "required" && (
+                                                <Form.Text className="text-danger">
+                                                    <div>required</div>
+                                                </Form.Text>
+                                            )}
+                                            <div style={{ marginTop: "10px" }}>
+                                                {Object.keys(options).map((keyName, i) => (
+                                                    <div key={i}>
+                                                        <InputGroup className="mb-3">
+                                                            <InputGroup.Text>{options[keyName]}</InputGroup.Text>
+                                                            <Form.Control
+                                                                placeholder={keyName}
+                                                                id={keyName}
+                                                                defaultValue=""
+                                                                {...register(`${keyName}`, { required: true })}
+                                                            />
+                                                            <Button onClick={e => DeleteOption_click(e)} id={keyName} variant="outline-secondary">
+                                                                Delete
+                                                            </Button>
+                                                        </InputGroup>
+                                                        {errors[keyName]?.type === "required" && (
                                                             <Form.Text className="text-danger">
                                                                 <div>required</div>
                                                             </Form.Text>
-                                                    )}
-                                                </div>
-                                            ))}
+                                                        )}
+                                                    </div>
+                                                ))}
+                                            </div>
+                                            <Button onClick={AddOption_click} style={{ marginTop: "5px" }}>Add option</Button> 
                                         </div>
-                                        <Button onClick={AddOption_click} style={{ marginTop: "5px" }}>Add option</Button>
-                                    </div>
-                                }
-                            </div>
-                        }
-                    </div>
-                </Form>
+                                    }
+                                </div>
+                            }
+                        </div>
+                    </Form>
+                </div>
             }
         </div>
     )
