@@ -3,12 +3,18 @@ import { Button, Modal, Form, Alert } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import {
+  BsEyeFill,
+  BsFillCaretLeftFill,
+  BsFillTrashFill,
+  BsPencilSquare
+} from "react-icons/bs";
+import {
   getAllPresentationsInGroup,
   getUserRoleInGroup,
   addNewPresentation
 } from "../../fetch/presentationFetch";
-
 import "./Presentation.css";
+import EditPresentationModal from "./EditPresentationModal";
 
 function getUserId() {
   const accessToken = localStorage.getItem("accessToken");
@@ -24,6 +30,8 @@ export default function Presentation() {
   const [listOfPresent, setListOfPresent] = useState([]);
   const [alertSuccess, setAlertSuccess] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editTarget, setEditTarget] = useState({});
 
   const navigate = useNavigate();
   const params = useParams();
@@ -44,11 +52,11 @@ export default function Presentation() {
     await addNewPresentation(params.groupId, currentUserId, data.presentName);
 
     await getAllPresentationsInGroup(params.groupId)
-      .then((data) => {
-        setListOfPresent(data);
+      .then((returnData) => {
+        setListOfPresent(returnData);
         setAlertSuccess(true);
       })
-      .catch((err) => {
+      .catch(() => {
         setAlertSuccess(false);
       });
 
@@ -56,11 +64,11 @@ export default function Presentation() {
     setShowAlert(true);
   };
 
-  const ViewSlide_Click = (e) => {
+  const viewSlideClick = (e) => {
     navigate(`/slides/${params.groupId}/show/${e.target.id}`);
   };
 
-  const Delete_Click = (e) => {
+  const deleteClick = (e) => {
     console.log(e.target.id);
   };
 
@@ -83,9 +91,32 @@ export default function Presentation() {
       });
   }, []);
 
-  const BackToGroup_click = () => {
+  const backToGroupClick = () => {
     navigate(`/group`);
   };
+
+  function editPresentation(presentation) {
+    setShowEditModal(true);
+    setEditTarget(presentation);
+  }
+
+  function submitEditedPresentation(hasChange, editedPresentation) {
+    setShowEditModal(false);
+    setEditTarget({});
+
+    if (hasChange) {
+      const editedId = editedPresentation.presentation_id;
+      const newListOfPresent = listOfPresent.map((item) => {
+        if (item.presentations_id === editedId) {
+          return editedPresentation;
+        }
+        return item;
+      });
+      setListOfPresent(newListOfPresent);
+
+      // TODO: submit change to backend
+    }
+  }
 
   const alert = (
     <Alert
@@ -115,26 +146,37 @@ export default function Presentation() {
           </div>
           <div className="boxPresentation2" style={{ float: "right" }}>
             <Button
-              id={present.presents_id}
-              onClick={(e) => ViewSlide_Click(e)}
+              onClick={(e) => viewSlideClick(e)}
               variant="success"
+              id={present.presents_id}
             >
-              View slide
+              <BsEyeFill />
+            </Button>
+            <Button
+              onClick={() => editPresentation(present)}
+              variant="outline-warning"
+              style={{ marginLeft: "5px" }}
+            >
+              <BsPencilSquare />
             </Button>
             <Button
               id={present.presents_id}
-              onClick={(e) => Delete_Click(e)}
-              variant="danger"
+              onClick={(e) => deleteClick(e)}
+              variant="outline-danger"
               style={{ marginLeft: "5px" }}
             >
-              Delete
+              <BsFillTrashFill />
             </Button>
           </div>
         </div>
       ))}
       <div>
-        <Button onClick={BackToGroup_click} variant="outline-secondary">
-          🔙
+        <Button
+          onClick={backToGroupClick}
+          variant="outline-secondary"
+          style={{ textAlign: "center" }}
+        >
+          <BsFillCaretLeftFill />
         </Button>
         {userInGroup.roles_id !== 3 && (
           <Button onClick={handleShow} style={{ marginLeft: "1rem" }}>
@@ -142,38 +184,45 @@ export default function Presentation() {
           </Button>
         )}
       </div>
-      <div>
-        <Modal show={showDialog} onHide={handleClose}>
-          <Modal.Header closeButton>
-            <Modal.Title>Create new presentation</Modal.Title>
-          </Modal.Header>
-          <Form onSubmit={handleSubmit((data) => onHandleSubmit(data))}>
-            <Modal.Body>
-              <Form.Group className="md-3">
-                <Form.Control
-                  id="presentName"
-                  type="text"
-                  placeholder="Enter name"
-                  {...register("presentName", { required: true })}
-                />
-              </Form.Group>
-              {errors.presentName?.type === "required" && (
-                <Form.Text className="text-danger" role="alert">
-                  Presentation's name is required
-                </Form.Text>
-              )}
-            </Modal.Body>
-            <Modal.Footer>
-              <Button variant="secondary" onClick={handleClose}>
-                Close
-              </Button>
-              <Button variant="primary" type="submit">
-                Create
-              </Button>
-            </Modal.Footer>
-          </Form>
-        </Modal>
-      </div>
+
+      <EditPresentationModal
+        show={showEditModal}
+        onHide={() => setShowEditModal(false)}
+        target={editTarget}
+        onSubmit={submitEditedPresentation}
+      />
+
+      {/* CREATE NEW PRESENTATION MODEL */}
+      <Modal show={showDialog} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Create new presentation</Modal.Title>
+        </Modal.Header>
+        <Form onSubmit={handleSubmit((data) => onHandleSubmit(data))}>
+          <Modal.Body>
+            <Form.Group className="md-3">
+              <Form.Control
+                id="presentName"
+                type="text"
+                placeholder="Enter name"
+                {...register("presentName", { required: true })}
+              />
+            </Form.Group>
+            {errors.presentName?.type === "required" && (
+              <Form.Text className="text-danger" role="alert">
+                Presentation's name is required
+              </Form.Text>
+            )}
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleClose}>
+              Close
+            </Button>
+            <Button variant="primary" type="submit">
+              Create
+            </Button>
+          </Modal.Footer>
+        </Form>
+      </Modal>
     </div>
   );
 }
