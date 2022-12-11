@@ -11,7 +11,8 @@ import {
 import {
   getAllPresentationsInGroup,
   getUserRoleInGroup,
-  addNewPresentation
+  addNewPresentation,
+  updatePresentation
 } from "../../fetch/presentationFetch";
 import "./Presentation.css";
 import EditPresentationModal from "./EditPresentationModal";
@@ -64,12 +65,12 @@ export default function Presentation() {
     setShowAlert(true);
   };
 
-  const viewSlideClick = (e) => {
-    navigate(`/slides/${params.groupId}/show/${e.target.id}`);
+  const viewSlideClick = (id) => {
+    navigate(`/slides/${params.groupId}/show/${id}`);
   };
 
-  const deleteClick = (e) => {
-    console.log(e.target.id);
+  const deleteClick = (id) => {
+    console.log(id);
   };
 
   useEffect(() => {
@@ -100,21 +101,21 @@ export default function Presentation() {
     setEditTarget(presentation);
   }
 
-  function submitEditedPresentation(hasChange, editedPresentation) {
+  async function submitEditedPresentation(hasChange, editedPresentation) {
     setShowEditModal(false);
     setEditTarget({});
 
     if (hasChange) {
-      const editedId = editedPresentation.presentation_id;
+      const editedId = editedPresentation.presents_id;
       const newListOfPresent = listOfPresent.map((item) => {
-        if (item.presentations_id === editedId) {
+        if (item.presents_id === editedId) {
           return editedPresentation;
         }
         return item;
       });
       setListOfPresent(newListOfPresent);
 
-      // TODO: submit change to backend
+      await updatePresentation(editedId, editedPresentation.presents_name);
     }
   }
 
@@ -146,9 +147,8 @@ export default function Presentation() {
           </div>
           <div className="boxPresentation2" style={{ float: "right" }}>
             <Button
-              onClick={(e) => viewSlideClick(e)}
+              onClick={(e) => viewSlideClick(present.presents_id)}
               variant="success"
-              id={present.presents_id}
             >
               <BsEyeFill />
             </Button>
@@ -160,8 +160,7 @@ export default function Presentation() {
               <BsPencilSquare />
             </Button>
             <Button
-              id={present.presents_id}
-              onClick={(e) => deleteClick(e)}
+              onClick={(e) => deleteClick(present.presents_id)}
               variant="outline-danger"
               style={{ marginLeft: "5px" }}
             >
