@@ -90,3 +90,7 @@ select {
 body {
   background-color: whitesmoke;
 }
+
+.bg-gray {
+    background-color: rgb(192, 192, 192);
+}

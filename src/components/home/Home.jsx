@@ -1,10 +1,9 @@
 import Container from "react-bootstrap/Container";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
-import { Link, Routes, Route } from "react-router-dom";
+import { Link, Routes, Route, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 
 import Welcome from "./Welcome";
 import Group from "../group/Group";
@@ -14,7 +13,6 @@ import JoinGroupByLink from "../group/joinGroup/JoinGroupByLink";
 import Presentation from "../presentation/Presentation";
 import Slide from "../slide/Slide";
 
-import userImage from "./user.png";
 import homeImage from "./home-button.png";
 
 export default function Home() {
@@ -68,11 +66,7 @@ export default function Home() {
         <Container>
           <Navbar.Brand>
             <Link to="/">
-              <img
-                alt="home"
-                src={homeImage}
-                style={{ height: "50px" }}
-              />
+              <img alt="home" src={homeImage} style={{ height: "50px" }} />
             </Link>
           </Navbar.Brand>
           <Nav className="me-auto">
@@ -132,9 +126,9 @@ export default function Home() {
         <Route index element={<Welcome />} />
         <Route path="group/*" element={<Group userId={user.users_id} />} />
         <Route path="profile" element={<UserProfile />} />
-		    <Route path="invite/*" element={<JoinGroupByLink />} />
-        <Route path="presentations/:groupId" element={<Presentation/>} />
-        <Route path="slides/:groupId/show/:presentId" element={<Slide/>} />
+        <Route path="invite/*" element={<JoinGroupByLink />} />
+        <Route path="presentations/:groupId" element={<Presentation />} />
+        <Route path="slides/:groupId/show/:presentId" element={<Slide />} />
       </Routes>
     </div>
   );

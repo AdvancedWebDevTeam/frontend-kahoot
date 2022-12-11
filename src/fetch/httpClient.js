@@ -15,4 +15,3 @@ export async function putRequest(url, data) {
 export async function patchRequest(url, data) {
   return axios.patch(url, data);
 }
-
