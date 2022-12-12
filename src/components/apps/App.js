@@ -14,7 +14,7 @@ const queryClient = new QueryClient();
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <div>
+      <div className="App" style={{ backgroundImage: "url(/body-bg.jpg)" }}>
         <Routes>
           <Route path="/*" element={<Home />} />
           <Route path="/login" element={<LoginForm />} />
