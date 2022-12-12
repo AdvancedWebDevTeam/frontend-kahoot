@@ -5,12 +5,15 @@ import { BrowserRouter } from "react-router-dom";
 import "./index.css";
 import App from "./components/apps/App";
 import reportWebVitals from "./reportWebVitals";
+import {SocketContext, socket} from './components/socket/Socket';
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <BrowserRouter>
     <React.StrictMode>
+    <SocketContext.Provider value={socket}>
       <App />
+      </SocketContext.Provider>
     </React.StrictMode>
   </BrowserRouter>
 );
