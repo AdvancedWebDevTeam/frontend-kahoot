@@ -1,4 +1,4 @@
-import { getRequest, postRequest, putRequest } from "./httpClient";
+import { deleteRequest, getRequest, postRequest, putRequest } from "./httpClient";
 
 export async function getAllPresentationsInGroup(groupId) {
   const url = `${process.env.REACT_APP_API_URL}/presentations/${groupId}`;
@@ -29,5 +29,11 @@ export async function updatePresentation(id, presentName) {
     name: presentName
   };
   const result = await putRequest(url, data);
+  return result.data;
+}
+
+export async function deletePresentation(id) {
+  const url = `${process.env.REACT_APP_API_URL}/presentations/delete/${id}`;
+  const result = await deleteRequest(url);
   return result.data;
 }

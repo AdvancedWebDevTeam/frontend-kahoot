@@ -1,0 +1,21 @@
+.containerMemberView{
+    margin:  auto;
+    width: 50%;
+    margin-top: 80px;
+}
+
+.containercbx{    
+    border: 1px solid gray;
+    padding: 12px;
+    border-radius: 6px;
+}
+
+.containercbxFocus{    
+    border: 1px solid blue;
+    padding: 12px;
+    border-radius: 6px;
+}
+
+.btnSubmit{
+    width: 100%;
+}

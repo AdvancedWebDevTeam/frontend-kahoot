@@ -1,4 +1,4 @@
-import { getRequest, postRequest, patchRequest } from "./httpClient";
+import { getRequest, postRequest, patchRequest, deleteRequest } from "./httpClient";
 
 export async function getAllSlides(presentId) {
     const url = `${process.env.REACT_APP_API_URL}/slides/show/${presentId}`;
@@ -38,5 +38,21 @@ export async function updateSlide (slideId, presentId, typeId, content) {
         content: content
     }
     const result = await patchRequest(url, data);
+    return result.data;
+}
+
+export async function deleteSlide (slideId) {
+    const url = `${process.env.REACT_APP_API_URL}/slides/delete/${slideId}`;
+    const result = await deleteRequest(url);
+    return result.data;
+}
+
+export async function submitSlide (presentId ,slideId, question, choice) {
+    const url = `${process.env.REACT_APP_API_URL}/slides/submit/${presentId}/${slideId}`;
+    const data = {
+        question: question,
+        choice: choice
+    }
+    const result = await postRequest(url, data);
     return result.data;
 }

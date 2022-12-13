@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { Button, Container } from "react-bootstrap";
+import { useState, useEffect, useContext } from "react";
+import { Button, Container, Modal } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -23,12 +23,16 @@ import {
   getAllSlides,
   getNameAndCreator,
   getSlideTypes,
-  addSlide
+  addSlide,
+  deleteSlide
 } from "../../fetch/slideFetch";
 import EditSlide from "./EditSlide";
 import MainView from "./MainView";
 import "./Slide.css";
 import TooltipTrigger from "../general/TooltipTrigger";
+import { set } from "react-hook-form";
+import { SocketContext } from "../socket/Socket";
+import MemberView from "./MemberView";
 
 ChartJS.register(
   CategoryScale,
@@ -45,8 +49,19 @@ export default function Slide() {
   const [listOfSlideTypes, setListofSlideTypes] = useState([]);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [isFetch, setIsFetch] = useState(false);
+  const [isShowModal, setIsShowModal] = useState(false);
+  const [linkShare, setLinkShare] = useState(``);
+  const socket = useContext(SocketContext);
+
+  const handleClose = () => setIsShowModal(false);
+  const handleShow = () => setIsShowModal(true);
 
   const handleClick = (index) => {
+    const data = {
+      indexSlide: index,
+      listOfSlide: listOfSlides,
+    };
+    socket.emit('clickedSlide', data);
     setSelectedIndex(index);
   };
 
@@ -81,6 +96,25 @@ export default function Slide() {
       .catch((err) => {
         console.log(err);
       });
+
+    socket.on("submitSlide", (data) => {
+      console.log(data);
+      setListOfSlides(data);
+    });
+    const data = {
+      indexSlide: selectedIndex,
+      listOfSlide: listOfSlides,
+    };
+    socket.emit('clickedSlide', data);
+    
+    setLinkShare(`${process.env.REACT_APP_FE}/share/slide/${params.presentId}`);
+
+    return () => {
+      socket.off("submitSlide", (data) => {
+        setListOfSlides(data);
+      });
+    }
+
   }, [isFetch]);
 
   const backToPresentClick = () => {
@@ -109,6 +143,14 @@ export default function Slide() {
     setIsFetch(flag);
   };
 
+  const handleDelete = () => {
+    if (selectedIndex < listOfSlides.length && selectedIndex >= 0) {
+      console.log(listOfSlides[selectedIndex].slides_id);
+      deleteSlide(listOfSlides[selectedIndex].slides_id);
+      window.location.reload();
+    }
+  };
+
   return (
     <div>
       <div className="boxSlide1 slide-header">
@@ -129,8 +171,13 @@ export default function Slide() {
       <div className="boxSlide1 slide-toolbar">
         <Button onClick={createSlideClick}>+ New slide</Button>
         <div className="float-right">
+          <TooltipTrigger text="Share slides">
+            <Button onClick={handleShow}>
+              Share
+            </Button>
+          </TooltipTrigger>
           <TooltipTrigger text="Delete slide">
-            <Button variant="outline-danger">
+            <Button variant="outline-danger" onClick={handleDelete}>
               <BsFillTrashFill />
             </Button>
           </TooltipTrigger>
@@ -208,6 +255,17 @@ export default function Slide() {
             />
           </Col>
         </Row>
+        <Modal show={isShowModal} onHide={handleClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>My Share Link Slide</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>Link: <a href={linkShare}>{linkShare}</a></Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleClose}>
+              Close
+            </Button>
+          </Modal.Footer>
+        </Modal>
       </Container>
     </div>
   );

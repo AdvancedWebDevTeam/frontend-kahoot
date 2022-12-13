@@ -40,7 +40,7 @@ export default function EditSlide({
         setQuestion("");
       }
     }
-  }, [len, selectedIndex]);
+  }, [len, selectedIndex, listOfSlides]);
 
   const handleChange = (e) => {
     setTypeName(e.target.value);

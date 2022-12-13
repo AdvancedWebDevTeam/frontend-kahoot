@@ -12,7 +12,8 @@ import {
   getAllPresentationsInGroup,
   getUserRoleInGroup,
   addNewPresentation,
-  updatePresentation
+  updatePresentation,
+  deletePresentation
 } from "../../fetch/presentationFetch";
 import "./Presentation.css";
 import EditPresentationModal from "./EditPresentationModal";
@@ -70,7 +71,8 @@ export default function Presentation() {
   };
 
   const deleteClick = (id) => {
-    console.log(id);
+    deletePresentation(id);
+    window.location.reload();
   };
 
   useEffect(() => {

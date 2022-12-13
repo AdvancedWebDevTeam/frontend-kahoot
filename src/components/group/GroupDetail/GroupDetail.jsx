@@ -71,7 +71,7 @@ function GroupDetail({ group, roles }) {
         roles={roles}
       />
       <div>
-        <Button onClick={viewPresent_Click}>View Presetation</Button>
+        <Button onClick={viewPresent_Click}>View Presentation</Button>
       </div>
     </div>
   );

@@ -14,6 +14,7 @@ import Presentation from "../presentation/Presentation";
 import Slide from "../slide/Slide";
 
 import homeImage from "./home-button.png";
+import MemberView from "../slide/MemberView";
 
 export default function Home() {
   const [user, setUser] = useState({
@@ -21,8 +22,6 @@ export default function Home() {
     users_name: "",
     email: ""
   });
-
-  const navigate = useNavigate();
 
   const buttonSignOut_Clicked = () => {
     const newUser = {
@@ -128,7 +127,8 @@ export default function Home() {
         <Route path="profile" element={<UserProfile />} />
         <Route path="invite/*" element={<JoinGroupByLink />} />
         <Route path="presentations/:groupId" element={<Presentation />} />
-        <Route path="slides/:groupId/show/:presentId" element={<Slide />} />
+        <Route path="slides/:groupId/show/:presentId" element={<Slide/>} />
+        <Route path="share/slide/:slideId" element={<MemberView/>} />
       </Routes>
     </div>
   );
