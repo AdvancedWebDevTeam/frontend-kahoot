@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useCallback, useContext } from "react";
 import { Button, Container, Modal } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import Row from "react-bootstrap/Row";
@@ -17,8 +17,11 @@ import {
 import {
   BsFillCaretLeftFill,
   BsFillPlayCircleFill,
-  BsFillTrashFill
+  BsFillTrashFill,
+  BsChevronRight,
+  BsChevronLeft
 } from "react-icons/bs";
+import { FullScreen, useFullScreenHandle } from "react-full-screen";
 import {
   getAllSlides,
   getNameAndCreator,
@@ -67,6 +70,9 @@ export default function Slide() {
 
   const navigate = useNavigate();
   const params = useParams();
+
+  const fullscreenHandle = useFullScreenHandle();
+  const [isOnFullScreen, setIsOnFullScreen] = useState(false);
 
   useEffect(() => {
     if (listOfSlideTypes.length === 0) {
@@ -143,6 +149,52 @@ export default function Slide() {
     setIsFetch(flag);
   };
 
+  function presentSlides() {
+    fullscreenHandle.enter();
+  }
+
+  const onFullscreenChange = useCallback(
+    (state) => {
+      setIsOnFullScreen(state);
+    },
+    [fullscreenHandle]
+  );
+
+  function moveToNextSlide() {
+    if (selectedIndex < listOfSlides.length - 1) {
+      setSelectedIndex(selectedIndex + 1);
+    } else {
+      setSelectedIndex(0);
+    }
+  }
+
+  function moveToPrevSlide() {
+    if (selectedIndex > 0) {
+      setSelectedIndex(selectedIndex - 1);
+    } else {
+      setSelectedIndex(listOfSlides.length - 1);
+    }
+  }
+
+  const navSlideButtons = isOnFullScreen && (
+    <>
+      <Button
+        className="nav-btn prev"
+        variant="outline-secondary"
+        onClick={moveToPrevSlide}
+      >
+        <BsChevronLeft />
+      </Button>
+      <Button
+        className="nav-btn next"
+        variant="outline-secondary"
+        onClick={moveToNextSlide}
+      >
+        <BsChevronRight />
+      </Button>
+    </>
+  );
+
   const handleDelete = () => {
     if (selectedIndex < listOfSlides.length && selectedIndex >= 0) {
       console.log(listOfSlides[selectedIndex].slides_id);
@@ -152,7 +204,7 @@ export default function Slide() {
   };
 
   return (
-    <div>
+    <>
       <div className="boxSlide1 slide-header">
         <Button
           variant="outline-dark"
@@ -182,7 +234,7 @@ export default function Slide() {
             </Button>
           </TooltipTrigger>
           <TooltipTrigger text="Present slides">
-            <Button variant="outline-success">
+            <Button variant="outline-success" onClick={presentSlides}>
               <BsFillPlayCircleFill />
             </Button>
           </TooltipTrigger>
@@ -240,10 +292,13 @@ export default function Slide() {
             </div>
           </Col>
           <Col xs={7} className="slide-edit-center">
-            <MainView
-              selectedIndex={selectedIndex}
-              listOfSlides={listOfSlides}
-            />
+            <FullScreen handle={fullscreenHandle} onChange={onFullscreenChange}>
+              <MainView
+                selectedIndex={selectedIndex}
+                listOfSlides={listOfSlides}
+              />
+              {navSlideButtons}
+            </FullScreen>
           </Col>
           <Col xs={3}>
             <EditSlide
@@ -267,6 +322,6 @@ export default function Slide() {
           </Modal.Footer>
         </Modal>
       </Container>
-    </div>
+    </>
   );
 }

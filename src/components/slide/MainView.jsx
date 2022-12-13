@@ -30,34 +30,31 @@ export default function MainView({ selectedIndex, listOfSlides }) {
   }, []);
 
   return (
-    <div className="boxSlide" style={{ marginTop: "5px" }}>
+    <div className="boxSlide main-view" style={{ marginTop: "5px" }}>
       {len > 0 && (
-        <div>
-          {listOfSlides[selectedIndex].types_id === 0 && <div />}
+        <>
+          {listOfSlides[selectedIndex].types_id === 0 && null}
           {listOfSlides[selectedIndex].types_id === 1 && (
-            <div>
-              <Bar
-                width="600px"
-                height="400px"
-                data={{
-                  labels: Object.keys(listOfSlides[selectedIndex].options),
-                  datasets: [
-                    {
-                      label: listOfSlides[selectedIndex].question,
-                      backgroundColor: ["#3e95cd", "#8e5ea2"],
-                      data: Object.values(listOfSlides[selectedIndex].options)
-                    }
-                  ]
-                }}
-                options={{
-                  responsive: true,
-                  legend: { display: false },
-                  maintainAspectRatio: false
-                }}
-              />
-            </div>
+            <Bar
+              className="bar"
+              data={{
+                labels: Object.keys(listOfSlides[selectedIndex].options),
+                datasets: [
+                  {
+                    label: listOfSlides[selectedIndex].question,
+                    backgroundColor: ["#3e95cd", "#8e5ea2"],
+                    data: Object.values(listOfSlides[selectedIndex].options)
+                  }
+                ]
+              }}
+              options={{
+                responsive: true,
+                legend: { display: false },
+                maintainAspectRatio: false
+              }}
+            />
           )}
-        </div>
+        </>
       )}
     </div>
   );
