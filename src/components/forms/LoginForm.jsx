@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useMutation } from "react-query";
 
@@ -95,6 +95,9 @@ export default function LoginForm() {
               <h4>Your account is not exists</h4>
             </Form.Text>
           )}
+          <div>
+            <Link to="/">Forgot password</Link>
+          </div>
           <div className="allign">
             <Button
               variant="primary"

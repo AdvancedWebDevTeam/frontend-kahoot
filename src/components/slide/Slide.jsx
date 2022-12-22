@@ -57,14 +57,17 @@ export default function Slide() {
   const socket = useContext(SocketContext);
 
   const handleClose = () => setIsShowModal(false);
-  const handleShow = () => setIsShowModal(true);
+  const handleShow = () => {
+    //socket.emit("NotifyPresentation", id)
+    setIsShowModal(true);
+  }
 
   const handleClick = (index) => {
     const data = {
       indexSlide: index,
       listOfSlide: listOfSlides,
     };
-    socket.emit('clickedSlide', data);
+    socket.emit("clickedSlide", data);
     setSelectedIndex(index);
   };
 
@@ -111,7 +114,7 @@ export default function Slide() {
       indexSlide: selectedIndex,
       listOfSlide: listOfSlides,
     };
-    socket.emit('clickedSlide', data);
+    socket.emit("clickedSlide", data);
     
     setLinkShare(`${process.env.REACT_APP_FE}/share/slide/${params.presentId}`);
 
