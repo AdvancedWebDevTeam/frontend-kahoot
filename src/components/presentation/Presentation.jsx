@@ -136,7 +136,7 @@ export default function Presentation() {
   return (
     <div className="boxPresentation1">
       {showAlert && alert}
-      <h1>Private Presentations</h1>
+      <h1>Group Presentations</h1>
       {listOfPresent.map((present) => (
         <div
           key={present.presents_id}

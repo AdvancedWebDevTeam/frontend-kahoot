@@ -33,9 +33,7 @@ import EditSlide from "./EditSlide";
 import MainView from "./MainView";
 import "./Slide.css";
 import TooltipTrigger from "../general/TooltipTrigger";
-import { set } from "react-hook-form";
 import { SocketContext } from "../socket/Socket";
-import MemberView from "./MemberView";
 
 ChartJS.register(
   CategoryScale,
@@ -55,6 +53,7 @@ export default function Slide() {
   const [isShowModal, setIsShowModal] = useState(false);
   const [linkShare, setLinkShare] = useState(``);
   const socket = useContext(SocketContext);
+  const [isMyPresentation, setIsMyPresentation] = useState(false);
 
   const handleClose = () => setIsShowModal(false);
   const handleShow = () => {
@@ -78,6 +77,9 @@ export default function Slide() {
   const [isOnFullScreen, setIsOnFullScreen] = useState(false);
 
   useEffect(() => {
+    if(!isMyPresentation && params.groupId === "mypresent"){
+      setIsMyPresentation(true);
+    }
     if (listOfSlideTypes.length === 0) {
       getSlideTypes()
         .then((data) => {
@@ -209,13 +211,15 @@ export default function Slide() {
   return (
     <>
       <div className="boxSlide1 slide-header">
-        <Button
-          variant="outline-dark"
-          className="back-btn"
-          onClick={backToPresentClick}
-        >
-          <BsFillCaretLeftFill />
-        </Button>
+        {!isMyPresentation &&
+          <Button
+            variant="outline-dark"
+            className="back-btn"
+            onClick={backToPresentClick}
+          >
+            <BsFillCaretLeftFill />
+          </Button>
+        }
         <div>
           <h4 className="title">{presentInfo.presents_name}</h4>
           <span className="credit">
