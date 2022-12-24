@@ -45,6 +45,11 @@ ChartJS.register(
   Legend
 );
 
+function getUserId() {
+  const accessToken = localStorage.getItem("accessToken");
+  return JSON.parse(atob(accessToken.split(".")[1])).user.users_id;
+}
+
 export default function Slide() {
   const [listOfSlides, setListOfSlides] = useState([]);
   const [presentInfo, setPresentInfo] = useState([]);
@@ -53,6 +58,8 @@ export default function Slide() {
   const [isFetch, setIsFetch] = useState(false);
   const [isShowModal, setIsShowModal] = useState(false);
   const [linkShare, setLinkShare] = useState(``);
+  const [currentUserId, setCurrentUserId] = useState("");
+
   const socket = useContext(SocketContext);
 
   const handleClose = () => setIsShowModal(false);
@@ -83,26 +90,6 @@ export default function Slide() {
 
   useEffect(() => {
 
-    if (listOfSlideTypes.length === 0) {
-      getSlideTypes()
-        .then((data) => {
-          setListofSlideTypes(data);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-
-    if (presentInfo.length === 0) {
-      getNameAndCreator(params.presentId)
-        .then((data) => {
-          setPresentInfo(data);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-
     getAllSlides(params.presentId)
       .then((data) => {
         setListOfSlides(data);
@@ -132,6 +119,31 @@ export default function Slide() {
 
   }, [isFetch]);
 
+  useEffect(() => {
+    
+    setCurrentUserId(getUserId());
+    
+    if (listOfSlideTypes.length === 0) {
+      getSlideTypes()
+        .then((data) => {
+          setListofSlideTypes(data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+
+    if (presentInfo.length === 0) {
+      getNameAndCreator(params.presentId)
+        .then((data) => {
+          setPresentInfo(data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }, [])
+
   const backToPresentClick = () => {
     navigate(`/presentations/${params.groupId}`);
   };
@@ -159,8 +171,8 @@ export default function Slide() {
   };
 
   function presentSlides() {
-    socket.emit("NotifyPresentation", presentInfo)
     fullscreenHandle.enter();
+    socket.emit("NotifyPresentation", {presentInfo, currentUserId});
   }
 
   const onFullscreenChange = useCallback(
@@ -207,7 +219,7 @@ export default function Slide() {
 
   const handleDelete = () => {
     if (selectedIndex < listOfSlides.length && selectedIndex >= 0) {
-      console.log(listOfSlides[selectedIndex].slides_id);
+      //console.log(listOfSlides[selectedIndex].slides_id);
       deleteSlide(listOfSlides[selectedIndex].slides_id);
       window.location.reload();
     }

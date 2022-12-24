@@ -2,7 +2,7 @@ import Container from "react-bootstrap/Container";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import { Link, Routes, Route, useNavigate } from "react-router-dom";
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 
 import Welcome from "./Welcome";
@@ -16,12 +16,12 @@ import MyPresentation from "../presentation/MyPresentation";
 
 import homeImage from "./home-button.png";
 import MemberView from "../slide/MemberView";
-import { SocketContext } from "../socket/Socket";
+
+
+
+import { JoinRoomSocket } from "./JoinRoomSocket";
 
 export default function Home() {
-
-  const socket = useContext(SocketContext);
-  const [message, setMessage] = useState("");
 
   const [user, setUser] = useState({
     users_id: "",
@@ -64,13 +64,6 @@ export default function Home() {
 
   useEffect(() => {
     fetchData();
-    // socket.on("NotifyPresentation", (data) => {
-    //   setMessage(data);
-    // })
-
-    // return () => {
-    //   socket.off("NotifyPresentation");
-    // }
   }, []);
 
   return (
@@ -152,13 +145,9 @@ export default function Home() {
         <Route path="share/slide/:slideId" element={<MemberView/>} />
         <Route path="presentations/mypresent/:userId" element={<MyPresentation/>} />
       </Routes>
-
-      {/* {message !== "" &&
-          <Alert variant="danger" onClose={() => setMessage("")} dismissible>
-              <Alert.Heading>Oh snap! You got an error!</Alert.Heading>
-              <div>Notify</div>
-            </Alert>
-      } */}
+      {user.users_id !== "" &&
+        <JoinRoomSocket user={user}/>
+      }
     </div>
   );
 }

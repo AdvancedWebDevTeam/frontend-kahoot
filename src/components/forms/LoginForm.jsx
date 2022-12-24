@@ -24,7 +24,7 @@ export default function LoginForm() {
         password: data.password
       })
       .then((res) => {
-        console.log(res);
+        //console.log(res);
         localStorage.setItem("accessToken", JSON.stringify(res.data));
         setStatus(res.status);
         navigate("/");
