@@ -1,7 +1,6 @@
 import { useEffect, useState, useContext  } from "react";
-import { getGroupsOfUser } from "../../fetch/groupFetch";
 import { socket } from "../socket/Socket";
-import { Alert } from "react-bootstrap";
+import { Alert, Modal, Button } from "react-bootstrap";
 import { SocketContext } from "../socket/Socket";
 
 export function JoinRoomSocket({user}) {
@@ -22,10 +21,19 @@ export function JoinRoomSocket({user}) {
     return(
         <div>
             {message !== "" &&
-                <Alert variant="success" onClose={() => setMessage("")} dismissible>
-                    <Alert.Heading>{message}</Alert.Heading>
-                    <div>Notify</div>
-                </Alert>
+                <Modal show={true} onHide={() => setMessage("")}>
+                    <Modal.Header>
+                        <Modal.Title>Notify</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <Alert variant="success">{message}</Alert>
+                    </Modal.Body>        
+                    <Modal.Footer>
+                        <Button variant="outline-secondary" onClick={() => setMessage("")}>
+                        Close
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
             }
         </div>
     );
