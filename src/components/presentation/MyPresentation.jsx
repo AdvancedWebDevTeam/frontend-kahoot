@@ -39,7 +39,7 @@ export default function MyPresentation() {
     const handleShow = () => setShowDialog(true);
 
     const onHandleSubmit = async (data) => {
-        await addNewPresentation("", params.userId, data.presentName);
+        await addNewPresentation(null, params.userId, data.presentName);
 
         await getAllMyPresentations(params.userId)
             .then((returnData) => {
@@ -155,7 +155,6 @@ export default function MyPresentation() {
                     Create presentation
                 </Button>
             </div>
-
             <EditPresentationModal
                 show={showEditModal}
                 onHide={() => setShowEditModal(false)}

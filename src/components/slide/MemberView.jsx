@@ -15,13 +15,13 @@ export default function MemberView() {
     const socket = useContext(SocketContext);
 
     useEffect(() => {
-        socket.on('clickedSlide', (data) => {
+        socket.on("clickedSlide", (data) => {
             setSlide(data.listOfSlide[data.indexSlide]);
             setOptions(Object.getOwnPropertyNames(data.listOfSlide[data.indexSlide].options));
             setPresentID(data.listOfSlide[data.indexSlide].presents_id);
         });
         return () => {
-            socket.off('clickedSlide', (data) => {
+            socket.off("clickedSlide", (data) => {
                 setSlide(data.listOfSlide[data.indexSlide]);
                 setOptions(Object.getOwnPropertyNames(data.listOfSlide[data.indexSlide].options));
                 setPresentID(data.listOfSlide[data.indexSlide].presents_id);
@@ -30,6 +30,7 @@ export default function MemberView() {
     }, [socket])
 
     const onSubmit = (e) => {
+        e.preventDefault(); // thiếu cái này khi submit
         if (result != "") {
             submitSlide(presentId, slide.slides_id, slide.question, result);
         }

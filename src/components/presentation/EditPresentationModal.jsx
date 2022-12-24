@@ -43,6 +43,9 @@ function EditPresentationModal({ target, show, onHide, onSubmit }) {
           <Button variant="primary" onClick={handleFormSubmit}>
             Save change
           </Button>
+          <Button variant="primary" onClick={handleFormSubmit}>
+            Assign collaborators
+          </Button>
         </Modal.Footer>
       </Form>
     </Modal>
