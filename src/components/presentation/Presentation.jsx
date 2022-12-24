@@ -136,7 +136,7 @@ export default function Presentation() {
   return (
     <div className="boxPresentation1">
       {showAlert && alert}
-      <h1>Presentations</h1>
+      <h1>Group Presentations</h1>
       {listOfPresent.map((present) => (
         <div
           key={present.presents_id}
@@ -148,26 +148,30 @@ export default function Presentation() {
             <div className="secondary-title">{present["user.users_name"]}</div>
           </div>
           <div className="boxPresentation2" style={{ float: "right" }}>
-            <Button
-              onClick={(e) => viewSlideClick(present.presents_id)}
-              variant="success"
-            >
-              <BsEyeFill />
-            </Button>
-            <Button
-              onClick={() => editPresentation(present)}
-              variant="outline-warning"
-              style={{ marginLeft: "5px" }}
-            >
-              <BsPencilSquare />
-            </Button>
-            <Button
-              onClick={(e) => deleteClick(present.presents_id)}
-              variant="outline-danger"
-              style={{ marginLeft: "5px" }}
-            >
-              <BsFillTrashFill />
-            </Button>
+            {userInGroup.roles_id !== 3 &&
+              <div>
+                <Button
+                  onClick={(e) => viewSlideClick(present.presents_id)}
+                  variant="success"
+                >
+                  <BsEyeFill />
+                </Button>
+                <Button
+                  onClick={() => editPresentation(present)}
+                  variant="outline-warning"
+                  style={{ marginLeft: "5px" }}
+                >
+                  <BsPencilSquare />
+                </Button>
+                <Button
+                  onClick={(e) => deleteClick(present.presents_id)}
+                  variant="outline-danger"
+                  style={{ marginLeft: "5px" }}
+                >
+                  <BsFillTrashFill />
+                </Button>
+              </div>
+            }
           </div>
         </div>
       ))}
