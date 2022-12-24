@@ -123,25 +123,21 @@ export default function Slide() {
     
     setCurrentUserId(getUserId());
     
-    if (listOfSlideTypes.length === 0) {
-      getSlideTypes()
-        .then((data) => {
-          setListofSlideTypes(data);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
+    getSlideTypes()
+    .then((data) => {
+      setListofSlideTypes(data);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 
-    if (presentInfo.length === 0) {
-      getNameAndCreator(params.presentId)
-        .then((data) => {
-          setPresentInfo(data);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
+    getNameAndCreator(params.presentId)
+    .then((data) => {
+      setPresentInfo(data);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
   }, [])
 
   const backToPresentClick = () => {
@@ -240,7 +236,7 @@ export default function Slide() {
         <div>
           <h4 className="title">{presentInfo.presents_name}</h4>
           <span className="credit">
-            Created by {presentInfo["user.users_name"]}
+            Created by {presentInfo.users_name}
           </span>
         </div>
       </div>
