@@ -100,18 +100,16 @@ export default function Slide() {
       });
 
     socket.on("submitSlide", (data) => {
-      console.log(data);
       setListOfSlides(data);
     });
     
-    const data = { // bien này có thể là data {}và nó đã 
+    const data = {
       presents_id: params.presentId,
       indexSlide: selectedIndex,
       listOfSlide: listOfSlides,
     };
 
-    socket.emit("clickedSlide", data);// có thể dòng này gây bug bởi của Ngọc 
-    //vì khi ông load component lên chưa chắc state[selectedIndex và listOfSlides] đã được set
+    socket.emit("clickedSlide", data);
     
     return () => {
       socket.off("submitSlide", (data) => {

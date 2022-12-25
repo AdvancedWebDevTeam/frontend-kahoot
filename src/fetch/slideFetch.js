@@ -6,6 +6,12 @@ export async function getAllSlides(presentId) {
     return result.data;
 }
 
+export async function getSlidePresent(presentId) {
+    const url = `${process.env.REACT_APP_API_URL}/slides/index/${presentId}`;
+    const result = await getRequest(url);
+    return result.data;
+}
+
 export async function getNameAndCreator(presentId) {
     const url = `${process.env.REACT_APP_API_URL}/slides/creator/${presentId}`;
     const result = await getRequest(url);

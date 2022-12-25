@@ -4,7 +4,8 @@ import { Button } from 'react-bootstrap';
 import { SocketContext } from '../socket/Socket';
 import { Form } from 'react-bootstrap';
 import "./MemberView.css";
-import { submitSlide } from '../../fetch/slideFetch';
+import { getSlidePresent, submitSlide } from '../../fetch/slideFetch';
+import { useParams } from 'react-router-dom';
 
 export default function MemberView() {
 
@@ -14,7 +15,16 @@ export default function MemberView() {
     const [result, setResult] = useState("");
     const socket = useContext(SocketContext);
 
+    const param = useParams();
+
     useEffect(() => {
+        if (slide.length === 0) {
+            getSlidePresent(param.presentId).then((data) => {
+                setSlide(data.listOfSlides[data.indexSlide.index_slide]);
+                setOptions(Object.getOwnPropertyNames(data.listOfSlides[data.indexSlide.index_slide].options));
+                setPresentID(data.indexSlide.presents_id);
+            }).catch(err => console.log(err));
+        }
         socket.on("clickedSlide", (data) => {
             setSlide(data.listOfSlide[data.indexSlide]);
             setOptions(Object.getOwnPropertyNames(data.listOfSlide[data.indexSlide].options));
@@ -30,7 +40,7 @@ export default function MemberView() {
     }, [socket])
 
     const onSubmit = (e) => {
-        e.preventDefault(); // thiếu cái này khi submit
+        e.preventDefault();
         if (result != "") {
             submitSlide(presentId, slide.slides_id, slide.question, result);
         }

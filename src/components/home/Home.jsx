@@ -142,7 +142,7 @@ export default function Home() {
         <Route path="invite/*" element={<JoinGroupByLink />} />
         <Route path="presentations/:groupId" element={<Presentation />} />
         <Route path="slides/:groupId/show/:presentId" element={<Slide/>} />
-        <Route path="share/slide/:slideId" element={<MemberView/>} />
+        <Route path="share/:access/slide/:presentId" element={<MemberView/>} />
         <Route path="presentations/mypresent/:userId" element={<MyPresentation/>} />
       </Routes>
       {user.users_id !== "" &&
