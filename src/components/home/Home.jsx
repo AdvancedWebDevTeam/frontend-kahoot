@@ -12,17 +12,24 @@ import UserProfile from "../profile/UserProfile";
 import JoinGroupByLink from "../group/joinGroup/JoinGroupByLink";
 import Presentation from "../presentation/Presentation";
 import Slide from "../slide/Slide";
+import MyPresentation from "../presentation/MyPresentation";
 
 import homeImage from "./home-button.png";
 import MemberView from "../slide/MemberView";
 
+
+
+import { JoinRoomSocket } from "./JoinRoomSocket";
+
 export default function Home() {
+
   const [user, setUser] = useState({
     users_id: "",
     users_name: "",
     email: ""
   });
-
+  const navigate = useNavigate();
+  
   const buttonSignOut_Clicked = () => {
     const newUser = {
       users_id: "",
@@ -88,6 +95,13 @@ export default function Home() {
                 </Link>
               </Navbar.Brand>
             )}
+            {user.users_id !== "" && (
+              <Navbar.Brand>
+                <Link className="textstyle" to={`/presentations/mypresent/${user.users_id}`}>
+                  My presentations
+                </Link>
+              </Navbar.Brand>
+            )}
           </Nav>
           <Navbar.Toggle />
           <Navbar.Collapse className="justify-content-end">
@@ -129,7 +143,11 @@ export default function Home() {
         <Route path="presentations/:groupId" element={<Presentation />} />
         <Route path="slides/:groupId/show/:presentId" element={<Slide/>} />
         <Route path="share/slide/:slideId" element={<MemberView/>} />
+        <Route path="presentations/mypresent/:userId" element={<MyPresentation/>} />
       </Routes>
+      {user.users_id !== "" &&
+        <JoinRoomSocket user={user}/>
+      }
     </div>
   );
 }

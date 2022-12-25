@@ -6,6 +6,12 @@ export async function getAllPresentationsInGroup(groupId) {
   return result.data;
 }
 
+export async function getAllMyPresentations(userId){
+  const url = `${process.env.REACT_APP_API_URL}/presentations/mypresent/${userId}`;
+  const result = await getRequest(url);
+  return result.data;
+}
+
 export async function getUserRoleInGroup(groupId, userId) {
   const url = `${process.env.REACT_APP_API_URL}/presentations/${groupId}/role/${userId}`;
   const result = await getRequest(url);

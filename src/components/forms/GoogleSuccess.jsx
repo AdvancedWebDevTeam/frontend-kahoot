@@ -1,12 +1,14 @@
 import "./verify.css";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import successImage from "./success.png";
 
 export default function LoginGoogleSuccess() {
   const params = useParams();
+  const navigate = useNavigate();
   useEffect(() => {
     localStorage.setItem("accessToken", JSON.stringify(params.token));
+    navigate("/")
   }, []);
   return (
     <div className="box-verify" style={{ marginTop: "10%" }}>

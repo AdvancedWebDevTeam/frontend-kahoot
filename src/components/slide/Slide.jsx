@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useContext } from "react";
 import { Button, Container, Modal } from "react-bootstrap";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, Link } from "react-router-dom";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { Bar } from "react-chartjs-2";
@@ -29,13 +29,12 @@ import {
   addSlide,
   deleteSlide
 } from "../../fetch/slideFetch";
+
 import EditSlide from "./EditSlide";
 import MainView from "./MainView";
 import "./Slide.css";
 import TooltipTrigger from "../general/TooltipTrigger";
-import { set } from "react-hook-form";
 import { SocketContext } from "../socket/Socket";
-import MemberView from "./MemberView";
 
 ChartJS.register(
   CategoryScale,
@@ -46,6 +45,11 @@ ChartJS.register(
   Legend
 );
 
+function getUserId() {
+  const accessToken = localStorage.getItem("accessToken");
+  return JSON.parse(atob(accessToken.split(".")[1])).user.users_id;
+}
+
 export default function Slide() {
   const [listOfSlides, setListOfSlides] = useState([]);
   const [presentInfo, setPresentInfo] = useState([]);
@@ -54,10 +58,20 @@ export default function Slide() {
   const [isFetch, setIsFetch] = useState(false);
   const [isShowModal, setIsShowModal] = useState(false);
   const [linkShare, setLinkShare] = useState(``);
+  const [currentUserId, setCurrentUserId] = useState("");
+
   const socket = useContext(SocketContext);
 
   const handleClose = () => setIsShowModal(false);
-  const handleShow = () => setIsShowModal(true);
+  const handleShow = () => {
+    if(presentInfo.groups_id === null){
+      setLinkShare(`${process.env.REACT_APP_FE}/share/public/slide/${params.presentId}`);
+    }
+    else{
+      setLinkShare(`${process.env.REACT_APP_FE}/share/private/slide/${params.presentId}`);
+    }
+    setIsShowModal(true);
+  }
 
   const handleClick = (index) => {
     const data = {
@@ -65,7 +79,7 @@ export default function Slide() {
       indexSlide: index,
       listOfSlide: listOfSlides,
     };
-    socket.emit('clickedSlide', data);
+    socket.emit("clickedSlide", data);
     setSelectedIndex(index);
   };
 
@@ -76,25 +90,6 @@ export default function Slide() {
   const [isOnFullScreen, setIsOnFullScreen] = useState(false);
 
   useEffect(() => {
-    if (listOfSlideTypes.length === 0) {
-      getSlideTypes()
-        .then((data) => {
-          setListofSlideTypes(data);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-
-    if (presentInfo.length === 0) {
-      getNameAndCreator(params.presentId)
-        .then((data) => {
-          setPresentInfo(data);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
 
     getAllSlides(params.presentId)
       .then((data) => {
@@ -108,15 +103,16 @@ export default function Slide() {
       console.log(data);
       setListOfSlides(data);
     });
-    const data = {
+    
+    const data = { // bien này có thể là data {}và nó đã 
       presents_id: params.presentId,
       indexSlide: selectedIndex,
       listOfSlide: listOfSlides,
     };
-    socket.emit('clickedSlide', data);
-    
-    setLinkShare(`${process.env.REACT_APP_FE}/share/slide/${params.presentId}`);
 
+    socket.emit("clickedSlide", data);// có thể dòng này gây bug bởi của Ngọc 
+    //vì khi ông load component lên chưa chắc state[selectedIndex và listOfSlides] đã được set
+    
     return () => {
       socket.off("submitSlide", (data) => {
         setListOfSlides(data);
@@ -124,6 +120,27 @@ export default function Slide() {
     }
 
   }, [isFetch]);
+
+  useEffect(() => {
+    
+    setCurrentUserId(getUserId());
+    
+    getSlideTypes()
+    .then((data) => {
+      setListofSlideTypes(data);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+
+    getNameAndCreator(params.presentId)
+    .then((data) => {
+      setPresentInfo(data);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  }, [])
 
   const backToPresentClick = () => {
     navigate(`/presentations/${params.groupId}`);
@@ -153,6 +170,7 @@ export default function Slide() {
 
   function presentSlides() {
     fullscreenHandle.enter();
+    socket.emit("NotifyPresentation", {presentInfo, currentUserId});
   }
 
   const onFullscreenChange = useCallback(
@@ -199,7 +217,7 @@ export default function Slide() {
 
   const handleDelete = () => {
     if (selectedIndex < listOfSlides.length && selectedIndex >= 0) {
-      console.log(listOfSlides[selectedIndex].slides_id);
+      //console.log(listOfSlides[selectedIndex].slides_id);
       deleteSlide(listOfSlides[selectedIndex].slides_id);
       window.location.reload();
     }
@@ -208,17 +226,19 @@ export default function Slide() {
   return (
     <>
       <div className="boxSlide1 slide-header">
-        <Button
-          variant="outline-dark"
-          className="back-btn"
-          onClick={backToPresentClick}
-        >
-          <BsFillCaretLeftFill />
-        </Button>
+        {params.groupId !== "mypresent" &&
+          <Button
+            variant="outline-dark"
+            className="back-btn"
+            onClick={backToPresentClick}
+          >
+            <BsFillCaretLeftFill />
+          </Button>
+        }
         <div>
           <h4 className="title">{presentInfo.presents_name}</h4>
           <span className="credit">
-            Created by {presentInfo["user.users_name"]}
+            Created by {presentInfo.users_name}
           </span>
         </div>
       </div>
@@ -316,7 +336,7 @@ export default function Slide() {
           <Modal.Header closeButton>
             <Modal.Title>My Share Link Slide</Modal.Title>
           </Modal.Header>
-          <Modal.Body>Link: <a href={linkShare}>{linkShare}</a></Modal.Body>
+          <Modal.Body>Link: <Link to={linkShare}>{linkShare}</Link></Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={handleClose}>
               Close
