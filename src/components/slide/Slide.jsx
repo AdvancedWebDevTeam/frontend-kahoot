@@ -61,6 +61,7 @@ export default function Slide() {
 
   const handleClick = (index) => {
     const data = {
+      presents_id: params.presentId,
       indexSlide: index,
       listOfSlide: listOfSlides,
     };
@@ -108,6 +109,7 @@ export default function Slide() {
       setListOfSlides(data);
     });
     const data = {
+      presents_id: params.presentId,
       indexSlide: selectedIndex,
       listOfSlide: listOfSlides,
     };
