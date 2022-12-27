@@ -1,26 +1,91 @@
 import React, { useEffect } from "react";
-import { Button, Modal, Table } from "react-bootstrap";
-import { BsPencilFill } from "react-icons/bs";
+import { Button, Table } from "react-bootstrap";
+import { BsFillTrashFill, BsPencilFill } from "react-icons/bs";
 import EditRoleModal from "./EditRoleModal";
+import Tag from "../../general/Tag";
 
 function getUserId() {
   const accessToken = localStorage.getItem("accessToken");
   return JSON.parse(atob(accessToken.split(".")[1])).user.users_id;
 }
 
-function MemberList({ members, groupId, changeMemberRole, roles }) {
+function getTbody(
+  members,
+  rowNeedHighlight,
+  canEditRole,
+  openEditModal,
+  currentUserRoleId,
+  kickMember
+) {
+  return (
+    <>
+      {members.map((member) => {
+        const highlightStyle = rowNeedHighlight(member.userId);
+        const tagVariant =
+          member.roleId === 1
+            ? "success"
+            : member.roleId === 2
+            ? "warning"
+            : null;
+        const isCurrentUser = member.userId === getUserId();
+        const hasLowerRole = member.roleId < currentUserRoleId;
+        const canBeKicked = member.roleId > 2 && currentUserRoleId <= 2;
+
+        function kick() {
+          kickMember(member.userId);
+        }
+
+        return (
+          <tr key={member.userId} style={highlightStyle}>
+            <td>{member.userId}</td>
+            <td>{member.username}</td>
+            <td>{member.email}</td>
+            <td>
+              <Tag variant={tagVariant}>{member.roleName}</Tag>
+            </td>
+            <td>
+              <Button
+                size="sm"
+                className="button"
+                variant={canEditRole ? "outline-primary" : "outline-dark"}
+                onClick={() => openEditModal(member)}
+                disabled={!canEditRole || isCurrentUser || hasLowerRole}
+              >
+                <BsPencilFill />
+              </Button>
+            </td>
+            <td>
+              {canBeKicked && (
+                <Button
+                  size="sm"
+                  className="button"
+                  variant="outline-danger"
+                  onClick={kick}
+                >
+                  <BsFillTrashFill />
+                </Button>
+              )}
+            </td>
+          </tr>
+        );
+      })}
+    </>
+  );
+}
+
+function MemberList({ members, groupId, changeMemberRole, roles, kickMember }) {
   const [showEditModal, setShowEditModal] = React.useState(false);
   const [editingMember, setEditingMember] = React.useState({});
   const [canEditRole, setCanEditRole] = React.useState(true);
+  const [currentUserRoleId, setCurrentUserRoleId] = React.useState(0);
 
   useEffect(() => {
     const currentUserId = getUserId();
     const currentUser = members.find(
       (member) => member.userId === currentUserId
     );
-    setCanEditRole(
-      currentUser?.roleId === 1 || currentUser?.roleId === 2
-    );
+    setCurrentUserRoleId(currentUser?.roleId);
+    setCanEditRole(currentUser?.roleId === 1 || currentUser?.roleId === 2);
   }, [members]);
 
   function openEditModal(member) {
@@ -35,6 +100,10 @@ function MemberList({ members, groupId, changeMemberRole, roles }) {
   function saveRoleChange(userId, newRoleName) {
     changeMemberRole(userId, newRoleName);
     closeEditModal();
+  }
+
+  function kick(userId) {
+    kickMember(userId);
   }
 
   function rowNeedHighlight(userId) {
@@ -58,28 +127,14 @@ function MemberList({ members, groupId, changeMemberRole, roles }) {
           <th>Role</th>
         </thead>
         <tbody>
-          {members.map((member) => {
-            const highlightStyle = rowNeedHighlight(member.userId);
-            return (
-              <tr key={member.userId} style={highlightStyle}>
-                <td>{member.userId}</td>
-                <td>{member.username}</td>
-                <td>{member.email}</td>
-                <td>{member.roleName}</td>
-                <td>
-                  <Button
-                    size="sm"
-                    className="button"
-                    variant={canEditRole ? "outline-primary" : "outline-dark"}
-                    onClick={() => openEditModal(member)}
-                    disabled={!canEditRole}
-                  >
-                    <BsPencilFill />
-                  </Button>
-                </td>
-              </tr>
-            );
-          })}
+          {getTbody(
+            members,
+            rowNeedHighlight,
+            canEditRole,
+            openEditModal,
+            currentUserRoleId,
+            kick
+          )}
         </tbody>
       </Table>
 
