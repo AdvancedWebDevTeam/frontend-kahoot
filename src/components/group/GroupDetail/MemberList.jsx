@@ -29,7 +29,8 @@ function getTbody(
             : null;
         const isCurrentUser = member.userId === getUserId();
         const hasLowerRole = member.roleId < currentUserRoleId;
-        const canBeKicked = member.roleId > 2 && currentUserRoleId <= 2;
+        const canBeKicked = member.roleId > currentUserRoleId;
+        const canBeEdited = canEditRole && !isCurrentUser && !hasLowerRole;
 
         function kick() {
           kickMember(member.userId);
@@ -44,15 +45,16 @@ function getTbody(
               <Tag variant={tagVariant}>{member.roleName}</Tag>
             </td>
             <td>
-              <Button
-                size="sm"
-                className="button"
-                variant={canEditRole ? "outline-primary" : "outline-dark"}
-                onClick={() => openEditModal(member)}
-                disabled={!canEditRole || isCurrentUser || hasLowerRole}
-              >
-                <BsPencilFill />
-              </Button>
+              {canBeEdited && (
+                <Button
+                  size="sm"
+                  className="button"
+                  variant={canEditRole ? "outline-primary" : "outline-dark"}
+                  onClick={() => openEditModal(member)}
+                >
+                  <BsPencilFill />
+                </Button>
+              )}
             </td>
             <td>
               {canBeKicked && (
