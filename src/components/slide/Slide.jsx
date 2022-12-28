@@ -334,7 +334,7 @@ export default function Slide() {
           <Modal.Header closeButton>
             <Modal.Title>My Share Link Slide</Modal.Title>
           </Modal.Header>
-          <Modal.Body>Link: <Link to={linkShare}>{linkShare}</Link></Modal.Body>
+          <Modal.Body>Link: <a href={linkShare}>{linkShare}</a></Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={handleClose}>
               Close

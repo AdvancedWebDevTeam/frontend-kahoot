@@ -20,6 +20,7 @@ import MemberView from "../slide/MemberView";
 
 
 import { JoinRoomSocket } from "./JoinRoomSocket";
+import Chat from "../chat/Chat";
 
 export default function Home() {
 
@@ -142,6 +143,7 @@ export default function Home() {
         <Route path="invite/*" element={<JoinGroupByLink />} />
         <Route path="presentations/:groupId" element={<Presentation />} />
         <Route path="slides/:groupId/show/:presentId" element={<Slide/>} />
+        <Route path="slides/:groupId/show/:presentId/chat" element={<Chat/>} />
         <Route path="share/:access/slide/:presentId" element={<MemberView/>} />
         <Route path="presentations/mypresent/:userId" element={<MyPresentation/>} />
       </Routes>
