@@ -11,7 +11,7 @@ function getUserId() {
     return JSON.parse(atob(accessToken.split(".")[1])).user.users_id;
 }
 
-export default function Chat({ room }) {
+export default function Chat() {
     const [currentMessage, setCurrentMessage] = useState("");
     const [messageList, setMessageList] = useState([]);
     const socket = useContext(SocketContext);
@@ -20,10 +20,6 @@ export default function Chat({ room }) {
 
     const sendMessage = async () => {
         if (currentMessage !== "") {
-            const messageData = {
-                author: userID,
-                chat: currentMessage,
-            };
             const data = {
                 presents_id: param.presentId,
                 users_id: userID,
@@ -71,7 +67,6 @@ export default function Chat({ room }) {
                                         <p>{messageContent.chat}</p>
                                     </div>
                                     <div className="message-meta">
-                                        {/* <p id="time">{messageContent.time}</p> */}
                                         <p id="author">{messageContent.author}</p>
                                     </div>
                                 </div>

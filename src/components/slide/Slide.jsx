@@ -53,7 +53,6 @@ function getUserId() {
 
 const popover = (
   <Popover id="popover-basic">
-    <Popover.Header as="h3">Popover right</Popover.Header>
     <Popover.Body>
       <Chat />
     </Popover.Body>
@@ -74,10 +73,10 @@ export default function Slide() {
 
   const handleClose = () => setIsShowModal(false);
   const handleShow = () => {
-    if(presentInfo.groups_id === null){
+    if (presentInfo.groups_id === null) {
       setLinkShare(`${process.env.REACT_APP_FE}/share/public/slide/${params.presentId}`);
     }
-    else{
+    else {
       setLinkShare(`${process.env.REACT_APP_FE}/share/private/slide/${params.presentId}`);
     }
     setIsShowModal(true);
@@ -112,7 +111,7 @@ export default function Slide() {
     socket.on("submitSlide", (data) => {
       setListOfSlides(data);
     });
-    
+
     const data = {
       presents_id: params.presentId,
       indexSlide: selectedIndex,
@@ -120,7 +119,7 @@ export default function Slide() {
     };
 
     socket.emit("clickedSlide", data);
-    
+
     return () => {
       socket.off("submitSlide", (data) => {
         setListOfSlides(data);
@@ -130,24 +129,24 @@ export default function Slide() {
   }, [isFetch]);
 
   useEffect(() => {
-    
+
     setCurrentUserId(getUserId());
-    
+
     getSlideTypes()
-    .then((data) => {
-      setListofSlideTypes(data);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+      .then((data) => {
+        setListofSlideTypes(data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
 
     getNameAndCreator(params.presentId)
-    .then((data) => {
-      setPresentInfo(data);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+      .then((data) => {
+        setPresentInfo(data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, [])
 
   const backToPresentClick = () => {
@@ -178,7 +177,7 @@ export default function Slide() {
 
   function presentSlides() {
     fullscreenHandle.enter();
-    socket.emit("NotifyPresentation", {presentInfo, currentUserId});
+    socket.emit("NotifyPresentation", { presentInfo, currentUserId });
   }
 
   const onFullscreenChange = useCallback(
@@ -252,14 +251,9 @@ export default function Slide() {
       <div className="boxSlide1 slide-toolbar">
         <Button onClick={createSlideClick}>+ New slide</Button>
         <div className="float-right">
-        <TooltipTrigger text="Box chat">
-            <Button href={window.location.href + "/chat"}>
-              Group chat
-            </Button>
-          </TooltipTrigger>
-          {/* <OverlayTrigger trigger="click" placement="left" overlay={popover}>
-    <Button variant="success">Click me to see</Button>
-  </OverlayTrigger> */}
+          <OverlayTrigger trigger="click" placement="left" overlay={popover}>
+            <Button variant="success">Box chat</Button>
+          </OverlayTrigger>
           <TooltipTrigger text="Share slides">
             <Button onClick={handleShow}>
               Share
