@@ -140,7 +140,7 @@ export default function Home() {
         <Route index element={<Welcome />} />
         <Route path="group/*" element={<Group userId={user.users_id} />} />
         <Route path="profile" element={<UserProfile />} />
-        <Route path="invite/*" element={<JoinGroupByLink />} />
+        <Route path="invite/:groupId" element={<JoinGroupByLink />} />
         <Route path="presentations/:groupId" element={<Presentation />} />
         <Route path="slides/:groupId/show/:presentId" element={<Slide/>} />
         <Route path="slides/:groupId/show/:presentId/chat" element={<Chat/>} />

@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useContext } from "react";
-import { Button, Container, Modal, OverlayTrigger, Popover } from "react-bootstrap";
+import { Alert, Button, Container, Modal, OverlayTrigger, Popover, Toast } from "react-bootstrap";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -60,6 +60,7 @@ export default function Slide() {
   const [isShowModal, setIsShowModal] = useState(false);
   const [linkShare, setLinkShare] = useState(``);
   const [currentUserId, setCurrentUserId] = useState("");
+  const [showAlert, setShowAlert] = useState(false);
 
   const socket = useContext(SocketContext);
 
@@ -120,10 +121,13 @@ export default function Slide() {
 
     socket.emit("clickedSlide", data);
 
+    socket.on("receive_message", (data) => setShowAlert(true));
+
     return () => {
       socket.off("submitSlide", (data) => {
         setListOfSlides(data);
       });
+      socket.off("receive_message");
     }
 
   }, [isFetch]);
@@ -229,9 +233,21 @@ export default function Slide() {
     }
   };
 
+  const alert = (
+    <Alert
+      dismissible
+      variant="primary"
+      onClose={() => setShowAlert(false)}
+    >
+      You have a new message!
+    </Alert>
+  );
+
   return (
     <>
+      {showAlert && alert}
       <div className="boxSlide1 slide-header">
+        
         {params.groupId !== "mypresent" &&
           <Button
             variant="outline-dark"
