@@ -215,9 +215,8 @@ export default function Slide() {
 
   const handleDelete = () => {
     if (selectedIndex < listOfSlides.length && selectedIndex >= 0) {
-      //console.log(listOfSlides[selectedIndex].slides_id);
       deleteSlide(listOfSlides[selectedIndex].slides_id);
-      window.location.reload();
+      FetchListOfSlide();
     }
   };
 
@@ -243,6 +242,11 @@ export default function Slide() {
       <div className="boxSlide1 slide-toolbar">
         <Button onClick={createSlideClick}>+ New slide</Button>
         <div className="float-right">
+        <TooltipTrigger text="Box chat">
+            <Button href={window.location.href + "/chat"}>
+              Group chat
+            </Button>
+          </TooltipTrigger>
           <TooltipTrigger text="Share slides">
             <Button onClick={handleShow}>
               Share
