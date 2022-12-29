@@ -35,11 +35,6 @@ export default function Chat({ room }) {
     };
 
     useEffect(() => {
-        if (messageList.length === 0) {
-            getAllChat(param.presentId).then((data) => {
-                setMessageList(data);
-            }).catch((error) => console.log(error));
-        }
         socket.on("receive_message", (data) => {
             const element = {
                 author: data.users_id,
@@ -48,15 +43,15 @@ export default function Chat({ room }) {
             setMessageList((list) => [...list, element]);
         });
         return () => {
-            socket.off("receive_message", (data) => {
-                const element = {
-                    author: data.users_id,
-                    chat: data.content
-                }
-                setMessageList((list) => [...list, element]);
-            });
+            socket.off("receive_message");
         }
     }, [socket]);
+
+    useEffect(() => {
+        getAllChat(param.presentId).then((data) => {
+            setMessageList(data);
+        }).catch((error) => console.log(error));
+    }, [])
 
     return (
         <div className="chat-window">

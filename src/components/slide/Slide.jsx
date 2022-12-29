@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useContext } from "react";
-import { Button, Container, Modal } from "react-bootstrap";
+import { Button, Container, Modal, OverlayTrigger, Popover } from "react-bootstrap";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -35,6 +35,7 @@ import MainView from "./MainView";
 import "./Slide.css";
 import TooltipTrigger from "../general/TooltipTrigger";
 import { SocketContext } from "../socket/Socket";
+import Chat from "../chat/Chat";
 
 ChartJS.register(
   CategoryScale,
@@ -49,6 +50,15 @@ function getUserId() {
   const accessToken = localStorage.getItem("accessToken");
   return JSON.parse(atob(accessToken.split(".")[1])).user.users_id;
 }
+
+const popover = (
+  <Popover id="popover-basic">
+    <Popover.Header as="h3">Popover right</Popover.Header>
+    <Popover.Body>
+      <Chat />
+    </Popover.Body>
+  </Popover>
+);
 
 export default function Slide() {
   const [listOfSlides, setListOfSlides] = useState([]);
@@ -247,6 +257,9 @@ export default function Slide() {
               Group chat
             </Button>
           </TooltipTrigger>
+          {/* <OverlayTrigger trigger="click" placement="left" overlay={popover}>
+    <Button variant="success">Click me to see</Button>
+  </OverlayTrigger> */}
           <TooltipTrigger text="Share slides">
             <Button onClick={handleShow}>
               Share
