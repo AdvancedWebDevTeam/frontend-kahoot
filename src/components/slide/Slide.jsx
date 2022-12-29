@@ -51,14 +51,6 @@ function getUserId() {
   return JSON.parse(atob(accessToken.split(".")[1])).user.users_id;
 }
 
-const popover = (
-  <Popover id="popover-basic">
-    <Popover.Body>
-      <Chat />
-    </Popover.Body>
-  </Popover>
-);
-
 export default function Slide() {
   const [listOfSlides, setListOfSlides] = useState([]);
   const [presentInfo, setPresentInfo] = useState([]);
@@ -70,6 +62,14 @@ export default function Slide() {
   const [currentUserId, setCurrentUserId] = useState("");
 
   const socket = useContext(SocketContext);
+
+  const popover = (
+    <Popover id="popover-basic">
+      <Popover.Body>
+        <Chat />
+      </Popover.Body>
+    </Popover>
+  );
 
   const handleClose = () => setIsShowModal(false);
   const handleShow = () => {
