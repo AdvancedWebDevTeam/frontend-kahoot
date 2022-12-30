@@ -11,7 +11,7 @@ function getUserId() {
     return JSON.parse(atob(accessToken.split(".")[1])).user.users_id;
 }
 
-export default function Chat() {
+export default function Chat({presentInfo}) {
     const [currentMessage, setCurrentMessage] = useState("");
     const [messageList, setMessageList] = useState([]);
     const socket = useContext(SocketContext);
@@ -25,7 +25,7 @@ export default function Chat() {
                 users_id: userID,
                 content: currentMessage
             }
-            await socket.emit("send_message", data);
+            await socket.emit("send_message", { presentInfo, data, userID });
             setCurrentMessage("");
         }
     };
@@ -67,7 +67,7 @@ export default function Chat() {
                                         <p>{messageContent.chat}</p>
                                     </div>
                                     <div className="message-meta">
-                                        <p id="author">{messageContent.author}</p>
+                                        <p id="author">{messageContent.name}</p>
                                     </div>
                                 </div>
                             </div>

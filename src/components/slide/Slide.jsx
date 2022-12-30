@@ -61,13 +61,14 @@ export default function Slide() {
   const [linkShare, setLinkShare] = useState(``);
   const [currentUserId, setCurrentUserId] = useState("");
   const [showAlert, setShowAlert] = useState(false);
+  const [message, setMessage] = useState("");
 
   const socket = useContext(SocketContext);
 
   const popover = (
     <Popover id="popover-basic">
       <Popover.Body>
-        <Chat />
+        <Chat presentInfo={presentInfo} />
       </Popover.Body>
     </Popover>
   );
@@ -121,7 +122,10 @@ export default function Slide() {
 
     socket.emit("clickedSlide", data);
 
-    socket.on("receive_message", (data) => setShowAlert(true));
+    socket.on("NotifyMessage", (data) => {
+      setShowAlert(true);
+      setMessage(data);
+    });
 
     return () => {
       socket.off("submitSlide", (data) => {
@@ -239,7 +243,7 @@ export default function Slide() {
       variant="primary"
       onClose={() => setShowAlert(false)}
     >
-      You have a new message!
+      {message}
     </Alert>
   );
 
