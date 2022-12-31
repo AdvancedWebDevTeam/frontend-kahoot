@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useContext } from "react";
-import { Alert, Button, Container, Modal, OverlayTrigger, Popover, Toast } from "react-bootstrap";
-import { useNavigate, useParams, Link } from "react-router-dom";
+import { Button, Container, Modal, OverlayTrigger, Popover } from "react-bootstrap";
+import { useNavigate, useParams } from "react-router-dom";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { Bar } from "react-chartjs-2";
@@ -60,15 +60,13 @@ export default function Slide() {
   const [isShowModal, setIsShowModal] = useState(false);
   const [linkShare, setLinkShare] = useState(``);
   const [currentUserId, setCurrentUserId] = useState("");
-  const [showAlert, setShowAlert] = useState(false);
-  const [message, setMessage] = useState("");
 
   const socket = useContext(SocketContext);
 
   const popover = (
     <Popover id="popover-basic">
       <Popover.Body>
-        <Chat presentInfo={presentInfo} />
+        <Chat/>
       </Popover.Body>
     </Popover>
   );
@@ -121,11 +119,6 @@ export default function Slide() {
     };
 
     socket.emit("clickedSlide", data);
-
-    socket.on("NotifyMessage", (data) => {
-      setShowAlert(true);
-      setMessage(data);
-    });
 
     return () => {
       socket.off("submitSlide", (data) => {
@@ -237,19 +230,8 @@ export default function Slide() {
     }
   };
 
-  const alert = (
-    <Alert
-      dismissible
-      variant="primary"
-      onClose={() => setShowAlert(false)}
-    >
-      {message}
-    </Alert>
-  );
-
   return (
     <>
-      {showAlert && alert}
       <div className="boxSlide1 slide-header">
         
         {params.groupId !== "mypresent" &&

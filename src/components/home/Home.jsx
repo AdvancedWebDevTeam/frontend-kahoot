@@ -21,6 +21,7 @@ import MemberView from "../slide/MemberView";
 
 import { JoinRoomSocket } from "./JoinRoomSocket";
 import Chat from "../chat/Chat";
+import NotifyChat from "./NotifyChat";
 
 export default function Home() {
 
@@ -143,12 +144,15 @@ export default function Home() {
         <Route path="invite/:groupId" element={<JoinGroupByLink />} />
         <Route path="presentations/:groupId" element={<Presentation />} />
         <Route path="slides/:groupId/show/:presentId" element={<Slide/>} />
-        <Route path="slides/:groupId/show/:presentId/chat" element={<Chat/>} />
+        <Route path="/:presentId/chat" element={<Chat/>} />
         <Route path="share/:access/slide/:presentId" element={<MemberView/>} />
         <Route path="presentations/mypresent/:userId" element={<MyPresentation/>} />
       </Routes>
       {user.users_id !== "" &&
         <JoinRoomSocket user={user}/>
+      }
+      {user.users_id !== "" &&
+        <NotifyChat/>
       }
     </div>
   );

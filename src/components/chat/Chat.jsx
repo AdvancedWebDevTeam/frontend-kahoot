@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import ScrollToBottom from 'react-scroll-to-bottom';
 import { getAllChat } from '../../fetch/presentationFetch';
+import { getNameAndCreator } from '../../fetch/slideFetch';
 import { SocketContext } from '../socket/Socket';
 import "./Chat.css";
 
@@ -11,9 +12,11 @@ function getUserId() {
     return JSON.parse(atob(accessToken.split(".")[1])).user.users_id;
 }
 
-export default function Chat({presentInfo}) {
+export default function Chat() {
     const [currentMessage, setCurrentMessage] = useState("");
     const [messageList, setMessageList] = useState([]);
+    const [username, setUsername] = useState("");
+    const [presentInfo, setPresentInfo] = useState([]);
     const socket = useContext(SocketContext);
     const userID = getUserId();
     const param = useParams();
@@ -23,7 +26,8 @@ export default function Chat({presentInfo}) {
             const data = {
                 presents_id: param.presentId,
                 users_id: userID,
-                content: currentMessage
+                content: currentMessage,
+                name: username
             }
             await socket.emit("send_message", { presentInfo, data, userID });
             setCurrentMessage("");
@@ -34,7 +38,8 @@ export default function Chat({presentInfo}) {
         socket.on("receive_message", (data) => {
             const element = {
                 author: data.users_id,
-                chat: data.content
+                chat: data.content,
+                name: data.name
             }
             setMessageList((list) => [...list, element]);
         });
@@ -46,7 +51,20 @@ export default function Chat({presentInfo}) {
     useEffect(() => {
         getAllChat(param.presentId).then((data) => {
             setMessageList(data);
+            for (let i = 0; i < data.length; i++) {
+                if (data[i].author === userID) {
+                    setUsername(data[i].name);
+                    break;
+                }
+            }
         }).catch((error) => console.log(error));
+        getNameAndCreator(param.presentId)
+        .then((data) => {
+            setPresentInfo(data);
+        })
+        .catch((err) => {
+            console.log(err);
+        });
     }, [])
 
     return (
