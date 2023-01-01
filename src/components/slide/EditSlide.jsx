@@ -95,6 +95,38 @@ export default function EditSlide({
         });
         break;
       }
+      case 2:
+      {
+        const { heading2, Subheading } = newData;
+        const content = {};
+        content["heading"] = heading2;
+        content["subheading"] = Subheading;
+        updateSlide(
+          listOfSlides[selectedIndex].slides_id,
+          listOfSlides[selectedIndex].presents_id,
+          typeId,
+          JSON.stringify(content)
+        ).catch((err) => {
+          console.log(err);
+        });
+        break;
+      }
+      case 3:
+      {
+        const { heading3, Paragraph } = newData;
+        const content = {};
+        content["heading"] = heading3;
+        content["paragraph"] = Paragraph;
+        updateSlide(
+          listOfSlides[selectedIndex].slides_id,
+          listOfSlides[selectedIndex].presents_id,
+          typeId,
+          JSON.stringify(content)
+        ).catch((err) => {
+          console.log(err);
+        });
+        break;
+      }
     }
     FetchListOfSlide();
   };
@@ -163,7 +195,7 @@ export default function EditSlide({
                       </InputGroup>
                       {errors.question?.type === "required" && (
                         <Form.Text className="text-danger">
-                          <div>required</div>
+                          <div>Required</div>
                         </Form.Text>
                       )}
                       <div style={{ marginTop: "10px" }}>
@@ -189,7 +221,7 @@ export default function EditSlide({
                             </InputGroup>
                             {errors[keyName]?.type === "required" && (
                               <Form.Text className="text-danger">
-                                <div>required</div>
+                                <div>Required</div>
                               </Form.Text>
                             )}
                           </div>
@@ -218,6 +250,11 @@ export default function EditSlide({
                           {...register("heading2", { required: true, maxLength: 30 })}
                         />
                       </InputGroup>
+                      {errors.heading2?.type === "required" && (
+                        <Form.Text className="text-danger">
+                          <div>Required</div>
+                        </Form.Text>
+                      )}
                       {errors.heading2?.type === "maxLength" && (
                         <Form.Text className="text-danger">
                           <div>Should have less than 31 characters</div>
@@ -227,9 +264,9 @@ export default function EditSlide({
                       <InputGroup style={{marginTop: "10px"}}>
                         <Form.Control
                           placeholder={subheading}
-                          id="subheading"
+                          id="Subheading"
                           defaultValue=""
-                          {...register("subheading", { required: true, maxLength: 100 })}
+                          {...register("Subheading", { maxLength: 100 })}
                         />
                       </InputGroup>
                       {errors.subheading?.type === "maxLength" && (
@@ -254,6 +291,11 @@ export default function EditSlide({
                           {...register("heading3", { required: true, maxLength: 30 })}
                         />
                       </InputGroup>
+                      {errors.heading3?.type === "required" && (
+                        <Form.Text className="text-danger">
+                          <div>Required</div>
+                        </Form.Text>
+                      )}
                       {errors.heading3?.type === "maxLength" && (
                         <Form.Text className="text-danger">
                           <div>Should have less than 31 characters</div>
@@ -263,9 +305,9 @@ export default function EditSlide({
                       <InputGroup style={{marginTop: "10px"}}>
                         <Form.Control
                           placeholder={paragraph}
-                          id="paragraph"
+                          id="Paragraph"
                           defaultValue=""
-                          {...register("paragraph", { required: true, maxLength: 190 })}
+                          {...register("Paragraph", { maxLength: 190 })}
                         />
                       </InputGroup>
                       {errors.paragraph?.type === "maxLength" && (
