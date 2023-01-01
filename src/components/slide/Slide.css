@@ -148,3 +148,63 @@
 .nav-btn.next{
   order: 3;
 }
+
+.heading-style{
+  text-align: center;
+  font-size: 7px;
+  font-weight: bold;
+}
+
+.subheading-style{
+  text-align: center;
+  font-size: 5px;
+  display: block;/* or inline-block */
+  text-overflow: ellipsis;
+  word-wrap: break-word;
+  overflow: hidden;
+  max-height: 3.6em;
+  line-height: 1.8em;
+}
+
+.paragraph-style{
+  text-align: center;
+  font-size: 5px;
+  display: block;/* or inline-block */
+  text-overflow: ellipsis;
+  word-wrap: break-word;
+  overflow: hidden;
+  max-height: 7.2em;
+  line-height: 1.8em;
+}
+
+.heading-style-mainview{
+  text-align: center;
+  font-weight: bold;
+  font-size: 30px;
+  display: block;/* or inline-block */
+  text-overflow: ellipsis;
+  word-wrap: break-word;
+  overflow: hidden;
+  max-height: 3.6em;
+  line-height: 1.8em;
+}
+
+.subheading-style-mainview{
+  text-align: center;
+  display: block;/* or inline-block */
+  text-overflow: ellipsis;
+  word-wrap: break-word;
+  overflow: hidden;
+  max-height: 3.6em;
+  line-height: 1.8em;
+}
+
+.paragraph-style-mainview{
+  text-align: center;
+  display: block;/* or inline-block */
+  text-overflow: ellipsis;
+  word-wrap: break-word;
+  overflow: hidden;
+  max-height: 7.2em;
+  line-height: 1.8em;
+}
