@@ -64,19 +64,22 @@ export default function Slide() {
 
   const handleClose = () => setIsShowModal(false);
   const handleShow = () => {
-    if(presentInfo.groups_id === null){
-      setLinkShare(`${process.env.REACT_APP_FE}/share/public/slide/${params.presentId}`);
-    }
-    else{
-      setLinkShare(`${process.env.REACT_APP_FE}/share/private/slide/${params.presentId}`);
+    if (presentInfo.groups_id === null) {
+      setLinkShare(
+        `${process.env.REACT_APP_FE}/share/public/slide/${params.presentId}`
+      );
+    } else {
+      setLinkShare(
+        `${process.env.REACT_APP_FE}/share/private/slide/${params.presentId}`
+      );
     }
     setIsShowModal(true);
-  }
+  };
 
   const handleClick = (index) => {
     const data = {
       indexSlide: index,
-      listOfSlide: listOfSlides,
+      listOfSlide: listOfSlides
     };
     socket.emit("clickedSlide", data);
     setSelectedIndex(index);
@@ -89,7 +92,6 @@ export default function Slide() {
   const [isOnFullScreen, setIsOnFullScreen] = useState(false);
 
   useEffect(() => {
-
     getAllSlides(params.presentId)
       .then((data) => {
         setListOfSlides(data);
@@ -102,43 +104,42 @@ export default function Slide() {
       console.log(data);
       setListOfSlides(data);
     });
-    
-    const data = { // bien này có thể là data {}và nó đã 
+
+    const data = {
+      // bien này có thể là data {}và nó đã
       indexSlide: selectedIndex,
-      listOfSlide: listOfSlides,
+      listOfSlide: listOfSlides
     };
 
-    socket.emit("clickedSlide", data);// có thể dòng này gây bug bởi của Ngọc 
-    //vì khi ông load component lên chưa chắc state[selectedIndex và listOfSlides] đã được set
-    
+    socket.emit("clickedSlide", data); // có thể dòng này gây bug bởi của Ngọc
+    // vì khi ông load component lên chưa chắc state[selectedIndex và listOfSlides] đã được set
+
     return () => {
       socket.off("submitSlide", (data) => {
         setListOfSlides(data);
       });
-    }
-
+    };
   }, [isFetch]);
 
   useEffect(() => {
-    
     setCurrentUserId(getUserId());
-    
+
     getSlideTypes()
-    .then((data) => {
-      setListofSlideTypes(data);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+      .then((data) => {
+        setListofSlideTypes(data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
 
     getNameAndCreator(params.presentId)
-    .then((data) => {
-      setPresentInfo(data);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-  }, [])
+      .then((data) => {
+        setPresentInfo(data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   const backToPresentClick = () => {
     navigate(`/presentations/${params.groupId}`);
@@ -168,7 +169,7 @@ export default function Slide() {
 
   function presentSlides() {
     fullscreenHandle.enter();
-    socket.emit("NotifyPresentation", {presentInfo, currentUserId});
+    socket.emit("NotifyPresentation", { presentInfo, currentUserId });
   }
 
   const onFullscreenChange = useCallback(
@@ -215,7 +216,7 @@ export default function Slide() {
 
   const handleDelete = () => {
     if (selectedIndex < listOfSlides.length && selectedIndex >= 0) {
-      //console.log(listOfSlides[selectedIndex].slides_id);
+      // console.log(listOfSlides[selectedIndex].slides_id);
       deleteSlide(listOfSlides[selectedIndex].slides_id);
       window.location.reload();
     }
@@ -224,7 +225,7 @@ export default function Slide() {
   return (
     <>
       <div className="boxSlide1 slide-header">
-        {params.groupId !== "mypresent" &&
+        {params.groupId !== "mypresent" && (
           <Button
             variant="outline-dark"
             className="back-btn"
@@ -232,21 +233,17 @@ export default function Slide() {
           >
             <BsFillCaretLeftFill />
           </Button>
-        }
+        )}
         <div>
           <h4 className="title">{presentInfo.presents_name}</h4>
-          <span className="credit">
-            Created by {presentInfo.users_name}
-          </span>
+          <span className="credit">Created by {presentInfo.users_name}</span>
         </div>
       </div>
       <div className="boxSlide1 slide-toolbar">
         <Button onClick={createSlideClick}>+ New slide</Button>
         <div className="float-right">
           <TooltipTrigger text="Share slides">
-            <Button onClick={handleShow}>
-              Share
-            </Button>
+            <Button onClick={handleShow}>Share</Button>
           </TooltipTrigger>
           <TooltipTrigger text="Delete slide">
             <Button variant="outline-danger" onClick={handleDelete}>
@@ -334,7 +331,9 @@ export default function Slide() {
           <Modal.Header closeButton>
             <Modal.Title>My Share Link Slide</Modal.Title>
           </Modal.Header>
-          <Modal.Body>Link: <Link to={linkShare}>{linkShare}</Link></Modal.Body>
+          <Modal.Body>
+            Link: <Link to={linkShare}>{linkShare}</Link>
+          </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={handleClose}>
               Close

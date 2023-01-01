@@ -1,16 +1,20 @@
 import React, { useEffect } from "react";
+import { Alert, Button } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 import MemberList from "./MemberList";
-import { getMembersInGroup } from "../../../fetch/groupFetch";
+import {
+  getMembersInGroup,
+  requestKickMember
+} from "../../../fetch/groupFetch";
 import { capitalizeFirstLetter } from "../../../util/string";
 import "./groupDetail.css";
 import { requestMemberRoleChange } from "../../../fetch/roleFetch";
-import { Alert, Button } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
 
 function GroupDetail({ group, roles }) {
   const [members, setMembers] = React.useState([]);
   const [showAlert, setShowAlert] = React.useState(false);
   const [alertSuccess, setAlertSuccess] = React.useState(false);
+  const [alertMessage, setAlertMessage] = React.useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -19,9 +23,9 @@ function GroupDetail({ group, roles }) {
     });
   }, []);
 
-  const viewPresent_Click = () => {
+  const viewPresentClick = () => {
     navigate(`/presentations/${group.groups_id}`);
-  }
+  };
 
   function changeMemberRole(userId, newRoleName) {
     const { roles_id } = roles.find((role) => role.roles_name === newRoleName);
@@ -36,16 +40,38 @@ function GroupDetail({ group, roles }) {
       return member;
     });
     setMembers(newMembers);
+
     requestMemberRoleChange(group.groups_id, userId, roles_id)
       .then((success) => {
         if (success) {
           setShowAlert(true);
           setAlertSuccess(true);
+          setAlertMessage("Role changed successfully");
         }
       })
       .catch(() => {
         setShowAlert(true);
         setAlertSuccess(false);
+        setAlertMessage("Failed to change role");
+      });
+  }
+
+  function kickMember(memberId) {
+    const newMembers = members.filter((member) => member.userId !== memberId);
+    setMembers(newMembers);
+
+    requestKickMember(group.groups_id, memberId)
+      .then((success) => {
+        if (success) {
+          setShowAlert(true);
+          setAlertSuccess(true);
+          setAlertMessage("Member has been kicked!");
+        }
+      })
+      .catch(() => {
+        setShowAlert(true);
+        setAlertSuccess(false);
+        setAlertMessage("Failed to kick member");
       });
   }
 
@@ -55,7 +81,7 @@ function GroupDetail({ group, roles }) {
       variant={alertSuccess ? "success" : "danger"}
       onClose={() => setShowAlert(false)}
     >
-      {alertSuccess ? "Change role successfully" : "Failed to change role"}
+      {alertMessage}
     </Alert>
   );
 
@@ -69,9 +95,10 @@ function GroupDetail({ group, roles }) {
         groupId={group.groups_id}
         changeMemberRole={changeMemberRole}
         roles={roles}
+        kickMember={kickMember}
       />
       <div>
-        <Button onClick={viewPresent_Click}>View Presentation</Button>
+        <Button onClick={viewPresentClick}>View Presentation</Button>
       </div>
     </div>
   );
