@@ -18,12 +18,15 @@ export default function EditSlide({
   const [typeId, setTypeId] = useState(0);
   const [options, setOptions] = useState({});
   const [question, setQuestion] = useState("");
+  const [heading, setHeading] = useState("");
+  const [subheading, setSubheading] = useState("");
+  const [paragraph, setParagraph] = useState("");
 
   const {
     register,
     handleSubmit,
     reset,
-    formState: { errors }
+    formState: { errors, isSubmitSuccessful }
   } = useForm();
 
   const len = listOfSlides.length;
@@ -32,15 +35,19 @@ export default function EditSlide({
     if (len > 0) {
       setTypeName(listOfSlides[selectedIndex]["type.types_name"]);
       setTypeId(listOfSlides[selectedIndex].types_id);
-      if (listOfSlides[selectedIndex].content !== "") {
-        setOptions(listOfSlides[selectedIndex].options);
-        setQuestion(listOfSlides[selectedIndex].question);
-      } else {
-        setOptions({});
-        setQuestion("");
-      }
+      setOptions(listOfSlides[selectedIndex].options);
+      setQuestion(listOfSlides[selectedIndex].question);
+      setHeading(listOfSlides[selectedIndex].heading);
+      setSubheading(listOfSlides[selectedIndex].subheading);
+      setParagraph(listOfSlides[selectedIndex].paragraph);
     }
   }, [len, selectedIndex, listOfSlides]);
+
+  useEffect(() => {
+    if(isSubmitSuccessful){
+      reset();
+    }
+  }, [isSubmitSuccessful])
 
   const handleChange = (e) => {
     setTypeName(e.target.value);
@@ -51,8 +58,10 @@ export default function EditSlide({
   const onHandleSubmit = (data) => {
     const newData = { ...data };
 
-    switch (typeId) {
-      case 0: {
+    switch (typeId) 
+    {
+      case 0: 
+      {
         updateSlide(
           listOfSlides[selectedIndex].slides_id,
           listOfSlides[selectedIndex].presents_id,
@@ -64,7 +73,8 @@ export default function EditSlide({
 
         break;
       }
-      case 1: {
+      case 1: 
+      {
         const { question } = newData;
         delete newData.question;
         const content = { question };
@@ -83,6 +93,7 @@ export default function EditSlide({
         ).catch((err) => {
           console.log(err);
         });
+        break;
       }
     }
     FetchListOfSlide();
@@ -106,18 +117,6 @@ export default function EditSlide({
     setOptions(newOptions);
   };
 
-  const resetButtonClick = () => {
-    switch (typeId) {
-      case 0: {
-        break;
-      }
-      case 1: {
-        reset();
-        break;
-      }
-    }
-  };
-
   return (
     <div className="boxSlide3">
       {len > 0 && (
@@ -127,11 +126,6 @@ export default function EditSlide({
               <TooltipTrigger text="Save change">
                 <Button variant="outline-primary" type="submit">
                   <BiSave />
-                </Button>
-              </TooltipTrigger>
-              <TooltipTrigger text="Reset form">
-                <Button variant="outline-primary" onClick={resetButtonClick}>
-                  <BsArrowCounterclockwise />
                 </Button>
               </TooltipTrigger>
             </div>
@@ -207,6 +201,78 @@ export default function EditSlide({
                       >
                         Add option
                       </Button>
+                    </div>
+                  )}
+                </div>
+              )}
+              {listOfSlides[selectedIndex].types_id === 2 && (
+                <div>
+                  {typeId === 2 && (
+                    <div style={{ marginTop: "10px" }}>
+                      <Form.Text style={{marginTop: "10px", fontSize: "20px"}}><b>Heading</b></Form.Text>
+                      <InputGroup>
+                        <Form.Control
+                          placeholder={heading}
+                          id="heading2"
+                          defaultValue=""
+                          {...register("heading2", { required: true, maxLength: 30 })}
+                        />
+                      </InputGroup>
+                      {errors.heading2?.type === "maxLength" && (
+                        <Form.Text className="text-danger">
+                          <div>Should have less than 31 characters</div>
+                        </Form.Text>
+                      )}
+                      <Form.Text style={{marginTop: "10px", fontSize: "20px"}}><b>Subheading</b></Form.Text>
+                      <InputGroup style={{marginTop: "10px"}}>
+                        <Form.Control
+                          placeholder={subheading}
+                          id="subheading"
+                          defaultValue=""
+                          {...register("subheading", { required: true, maxLength: 100 })}
+                        />
+                      </InputGroup>
+                      {errors.subheading?.type === "maxLength" && (
+                        <Form.Text className="text-danger">
+                          <div>Should have less than 101 characters</div>
+                        </Form.Text>
+                      )}
+                    </div>
+                  )}
+                </div>
+              )}
+              {listOfSlides[selectedIndex].types_id === 3 && (
+                <div>
+                  {typeId === 3 && (
+                    <div style={{ marginTop: "10px" }}>
+                      <Form.Text style={{marginTop: "10px", fontSize: "20px"}}><b>Heading</b></Form.Text>
+                      <InputGroup>
+                        <Form.Control
+                          placeholder={heading}
+                          id="heading3"
+                          defaultValue=""
+                          {...register("heading3", { required: true, maxLength: 30 })}
+                        />
+                      </InputGroup>
+                      {errors.heading3?.type === "maxLength" && (
+                        <Form.Text className="text-danger">
+                          <div>Should have less than 31 characters</div>
+                        </Form.Text>
+                      )}
+                      <Form.Text style={{marginTop: "10px", fontSize: "20px"}}><b>Paragraph</b></Form.Text>
+                      <InputGroup style={{marginTop: "10px"}}>
+                        <Form.Control
+                          placeholder={paragraph}
+                          id="paragraph"
+                          defaultValue=""
+                          {...register("paragraph", { required: true, maxLength: 190 })}
+                        />
+                      </InputGroup>
+                      {errors.paragraph?.type === "maxLength" && (
+                        <Form.Text className="text-danger">
+                          <div>Should have less than 191 characters</div>
+                        </Form.Text>
+                      )}
                     </div>
                   )}
                 </div>
