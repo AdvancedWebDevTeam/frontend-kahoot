@@ -35,6 +35,7 @@ import MainView from "./MainView";
 import "./Slide.css";
 import TooltipTrigger from "../general/TooltipTrigger";
 import { SocketContext } from "../socket/Socket";
+import { getLoggedInUserId } from "../../util/ultilis";
 
 ChartJS.register(
   CategoryScale,
@@ -44,11 +45,6 @@ ChartJS.register(
   Tooltip,
   Legend
 );
-
-function getUserId() {
-  const accessToken = localStorage.getItem("accessToken");
-  return JSON.parse(atob(accessToken.split(".")[1])).user.users_id;
-}
 
 export default function Slide() {
   const [listOfSlides, setListOfSlides] = useState([]);
@@ -122,7 +118,7 @@ export default function Slide() {
   }, [isFetch]);
 
   useEffect(() => {
-    setCurrentUserId(getUserId());
+    setCurrentUserId(getLoggedInUserId());
 
     getSlideTypes()
       .then((data) => {

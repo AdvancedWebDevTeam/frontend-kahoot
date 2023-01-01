@@ -148,7 +148,7 @@ export default function Presentation() {
             <div className="secondary-title">{present["user.users_name"]}</div>
           </div>
           <div className="boxPresentation2" style={{ float: "right" }}>
-            {userInGroup.roles_id !== 3 &&
+            {userInGroup.roles_id !== 3 && (
               <div>
                 <Button
                   onClick={(e) => viewSlideClick(present.presents_id)}
@@ -171,7 +171,7 @@ export default function Presentation() {
                   <BsFillTrashFill />
                 </Button>
               </div>
-            }
+            )}
           </div>
         </div>
       ))}

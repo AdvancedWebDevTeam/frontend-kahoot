@@ -1,7 +1,7 @@
 import React from "react";
 import { Card, Nav } from "react-bootstrap";
 import "./group.css";
-import { capitalizeFirstLetter } from "../../util/string";
+import { capitalizeFirstLetter } from "../../util/ultilis";
 
 function GroupSideBar({ groups }) {
   return (

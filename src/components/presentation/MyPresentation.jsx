@@ -16,7 +16,8 @@ import {
 } from "../../fetch/presentationFetch";
 import "./Presentation.css";
 import EditPresentationModal from "./EditPresentationModal";
-import AssignCollaboratorsModal from "./AssignCollaboratorsModal";
+import AssignCollaboratorsModal from "./collab/AssignCollaboratorsModal";
+import { updatePresentationCollaborators } from "../../fetch/collab";
 
 export default function MyPresentation() {
   const [listOfPresent, setListOfPresent] = useState([]);
@@ -107,7 +108,23 @@ export default function MyPresentation() {
     }
   }
 
-  async function submitCollaborators(hasChange, newColaborators) {}
+  async function submitCollaborators(presentId, newColaborators) {
+    setShowAssignModal(false);
+    setAssignTarget({});
+
+    const newListOfPresent = listOfPresent.map((item) => {
+      if (item.presents_id === presentId) {
+        return {
+          ...item,
+          collaborators: newColaborators
+        };
+      }
+      return item;
+    });
+    setListOfPresent(newListOfPresent);
+
+    // await updatePresentationCollaborators(presentId, newColaborators);
+  }
 
   const alert = (
     <Alert
@@ -154,7 +171,7 @@ export default function MyPresentation() {
                   <BsPencilSquare />
                 </Button>
                 <Button
-                  onClick={() => assignCollaborators(present.presents_id)}
+                  onClick={() => assignCollaborators(present)}
                   variant="outline-info"
                   style={{ marginLeft: "5px" }}
                 >
