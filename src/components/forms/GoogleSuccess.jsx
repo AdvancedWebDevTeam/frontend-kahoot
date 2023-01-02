@@ -8,7 +8,7 @@ export default function LoginGoogleSuccess() {
   const navigate = useNavigate();
   useEffect(() => {
     localStorage.setItem("accessToken", JSON.stringify(params.token));
-    navigate("/")
+    navigate("/");
   }, []);
   return (
     <div className="box-verify" style={{ marginTop: "10%" }}>

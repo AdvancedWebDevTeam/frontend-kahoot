@@ -37,6 +37,7 @@ import TooltipTrigger from "../general/TooltipTrigger";
 import { SocketContext } from "../socket/Socket";
 import paragraphImg from "./paragraph.png";
 import headingImg from "./heading.png";
+import { getLoggedInUserId } from "../../util/ultilis";
 
 ChartJS.register(
   CategoryScale,
@@ -151,17 +152,16 @@ export default function Slide() {
     setListOfSlides(newList);
   };
 
-  const createSlideClick = () => {
-    addSlide(params.presentId, 0, "").catch((err) => {
-      console.log(err);
-    });
+  const FetchListOfSlide = () => {
     const flag = !isFetch;
     setIsFetch(flag);
   };
 
-  const FetchListOfSlide = () => {
-    const flag = !isFetch;
-    setIsFetch(flag);
+  const createSlideClick = () => {
+    addSlide(params.presentId, 0, "").catch((err) => {
+      console.log(err);
+    });
+    FetchListOfSlide();
   };
 
   function presentSlides() {
@@ -302,9 +302,12 @@ export default function Slide() {
                     {slide.types_id === 2 && (
                       <div>
                         <div>
-                          <img alt="heading image" src={headingImg}></img>
+                          <img alt="heading image" src={headingImg} />
                         </div>
-                        <div className="heading-style" style={{marginTop: "10%"}}>
+                        <div
+                          className="heading-style"
+                          style={{ marginTop: "10%" }}
+                        >
                           {slide.heading}
                         </div>
                         <div className="subheading-style">
@@ -315,14 +318,15 @@ export default function Slide() {
                     {slide.types_id === 3 && (
                       <div>
                         <div>
-                          <img alt="heading image" src={paragraphImg}></img>
+                          <img alt="heading image" src={paragraphImg} />
                         </div>
-                        <div className="heading-style" style={{marginTop: "10%"}}>
+                        <div
+                          className="heading-style"
+                          style={{ marginTop: "10%" }}
+                        >
                           {slide.heading}
                         </div>
-                        <div className="paragraph-style">
-                          {slide.paragraph}
-                        </div>
+                        <div className="paragraph-style">{slide.paragraph}</div>
                       </div>
                     )}
                   </div>

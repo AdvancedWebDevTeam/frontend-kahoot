@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 import { Alert, Button, Form } from "react-bootstrap";
-import { getPotentialMembersForOwner } from "../../../usecase/group";
 import axios from "axios";
-import "./joinGroup.css"
+import { getPotentialMembersForOwner } from "../../../usecase/group";
+import "./joinGroup.css";
 
 function getUserId() {
   const accessToken = localStorage.getItem("accessToken");
@@ -31,20 +31,23 @@ export default function JoinGroup() {
   const submitGroup = async (e) => {
     e.preventDefault();
     setisSendingInvitation(true);
-    await axios.post(`${process.env.REACT_APP_API_URL}/groups/${currentUserId}/invite`, {
-      groupName: groupName,
-      emails: members
-    }).then((response) => {
-      setisSendingInvitation(false);
-      setfailedToSendInvite(!(response.data === "success"));
-      setShowAlert(true);
-      resetForm();
-    }).catch(() => {
-      setisSendingInvitation(false);
-      setfailedToSendInvite(true);
-      setShowAlert(true);
-    })
-  }
+    await axios
+      .post(`${process.env.REACT_APP_API_URL}/groups/${currentUserId}/invite`, {
+        groupName,
+        emails: members
+      })
+      .then((response) => {
+        setisSendingInvitation(false);
+        setfailedToSendInvite(!(response.data === "success"));
+        setShowAlert(true);
+        resetForm();
+      })
+      .catch(() => {
+        setisSendingInvitation(false);
+        setfailedToSendInvite(true);
+        setShowAlert(true);
+      });
+  };
 
   const alert = (
     <Alert
@@ -52,7 +55,9 @@ export default function JoinGroup() {
       variant={failedToSendInvite ? "danger" : "success"}
       onClose={() => setShowAlert(false)}
     >
-      {failedToSendInvite ? "Failed to send the invitation" : "Invitation had been sent!"}
+      {failedToSendInvite
+        ? "Failed to send the invitation"
+        : "Invitation had been sent!"}
     </Alert>
   );
 
@@ -81,9 +86,8 @@ export default function JoinGroup() {
                 [].slice
                   .call(e.target.selectedOptions)
                   .map((item) => item.value)
-              )
-            }
-            }
+              );
+            }}
           >
             {membersToChoose.map((member) => (
               <option key={member.users_id} value={member.email}>
