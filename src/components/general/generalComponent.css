@@ -1,0 +1,19 @@
+.tag {
+  background-color: lightgray;
+  padding: .15rem .3rem;
+  border-radius: 5px;
+  width: min-content;
+  white-space: nowrap;
+}
+
+.tag.success {
+  background-color: lightgreen;
+}
+
+.tag.error {
+  background-color: lightcoral;
+}
+
+.tag.warning {
+  background-color: lightsalmon;
+}
