@@ -9,6 +9,8 @@ import VerifyForm from "../forms/VerifyForm";
 import LoginGoogleSuccess from "../forms/GoogleSuccess";
 import LoginGoogleFail from "../forms/GoogleFailure";
 import { SocketContext, socket, SocketContextProvider } from "../socket/Socket";
+import ResetPasswordForm from "../forms/ResetPasswordForm";
+import EnterEmailForm from "../forms/EnterEmailForm";
 
 const queryClient = new QueryClient();
 
@@ -27,6 +29,8 @@ function App() {
               element={<LoginGoogleSuccess />}
             />
             <Route path="/login/google/failure" element={<LoginGoogleFail />} />
+            <Route path="/forgotpassword" element={<EnterEmailForm />} />
+            <Route path="/resetpassword/:token" element={<ResetPasswordForm />} />
           </Routes>
         </div>
       </QueryClientProvider>

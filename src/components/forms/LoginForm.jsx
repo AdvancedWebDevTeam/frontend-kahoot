@@ -92,11 +92,11 @@ export default function LoginForm() {
           )}
           {status === 401 && (
             <Form.Text className="text-danger">
-              <h4>Your account is not exists</h4>
+              <h5>Your account is not exists</h5>
             </Form.Text>
           )}
           <div>
-            <Link to="/">Forgot password</Link>
+            <Link to="/forgotpassword">Forgot password</Link>
           </div>
           <div className="allign">
             <Button
