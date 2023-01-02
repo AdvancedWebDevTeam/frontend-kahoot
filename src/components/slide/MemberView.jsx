@@ -1,6 +1,6 @@
 import React, { useContext, useCallback } from 'react'
 import { useEffect, useState } from 'react';
-import { Button } from 'react-bootstrap';
+import { Alert, Button } from 'react-bootstrap';
 import { SocketContext } from '../socket/Socket';
 import { Form } from 'react-bootstrap';
 import "./MemberView.css";
@@ -14,39 +14,50 @@ export default function MemberView() {
     const [options, setOptions] = useState([]);
     const [result, setResult] = useState("");
     const socket = useContext(SocketContext);
+    const [showAlert, setShowAlert] = useState(false);
 
     const param = useParams();
 
     useEffect(() => {
-        if (slide.length === 0) {
-            getSlidePresent(param.presentId).then((data) => {
-                setSlide(data.listOfSlides[data.indexSlide.index_slide]);
-                setOptions(Object.getOwnPropertyNames(data.listOfSlides[data.indexSlide.index_slide].options));
-                setPresentID(data.indexSlide.presents_id);
-            }).catch(err => console.log(err));
-        }
         socket.on("clickedSlide", (data) => {
             setSlide(data.listOfSlide[data.indexSlide]);
             setOptions(Object.getOwnPropertyNames(data.listOfSlide[data.indexSlide].options));
             setPresentID(data.listOfSlide[data.indexSlide].presents_id);
         });
         return () => {
-            socket.off("clickedSlide", (data) => {
-                setSlide(data.listOfSlide[data.indexSlide]);
-                setOptions(Object.getOwnPropertyNames(data.listOfSlide[data.indexSlide].options));
-                setPresentID(data.listOfSlide[data.indexSlide].presents_id);
-            });
+            socket.off("clickedSlide");
         }
     }, [socket])
 
+    useEffect(() => {
+        getSlidePresent(param.presentId).then((data) => {
+            setSlide(data.listOfSlides[data.indexSlide.index_slide]);
+            setOptions(Object.getOwnPropertyNames(data.listOfSlides[data.indexSlide.index_slide].options));
+            setPresentID(data.indexSlide.presents_id);
+        }).catch(err => console.log(err));
+    }, [])
+
     const onSubmit = (e) => {
         e.preventDefault();
-        if (result != "") {
+        if (result !== "") {
             submitSlide(presentId, slide.slides_id, slide.question, result);
+            setResult("");
+            setShowAlert(true);
         }
     };
 
+    const alert = (
+        <Alert
+          dismissible
+          onClose={() => setShowAlert(false)}
+        >
+          Your choice is submitted!
+        </Alert>
+      );
+
     return (
+        <>
+        {showAlert && alert}
         <div className='containerMemberView'>
             <h1>Multiple Choice</h1>
             <Form onSubmit={(e) => onSubmit(e)}>
@@ -57,6 +68,7 @@ export default function MemberView() {
                             label={item}
                             name="group1"
                             type='radio'
+                            checked={result === item}
                             id={item}
                         />
                     </div>
@@ -66,5 +78,6 @@ export default function MemberView() {
                 </Button>
             </Form>
         </div>
+        </>
     )
 }
