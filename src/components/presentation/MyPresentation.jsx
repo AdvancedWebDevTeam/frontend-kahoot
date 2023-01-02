@@ -18,6 +18,7 @@ import "./Presentation.css";
 import EditPresentationModal from "./EditPresentationModal";
 import AssignCollaboratorsModal from "./collab/AssignCollaboratorsModal";
 import { updatePresentationCollaborators } from "../../fetch/collab";
+import { getAllUsers } from "../../fetch/userFetch";
 
 export default function MyPresentation() {
   const [listOfPresent, setListOfPresent] = useState([]);
@@ -32,6 +33,7 @@ export default function MyPresentation() {
   // Assign colaborators states
   const [showAssignModal, setShowAssignModal] = useState(false);
   const [assignTarget, setAssignTarget] = useState({});
+  const [allUsers, setAllUsers] = useState([]);
 
   const navigate = useNavigate();
   const params = useParams();
@@ -78,6 +80,12 @@ export default function MyPresentation() {
       .catch((err) => {
         console.log(err);
       });
+  }, []);
+
+  useEffect(() => {
+    getAllUsers().then((data) => {
+      setAllUsers(data);
+    });
   }, []);
 
   function editPresentation(presentation) {
@@ -211,6 +219,7 @@ export default function MyPresentation() {
         onHide={() => setShowAssignModal(false)}
         target={assignTarget}
         onSubmit={submitCollaborators}
+        allUsers={allUsers}
       />
 
       {/* CREATE NEW PRESENTATION MODAL */}
