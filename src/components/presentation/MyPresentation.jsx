@@ -108,22 +108,24 @@ export default function MyPresentation() {
     }
   }
 
-  async function submitCollaborators(presentId, newColaborators) {
+  async function submitCollaborators(hasChange, presentId, newColaborators) {
     setShowAssignModal(false);
     setAssignTarget({});
 
-    const newListOfPresent = listOfPresent.map((item) => {
-      if (item.presents_id === presentId) {
-        return {
-          ...item,
-          collaborators: newColaborators
-        };
-      }
-      return item;
-    });
-    setListOfPresent(newListOfPresent);
+    if (hasChange) {
+      const newListOfPresent = listOfPresent.map((item) => {
+        if (item.presents_id === presentId) {
+          return {
+            ...item,
+            collaborators: newColaborators
+          };
+        }
+        return item;
+      });
+      setListOfPresent(newListOfPresent);
 
-    // await updatePresentationCollaborators(presentId, newColaborators);
+      await updatePresentationCollaborators(presentId, newColaborators);
+    }
   }
 
   const alert = (

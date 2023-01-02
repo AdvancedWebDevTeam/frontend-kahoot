@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { Button, Modal } from "react-bootstrap";
 import CollaboratorCard from "./CollaboratorCard";
 import NewCollaboratorForm from "./NewCollaboratorForm";
-import {getLoggedInUserId} from "../../../util/ultilis";
+import { getLoggedInUserId } from "../../../util/ultilis";
 
 function areEqualCollaboratorsArray(arr1, arr2) {
   if (arr1.length !== arr2.length) {
@@ -28,7 +28,9 @@ function AssignCollaboratorsModal({ show, onSubmit, target, onHide }) {
 
   function submitCollaborators() {
     if (!areEqualCollaboratorsArray(collaborators, target.collaborators)) {
-      onSubmit(target.presents_id, collaborators);
+      onSubmit(true, target.presents_id, collaborators);
+    } else {
+      onSubmit(false, null, null);
     }
   }
 
