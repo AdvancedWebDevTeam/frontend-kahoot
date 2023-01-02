@@ -35,7 +35,8 @@ import MainView from "./MainView";
 import "./Slide.css";
 import TooltipTrigger from "../general/TooltipTrigger";
 import { SocketContext } from "../socket/Socket";
-import { getLoggedInUserId } from "../../util/ultilis";
+import paragraphImg from "./paragraph.png";
+import headingImg from "./heading.png";
 
 ChartJS.register(
   CategoryScale,
@@ -212,7 +213,6 @@ export default function Slide() {
 
   const handleDelete = () => {
     if (selectedIndex < listOfSlides.length && selectedIndex >= 0) {
-      // console.log(listOfSlides[selectedIndex].slides_id);
       deleteSlide(listOfSlides[selectedIndex].slides_id);
       window.location.reload();
     }
@@ -298,6 +298,32 @@ export default function Slide() {
                           maintainAspectRatio: false
                         }}
                       />
+                    )}
+                    {slide.types_id === 2 && (
+                      <div>
+                        <div>
+                          <img alt="heading image" src={headingImg}></img>
+                        </div>
+                        <div className="heading-style" style={{marginTop: "10%"}}>
+                          {slide.heading}
+                        </div>
+                        <div className="subheading-style">
+                          {slide.subheading}
+                        </div>
+                      </div>
+                    )}
+                    {slide.types_id === 3 && (
+                      <div>
+                        <div>
+                          <img alt="heading image" src={paragraphImg}></img>
+                        </div>
+                        <div className="heading-style" style={{marginTop: "10%"}}>
+                          {slide.heading}
+                        </div>
+                        <div className="paragraph-style">
+                          {slide.paragraph}
+                        </div>
+                      </div>
                     )}
                   </div>
                 </div>
