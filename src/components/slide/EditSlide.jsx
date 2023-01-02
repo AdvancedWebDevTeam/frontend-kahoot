@@ -247,6 +247,7 @@ export default function EditSlide({
                           placeholder={heading}
                           id="heading2"
                           defaultValue=""
+                          as="textarea"
                           {...register("heading2", { required: true, maxLength: 30 })}
                         />
                       </InputGroup>
@@ -266,6 +267,7 @@ export default function EditSlide({
                           placeholder={subheading}
                           id="Subheading"
                           defaultValue=""
+                          as="textarea"
                           {...register("Subheading", { maxLength: 100 })}
                         />
                       </InputGroup>
@@ -288,6 +290,7 @@ export default function EditSlide({
                           placeholder={heading}
                           id="heading3"
                           defaultValue=""
+                          as="textarea"
                           {...register("heading3", { required: true, maxLength: 30 })}
                         />
                       </InputGroup>
@@ -307,6 +310,7 @@ export default function EditSlide({
                           placeholder={paragraph}
                           id="Paragraph"
                           defaultValue=""
+                          as="textarea"
                           {...register("Paragraph", { maxLength: 190 })}
                         />
                       </InputGroup>
