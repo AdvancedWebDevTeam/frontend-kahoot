@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 import { Button, Modal, Form } from "react-bootstrap";
 
 function EditRoleModal({
@@ -10,6 +10,11 @@ function EditRoleModal({
   ...props
 }) {
   const [roleName, setRoleName] = React.useState();
+  const [availableRoles, setAvailableRoles] = React.useState([]);
+
+  useEffect(() => {
+    setAvailableRoles(roles.filter((role) => role.roles_id !== 1));
+  }, []);
 
   useEffect(() => {
     setRoleName(member.roleName);
@@ -32,8 +37,10 @@ function EditRoleModal({
         <h3>{member.username}</h3>
         <p>{member.userId}</p>
         <p>{member.email}</p>
+
+        <p style={{ marginTop: ".5rem" }}>Role:</p>
         <Form.Select value={roleName} onChange={handleChange}>
-          {roles.map((role) => {
+          {availableRoles.map((role) => {
             const isSelected = role.roles_name === roleName;
             return (
               <option

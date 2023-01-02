@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { Bar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -24,11 +23,6 @@ ChartJS.register(
 export default function MainView({ selectedIndex, listOfSlides }) {
   const len = listOfSlides.length;
 
-  useEffect(() => {
-    if (len > 0) {
-    }
-  }, []);
-
   return (
     <div className="boxSlide main-view" style={{ marginTop: "5px" }}>
       {len > 0 && (
@@ -53,6 +47,27 @@ export default function MainView({ selectedIndex, listOfSlides }) {
                 maintainAspectRatio: false
               }}
             />
+          )}
+          {listOfSlides[selectedIndex].types_id === 2 && (
+            <div style={{marginTop: "25%"}}>
+              <div className="heading-style-mainview">
+                {listOfSlides[selectedIndex].heading}
+              </div>
+              <div className="subheading-style-mainview">
+                {listOfSlides[selectedIndex].subheading}
+              </div>
+            </div>
+          )}
+          {listOfSlides[selectedIndex].types_id === 3 && (
+            <div style={{marginTop: "25%"}}>
+              <div className="heading-style-mainview">
+                {listOfSlides[selectedIndex].heading}
+              </div>
+              <div className="paragraph-style-mainview">
+                {listOfSlides[selectedIndex].paragraph}
+              </div>
+
+            </div>
           )}
         </>
       )}

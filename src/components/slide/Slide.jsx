@@ -35,7 +35,9 @@ import MainView from "./MainView";
 import "./Slide.css";
 import TooltipTrigger from "../general/TooltipTrigger";
 import { SocketContext } from "../socket/Socket";
+import paragraphImg from "./paragraph.png";
 import Chat from "../chat/Chat";
+import headingImg from "./heading.png";
 
 ChartJS.register(
   CategoryScale,
@@ -74,19 +76,22 @@ export default function Slide() {
   const handleClose = () => setIsShowModal(false);
   const handleShow = () => {
     if (presentInfo.groups_id === null) {
-      setLinkShare(`${process.env.REACT_APP_FE}/share/public/slide/${params.presentId}`);
-    }
-    else {
-      setLinkShare(`${process.env.REACT_APP_FE}/share/private/slide/${params.presentId}`);
+      setLinkShare(
+        `${process.env.REACT_APP_FE}/share/public/slide/${params.presentId}`
+      );
+    } else {
+      setLinkShare(
+        `${process.env.REACT_APP_FE}/share/private/slide/${params.presentId}`
+      );
     }
     setIsShowModal(true);
-  }
+  };
 
   const handleClick = (index) => {
     const data = {
       presents_id: params.presentId,
       indexSlide: index,
-      listOfSlide: listOfSlides,
+      listOfSlide: listOfSlides
     };
     socket.emit("clickedSlide", data);
     setSelectedIndex(index);
@@ -99,7 +104,6 @@ export default function Slide() {
   const [isOnFullScreen, setIsOnFullScreen] = useState(false);
 
   useEffect(() => {
-
     getAllSlides(params.presentId)
       .then((data) => {
         setListOfSlides(data);
@@ -115,7 +119,7 @@ export default function Slide() {
     const data = {
       presents_id: params.presentId,
       indexSlide: selectedIndex,
-      listOfSlide: listOfSlides,
+      listOfSlide: listOfSlides
     };
 
     socket.emit("clickedSlide", data);
@@ -124,13 +128,10 @@ export default function Slide() {
       socket.off("submitSlide", (data) => {
         setListOfSlides(data);
       });
-      socket.off("receive_message");
-    }
-
+    };
   }, [isFetch]);
 
   useEffect(() => {
-
     setCurrentUserId(getUserId());
 
     getSlideTypes()
@@ -148,7 +149,7 @@ export default function Slide() {
       .catch((err) => {
         console.log(err);
       });
-  }, [])
+  }, []);
 
   const backToPresentClick = () => {
     navigate(`/presentations/${params.groupId}`);
@@ -245,9 +246,7 @@ export default function Slide() {
         }
         <div>
           <h4 className="title">{presentInfo.presents_name}</h4>
-          <span className="credit">
-            Created by {presentInfo.users_name}
-          </span>
+          <span className="credit">Created by {presentInfo.users_name}</span>
         </div>
       </div>
       <div className="boxSlide1 slide-toolbar">
@@ -257,9 +256,7 @@ export default function Slide() {
             <Button variant="success">Box chat</Button>
           </OverlayTrigger>
           <TooltipTrigger text="Share slides">
-            <Button onClick={handleShow}>
-              Share
-            </Button>
+            <Button onClick={handleShow}>Share</Button>
           </TooltipTrigger>
           <TooltipTrigger text="Delete slide">
             <Button variant="outline-danger" onClick={handleDelete}>
@@ -318,6 +315,32 @@ export default function Slide() {
                           maintainAspectRatio: false
                         }}
                       />
+                    )}
+                    {slide.types_id === 2 && (
+                      <div>
+                        <div>
+                          <img alt="heading image" src={headingImg}></img>
+                        </div>
+                        <div className="heading-style" style={{marginTop: "10%"}}>
+                          {slide.heading}
+                        </div>
+                        <div className="subheading-style">
+                          {slide.subheading}
+                        </div>
+                      </div>
+                    )}
+                    {slide.types_id === 3 && (
+                      <div>
+                        <div>
+                          <img alt="heading image" src={paragraphImg}></img>
+                        </div>
+                        <div className="heading-style" style={{marginTop: "10%"}}>
+                          {slide.heading}
+                        </div>
+                        <div className="paragraph-style">
+                          {slide.paragraph}
+                        </div>
+                      </div>
                     )}
                   </div>
                 </div>
