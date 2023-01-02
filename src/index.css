@@ -94,3 +94,7 @@ body {
 .bg-gray {
     background-color: rgb(192, 192, 192);
 }
+
+.fs-7 {
+    font-size: .8rem;
+}

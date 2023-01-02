@@ -41,3 +41,30 @@
     font-weight: 300;
     font-style: italic;
 }
+
+.card.collab {
+    margin: .8rem 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border: none;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+
+.card.collab .btn {
+    margin-right: .6rem;
+}
+
+.card.collab .card-body {
+    padding: .5rem;
+    border-radius: 5px;
+}
+
+.card.collab .card-body p {
+    font-size: 1.2rem;
+}
+
+.card.collab .card-body p:last-child {
+    font-size: .8rem;
+    font-style: italic;
+}
