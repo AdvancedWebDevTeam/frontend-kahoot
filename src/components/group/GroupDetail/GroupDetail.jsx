@@ -6,7 +6,7 @@ import {
   getMembersInGroup,
   requestKickMember
 } from "../../../fetch/groupFetch";
-import { capitalizeFirstLetter } from "../../../util/string";
+import { capitalizeFirstLetter } from "../../../util/ultilis";
 import "./groupDetail.css";
 import { requestMemberRoleChange } from "../../../fetch/roleFetch";
 

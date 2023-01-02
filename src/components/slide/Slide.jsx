@@ -47,11 +47,6 @@ ChartJS.register(
   Legend
 );
 
-function getUserId() {
-  const accessToken = localStorage.getItem("accessToken");
-  return JSON.parse(atob(accessToken.split(".")[1])).user.users_id;
-}
-
 export default function Slide() {
   const [listOfSlides, setListOfSlides] = useState([]);
   const [presentInfo, setPresentInfo] = useState([]);
@@ -124,7 +119,7 @@ export default function Slide() {
   }, [isFetch]);
 
   useEffect(() => {
-    setCurrentUserId(getUserId());
+    setCurrentUserId(getLoggedInUserId());
 
     getSlideTypes()
       .then((data) => {

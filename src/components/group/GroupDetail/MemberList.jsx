@@ -3,11 +3,7 @@ import { Button, Table } from "react-bootstrap";
 import { BsFillTrashFill, BsPencilFill } from "react-icons/bs";
 import EditRoleModal from "./EditRoleModal";
 import Tag from "../../general/Tag";
-
-function getUserId() {
-  const accessToken = localStorage.getItem("accessToken");
-  return JSON.parse(atob(accessToken.split(".")[1])).user.users_id;
-}
+import { getLoggedInUserId } from "../../../util/ultilis";
 
 function getTbody(
   members,
@@ -27,7 +23,7 @@ function getTbody(
             : member.roleId === 2
             ? "warning"
             : null;
-        const isCurrentUser = member.userId === getUserId();
+        const isCurrentUser = member.userId === getLoggedInUserId();
         const hasLowerRole = member.roleId < currentUserRoleId;
         const canBeKicked = member.roleId > currentUserRoleId;
         const canBeEdited = canEditRole && !isCurrentUser && !hasLowerRole;
@@ -82,7 +78,7 @@ function MemberList({ members, groupId, changeMemberRole, roles, kickMember }) {
   const [currentUserRoleId, setCurrentUserRoleId] = React.useState(0);
 
   useEffect(() => {
-    const currentUserId = getUserId();
+    const currentUserId = getLoggedInUserId();
     const currentUser = members.find(
       (member) => member.userId === currentUserId
     );
@@ -109,7 +105,7 @@ function MemberList({ members, groupId, changeMemberRole, roles, kickMember }) {
   }
 
   function rowNeedHighlight(userId) {
-    const currentUserId = getUserId();
+    const currentUserId = getLoggedInUserId();
     if (userId === currentUserId) {
       return {
         backgroundColor: "#a3c2ff"
