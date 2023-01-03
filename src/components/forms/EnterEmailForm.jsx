@@ -25,7 +25,8 @@ export default function EnterEmailForm() {
       email: data.email,
     })
     .then((res) => {
-      console.log(res.data);
+      //console.log(res.data);
+      setStatus(res.status);
     })
     .catch((error) => {
       console.log(error);
@@ -63,6 +64,11 @@ export default function EnterEmailForm() {
           {status === 405 && (
             <Form.Text className="text-danger" role="alert">
               <h5>Email does not exist</h5>
+            </Form.Text>
+          )}
+          {status === 200 && (
+            <Form.Text className="text-success" role="alert">
+              <h5>Visit your email to reset password. token is about to expire in 15 minute</h5>
             </Form.Text>
           )}
           <div className="allign">

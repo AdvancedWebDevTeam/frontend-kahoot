@@ -110,7 +110,7 @@ export default function RegisterForm() {
             </Form.Text>
           )}
           {isVerify === 0 && (
-            <Form.Text className="text-danger">
+            <Form.Text className="text-success">
               <h5>An email has sent to verify your account</h5>
             </Form.Text>
           )}
