@@ -1,5 +1,5 @@
 import "./verify.css";
-import { Link, useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import successImage from "./success.png";
 
@@ -8,7 +8,9 @@ export default function LoginGoogleSuccess() {
   const navigate = useNavigate();
   useEffect(() => {
     localStorage.setItem("accessToken", JSON.stringify(params.token));
-    navigate("/")
+    setTimeout(() => {
+      navigate("/");
+    }, 1000);
   }, []);
   return (
     <div className="box-verify" style={{ marginTop: "10%" }}>
@@ -18,14 +20,6 @@ export default function LoginGoogleSuccess() {
         style={{ margin: "0px auto", display: "block" }}
       />
       <h1 style={{ textAlign: "center" }}>Login successfully</h1>
-      <Link to="/">
-        <button
-          className="green_btn"
-          style={{ margin: "0px auto", display: "block" }}
-        >
-          Back to home page
-        </button>
-      </Link>
     </div>
   );
 }
