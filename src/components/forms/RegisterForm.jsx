@@ -111,7 +111,9 @@ export default function RegisterForm() {
           )}
           {isVerify === 0 && (
             <Form.Text className="text-success">
-              <h5>An email has sent to verify your account</h5>
+              <h5>
+                An email has sent to verify your account. Token is about to expire in 15 minutes
+              </h5>
             </Form.Text>
           )}
           <div className="allign">

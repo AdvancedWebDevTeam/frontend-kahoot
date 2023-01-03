@@ -68,7 +68,7 @@ export default function EnterEmailForm() {
           )}
           {status === 200 && (
             <Form.Text className="text-success" role="alert">
-              <h5>Visit your email to reset password. token is about to expire in 15 minute</h5>
+              <h5>Visit your email to reset password. Token is about to expire in 15 minute</h5>
             </Form.Text>
           )}
           <div className="allign">
