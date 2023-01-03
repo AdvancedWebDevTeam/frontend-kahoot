@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import {
   BsEyeFill,
   BsFillTrashFill,
+  BsPatchQuestionFill,
   BsPencilSquare,
   BsPeopleFill
 } from "react-icons/bs";
@@ -19,6 +20,7 @@ import EditPresentationModal from "./EditPresentationModal";
 import AssignCollaboratorsModal from "./collab/AssignCollaboratorsModal";
 import { updatePresentationCollaborators } from "../../fetch/collab";
 import { getAllUsers } from "../../fetch/userFetch";
+import QuestionModal from "../question/QuestionModal";
 
 export default function MyPresentation() {
   const [listOfPresent, setListOfPresent] = useState([]);
@@ -34,6 +36,10 @@ export default function MyPresentation() {
   const [showAssignModal, setShowAssignModal] = useState(false);
   const [assignTarget, setAssignTarget] = useState({});
   const [allUsers, setAllUsers] = useState([]);
+
+  // Question Modal states
+  const [showQuestionModal, setShowQuestionModal] = useState(false);
+  const [questionTarget, setQuestionTarget] = useState({});
 
   const navigate = useNavigate();
   const params = useParams();
@@ -88,14 +94,19 @@ export default function MyPresentation() {
     });
   }, []);
 
-  function editPresentation(presentation) {
-    setShowEditModal(true);
+  function editPresentation(show, presentation) {
+    setShowEditModal(show);
     setEditTarget(presentation);
   }
 
-  function assignCollaborators(presentation) {
-    setShowAssignModal(true);
+  function assignCollaborators(show, presentation) {
+    setShowAssignModal(show);
     setAssignTarget(presentation);
+  }
+
+  function showQuestionsOfPresent(show, presentation) {
+    setShowQuestionModal(show);
+    setQuestionTarget(presentation);
   }
 
   async function submitEditedPresentation(hasChange, editedPresentation) {
@@ -174,18 +185,25 @@ export default function MyPresentation() {
                   <BsEyeFill />
                 </Button>
                 <Button
-                  onClick={() => editPresentation(present)}
+                  onClick={() => editPresentation(true, present)}
                   variant="outline-warning"
                   style={{ marginLeft: "5px" }}
                 >
                   <BsPencilSquare />
                 </Button>
                 <Button
-                  onClick={() => assignCollaborators(present)}
+                  onClick={() => assignCollaborators(true, present)}
                   variant="outline-info"
                   style={{ marginLeft: "5px" }}
                 >
                   <BsPeopleFill />
+                </Button>
+                <Button
+                  onClick={() => showQuestionsOfPresent(true, present)}
+                  variant="outline-dark"
+                  style={{ marginLeft: "5px" }}
+                >
+                  <BsPatchQuestionFill />
                 </Button>
                 <Button
                   onClick={() => deleteClick(present.presents_id)}
@@ -208,7 +226,7 @@ export default function MyPresentation() {
       {/* Edit presentation Modals */}
       <EditPresentationModal
         show={showEditModal}
-        onHide={() => setShowEditModal(false)}
+        onHide={() => editPresentation(false, {})}
         target={editTarget}
         onSubmit={submitEditedPresentation}
       />
@@ -216,10 +234,17 @@ export default function MyPresentation() {
       {/* Assign Colaborators modal */}
       <AssignCollaboratorsModal
         show={showAssignModal}
-        onHide={() => setShowAssignModal(false)}
+        onHide={() => assignCollaborators(false, {})}
         target={assignTarget}
         onSubmit={submitCollaborators}
         allUsers={allUsers}
+      />
+
+      {/* Questions list modal */}
+      <QuestionModal
+        show={showQuestionModal}
+        handleClose={() => showQuestionsOfPresent(false, {})}
+        target={questionTarget}
       />
 
       {/* CREATE NEW PRESENTATION MODAL */}
