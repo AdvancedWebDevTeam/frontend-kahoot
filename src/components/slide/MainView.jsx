@@ -49,7 +49,7 @@ export default function MainView({ selectedIndex, listOfSlides }) {
             />
           )}
           {listOfSlides[selectedIndex].types_id === 2 && (
-            <div style={{marginTop: "25%"}}>
+            <div style={{ marginTop: "25%" }}>
               <div className="heading-style-mainview">
                 {listOfSlides[selectedIndex].heading}
               </div>
@@ -59,14 +59,13 @@ export default function MainView({ selectedIndex, listOfSlides }) {
             </div>
           )}
           {listOfSlides[selectedIndex].types_id === 3 && (
-            <div style={{marginTop: "25%"}}>
+            <div style={{ marginTop: "25%" }}>
               <div className="heading-style-mainview">
                 {listOfSlides[selectedIndex].heading}
               </div>
               <div className="paragraph-style-mainview">
                 {listOfSlides[selectedIndex].paragraph}
               </div>
-
             </div>
           )}
         </>

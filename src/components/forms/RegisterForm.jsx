@@ -17,6 +17,7 @@ export default function RegisterForm() {
 
   const [status, setStatus] = useState(0);
   const [isVerify, setIsVerify] = useState(-1);
+  const [message, setMessage] = useState("");
 
   const { mutate, isLoading } = useMutation(async (data) => {
     await axios
@@ -28,10 +29,12 @@ export default function RegisterForm() {
       .then((res) => {
         setStatus(res.status);
         setIsVerify(0);
+        setMessage("");
       })
       .catch((error) => {
         console.log(error);
         setStatus(error.response.status);
+        setMessage(error.response.data);
       });
   });
 
@@ -103,12 +106,14 @@ export default function RegisterForm() {
 
           {status === 401 && (
             <Form.Text className="text-danger">
-              <h4>Your account already exists</h4>
+              <h5>{message}</h5>
             </Form.Text>
           )}
           {isVerify === 0 && (
-            <Form.Text className="text-danger">
-              <h4>An email has sent to verify your account</h4>
+            <Form.Text className="text-success">
+              <h5>
+                An email has sent to verify your account. Token is about to expire in 15 minutes
+              </h5>
             </Form.Text>
           )}
           <div className="allign">
