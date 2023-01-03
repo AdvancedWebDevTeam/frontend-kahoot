@@ -1,7 +1,11 @@
 import React, { useEffect } from "react";
 import { Modal } from "react-bootstrap";
-import { getAllQuestionsOfPresent } from "../../fetch/questionsFetch";
+import {
+  getAllQuestionsOfPresent,
+  requestUpdateQuestions
+} from "../../fetch/questionsFetch";
 import Question from "./Question";
+import "./question.css";
 
 function QuestionModal({ show, handleClose, target }) {
   const presentId = target.presents_id;
@@ -10,11 +14,14 @@ function QuestionModal({ show, handleClose, target }) {
     return collaborator.userId;
   });
   const [questions, setQuestions] = React.useState([]);
+  const [hasChange, setHasChange] = React.useState(false);
 
   useEffect(() => {
-    getAllQuestionsOfPresent(presentId).then((data) => {
-      setQuestions(data);
-    });
+    if (presentId) {
+      getAllQuestionsOfPresent(presentId).then((data) => {
+        setQuestions(data);
+      });
+    }
   }, [target]);
 
   function handleVote(id, amount) {
@@ -29,6 +36,7 @@ function QuestionModal({ show, handleClose, target }) {
         return question;
       });
     });
+    setHasChange(true);
   }
 
   function handleMarkAsAnswered(id) {
@@ -43,12 +51,23 @@ function QuestionModal({ show, handleClose, target }) {
         return question;
       });
     });
+    setHasChange(true);
+  }
+
+  async function onHide() {
+    if (hasChange) {
+      await requestUpdateQuestions(target.presents_id, questions);
+    }
+    handleClose();
   }
 
   return (
-    <Modal show={show} onHide={handleClose}>
+    <Modal show={show} onHide={onHide}>
       <Modal.Header closeButton>
-        <Modal.Title>Questions</Modal.Title>
+        <div>
+          <Modal.Title>Questions</Modal.Title>
+          <p className="question-modal-subtitle">{target.presents_name}</p>
+        </div>
       </Modal.Header>
       <Modal.Body>
         {questions.map((question) => (

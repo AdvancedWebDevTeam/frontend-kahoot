@@ -10,5 +10,5 @@ export function getLoggedInUserId() {
 }
 
 export function getFormattedDateTimeString(dateStr) {
-  return moment(dateStr).format("DD-MM-YYYY, HH:mm");
+  return moment.utc(dateStr).format("DD-MM-YYYY, HH:mm");
 }

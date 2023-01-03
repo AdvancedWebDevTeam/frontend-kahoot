@@ -36,32 +36,30 @@ export default function Question({ question, onVote, onMarkAsAnswered }) {
   return (
     <div className="question">
       <div className="question-header">
-        <h3>{question.questionerName}</h3>
-        <p>{question.questionerEmail}</p>
+        <div>
+          <h1>{question.questionerName}</h1>
+          <p>{question.questionerEmail}</p>
+        </div>
         <p>{getFormattedDateTimeString(question.questions_time)}</p>
       </div>
 
       <p className="question-content">{question.content}</p>
 
       <div className="question-footer">
-        <div>
-          <Button size="sm" onClick={() => upvote()} variant={upvoteVariant}>
-            <ImArrowUp />
-          </Button>
-          <p>{question.vote}</p>
-          <Button
-            size="sm"
-            onClick={() => downvote()}
-            variant={downvoteVariant}
-          >
-            <ImArrowDown />
-          </Button>
-        </div>
+        <Button size="sm" onClick={() => upvote()} variant={upvoteVariant}>
+          <ImArrowUp />
+        </Button>
+        <p>{question.vote}</p>
+        <Button size="sm" onClick={() => downvote()} variant={downvoteVariant}>
+          <ImArrowDown />
+        </Button>
+
         <Button
           onClick={() => onMarkAsAnswered()}
           variant={markAsAnsweredVariant}
+          size="sm"
         >
-          <ImCheckmark />
+          {question.is_answer ? <ImCheckmark /> : "Mark as answered"}
         </Button>
       </div>
     </div>
