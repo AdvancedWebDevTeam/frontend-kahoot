@@ -2,6 +2,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import { useMutation } from "react-query";
 
 import "./Forms.css";
 import { Form, Button, Container } from "react-bootstrap";
@@ -19,7 +20,7 @@ export default function EnterEmailForm() {
     setStatus(0);
   }, [isValid])
 
-  const sendData = async (data) => {
+  const { mutate, isLoading } = useMutation(async (data) => {
     await axios
     .post(`${process.env.REACT_APP_API_URL}/users/enteremail`, {
       email: data.email,
@@ -32,14 +33,24 @@ export default function EnterEmailForm() {
       console.log(error);
       setStatus(error.response.status);
     });
-  }
+  });
 
   const onHandleSubmit = (data) => {
-   sendData(data);
+   mutate(data);
   }
 
   const buttonLogin_Clicked = () => {
     navigate("/login");
+  }
+
+  if (isLoading) {
+    return (
+      <div className="center">
+        <div className="ring">
+          <div className="decorate">Loading...</div>
+        </div>
+      </div>
+    );
   }
 
   return (
