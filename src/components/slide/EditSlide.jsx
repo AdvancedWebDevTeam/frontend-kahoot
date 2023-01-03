@@ -44,10 +44,10 @@ export default function EditSlide({
   }, [len, selectedIndex, listOfSlides]);
 
   useEffect(() => {
-    if(isSubmitSuccessful){
+    if (isSubmitSuccessful) {
       reset();
     }
-  }, [isSubmitSuccessful])
+  }, [isSubmitSuccessful]);
 
   const handleChange = (e) => {
     setTypeName(e.target.value);
@@ -58,10 +58,8 @@ export default function EditSlide({
   const onHandleSubmit = (data) => {
     const newData = { ...data };
 
-    switch (typeId) 
-    {
-      case 0: 
-      {
+    switch (typeId) {
+      case 0: {
         updateSlide(
           listOfSlides[selectedIndex].slides_id,
           listOfSlides[selectedIndex].presents_id,
@@ -73,8 +71,7 @@ export default function EditSlide({
 
         break;
       }
-      case 1: 
-      {
+      case 1: {
         const { question } = newData;
         delete newData.question;
         const content = { question };
@@ -95,12 +92,11 @@ export default function EditSlide({
         });
         break;
       }
-      case 2:
-      {
+      case 2: {
         const { heading2, Subheading } = newData;
         const content = {};
-        content["heading"] = heading2;
-        content["subheading"] = Subheading;
+        content.heading = heading2;
+        content.subheading = Subheading;
         updateSlide(
           listOfSlides[selectedIndex].slides_id,
           listOfSlides[selectedIndex].presents_id,
@@ -111,12 +107,11 @@ export default function EditSlide({
         });
         break;
       }
-      case 3:
-      {
+      case 3: {
         const { heading3, Paragraph } = newData;
         const content = {};
-        content["heading"] = heading3;
-        content["paragraph"] = Paragraph;
+        content.heading = heading3;
+        content.paragraph = Paragraph;
         updateSlide(
           listOfSlides[selectedIndex].slides_id,
           listOfSlides[selectedIndex].presents_id,
@@ -241,13 +236,21 @@ export default function EditSlide({
                 <div>
                   {typeId === 2 && (
                     <div style={{ marginTop: "10px" }}>
-                      <Form.Text style={{marginTop: "10px", fontSize: "20px"}}><b>Heading</b></Form.Text>
+                      <Form.Text
+                        style={{ marginTop: "10px", fontSize: "20px" }}
+                      >
+                        <b>Heading</b>
+                      </Form.Text>
                       <InputGroup>
                         <Form.Control
                           placeholder={heading}
                           id="heading2"
                           defaultValue=""
-                          {...register("heading2", { required: true, maxLength: 30 })}
+                          as="textarea"
+                          {...register("heading2", {
+                            required: true,
+                            maxLength: 30
+                          })}
                         />
                       </InputGroup>
                       {errors.heading2?.type === "required" && (
@@ -260,12 +263,17 @@ export default function EditSlide({
                           <div>Should have less than 31 characters</div>
                         </Form.Text>
                       )}
-                      <Form.Text style={{marginTop: "10px", fontSize: "20px"}}><b>Subheading</b></Form.Text>
-                      <InputGroup style={{marginTop: "10px"}}>
+                      <Form.Text
+                        style={{ marginTop: "10px", fontSize: "20px" }}
+                      >
+                        <b>Subheading</b>
+                      </Form.Text>
+                      <InputGroup style={{ marginTop: "10px" }}>
                         <Form.Control
                           placeholder={subheading}
                           id="Subheading"
                           defaultValue=""
+                          as="textarea"
                           {...register("Subheading", { maxLength: 100 })}
                         />
                       </InputGroup>
@@ -282,13 +290,21 @@ export default function EditSlide({
                 <div>
                   {typeId === 3 && (
                     <div style={{ marginTop: "10px" }}>
-                      <Form.Text style={{marginTop: "10px", fontSize: "20px"}}><b>Heading</b></Form.Text>
+                      <Form.Text
+                        style={{ marginTop: "10px", fontSize: "20px" }}
+                      >
+                        <b>Heading</b>
+                      </Form.Text>
                       <InputGroup>
                         <Form.Control
                           placeholder={heading}
                           id="heading3"
                           defaultValue=""
-                          {...register("heading3", { required: true, maxLength: 30 })}
+                          as="textarea"
+                          {...register("heading3", {
+                            required: true,
+                            maxLength: 30
+                          })}
                         />
                       </InputGroup>
                       {errors.heading3?.type === "required" && (
@@ -301,12 +317,17 @@ export default function EditSlide({
                           <div>Should have less than 31 characters</div>
                         </Form.Text>
                       )}
-                      <Form.Text style={{marginTop: "10px", fontSize: "20px"}}><b>Paragraph</b></Form.Text>
-                      <InputGroup style={{marginTop: "10px"}}>
+                      <Form.Text
+                        style={{ marginTop: "10px", fontSize: "20px" }}
+                      >
+                        <b>Paragraph</b>
+                      </Form.Text>
+                      <InputGroup style={{ marginTop: "10px" }}>
                         <Form.Control
                           placeholder={paragraph}
                           id="Paragraph"
                           defaultValue=""
+                          as="textarea"
                           {...register("Paragraph", { maxLength: 190 })}
                         />
                       </InputGroup>

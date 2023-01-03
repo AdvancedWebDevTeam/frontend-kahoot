@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import successImage from "./success.png";
 import errorImage from "./error404.png";
 
@@ -9,24 +9,35 @@ import "./verify.css";
 export default function VerifyForm() {
   const params = useParams();
   const [validUrl, setValidUrl] = useState(false);
+  const navigate = useNavigate();
 
   const verify = async () => {
-    await axios
-      .get(
+    const token = params.token;
+    const exp = JSON.parse(atob(token.split(".")[1])).exp;
+    const curtime = Math.floor(Date.now() / 1000);
+    if(curtime > exp) {
+      setValidUrl(false);
+    }
+    else {
+      await axios
+      .patch(
         `${process.env.REACT_APP_API_URL}/users/${params.id}/verify/${params.token}`
       )
       .then((res) => {
-        console.log(res);
         setValidUrl(true);
+        setTimeout(() => {
+          navigate("/login");
+        }, 1000);
       })
       .catch((err) => {
         console.log(err);
       });
+    }
   };
 
   useEffect(() => {
     verify();
-  });
+  }, []);
 
   return (
     <div>
@@ -38,14 +49,6 @@ export default function VerifyForm() {
             style={{ margin: "0px auto", display: "block" }}
           />
           <h1 style={{ textAlign: "center" }}>Email verified successfully</h1>
-          <Link to="/login">
-            <button
-              className="green_btn"
-              style={{ margin: "0px auto", display: "block" }}
-            >
-              Login
-            </button>
-          </Link>
         </div>
       ) : (
         <div className="box-verify" style={{ marginTop: "10%" }}>
@@ -60,14 +63,6 @@ export default function VerifyForm() {
             alt="error404_img"
           />
           <h1 style={{ textAlign: "center" }}>404 Not Found</h1>
-          <Link to="/">
-            <button
-              className="red_btn"
-              style={{ margin: "0px auto", display: "block" }}
-            >
-              Back to menu
-            </button>
-          </Link>
         </div>
       )}
     </div>

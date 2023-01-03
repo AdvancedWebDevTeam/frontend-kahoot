@@ -36,11 +36,18 @@ export default function UserProfile() {
 
   const fetchData = async () => {
     const token = localStorage.getItem("accessToken");
-    await axios.get(`${process.env.REACT_APP_API_URL}/users/${parseJwt(token).user.users_id}`).then((response) => {
-      setUser(response.data);
-    }).catch((err) => {
-      console.log(err);
-    });
+    await axios
+      .get(
+        `${process.env.REACT_APP_API_URL}/users/${
+          parseJwt(token).user.users_id
+        }`
+      )
+      .then((response) => {
+        setUser(response.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   useEffect(() => {
@@ -105,12 +112,15 @@ export default function UserProfile() {
   const checkPassword = async (e) => {
     const token = localStorage.getItem("accessToken");
     await axios
-      .get(`${process.env.REACT_APP_API_URL}/users/${parseJwt(token).user.users_id}/${e.target.value}`)
+      .get(
+        `${process.env.REACT_APP_API_URL}/users/${
+          parseJwt(token).user.users_id
+        }/${e.target.value}`
+      )
       .then((res) => {
-        if (res.data === 'Right password') {
+        if (res.data === "Right password") {
           setIsMatch(true);
-        }
-        else {
+        } else {
           setIsMatch(false);
         }
       })
@@ -163,14 +173,15 @@ export default function UserProfile() {
                 />
               )}
             </Form.Group>
-            {isEdit === true ? (<>
-              <Button variant="primary" type="submit">
-                Submit
-              </Button>
-              <Button className="cancel" variant="primary" onClick={onCancel}>
-                Cancel
-              </Button>
-            </>
+            {isEdit === true ? (
+              <>
+                <Button variant="primary" type="submit">
+                  Submit
+                </Button>
+                <Button className="cancel" variant="primary" onClick={onCancel}>
+                  Cancel
+                </Button>
+              </>
             ) : (
               <Button variant="primary" onClick={onEdit}>
                 Edit
@@ -179,34 +190,62 @@ export default function UserProfile() {
           </Form>
         </Card.Body>
       </Card>
-      <Accordion className='card'>
+      <Accordion className="card">
         <Accordion.Item eventKey="0">
           <Accordion.Header>Change Password</Accordion.Header>
           <Accordion.Body>
             <Form onSubmit={handleSubmit2((data) => onChangePassword(data))}>
               <Row>
                 <Col>
-                  <Form.Control placeholder="Enter now password" id="nowPassword" {...register2("nowPassword", { required: "Please fill out your now password", validate: value => isMatch || "Does not match!" })} onChange={(e) => checkPassword(e)} />
-                  <Form.Text className='error'>{errors2.nowPassword?.message}</Form.Text>
+                  <Form.Control
+                    placeholder="Enter now password"
+                    id="nowPassword"
+                    {...register2("nowPassword", {
+                      required: "Please fill out your now password",
+                      validate: (value) => isMatch || "Does not match!"
+                    })}
+                    onChange={(e) => checkPassword(e)}
+                  />
+                  <Form.Text className="error">
+                    {errors2.nowPassword?.message}
+                  </Form.Text>
                 </Col>
                 <Col>
-                  <Form.Control placeholder="Enter new password" id="NewPs" {...register2("NewPs", { required: "You must specify a new password" })} />
-                  <Form.Text className='error'>{errors2.NewPs?.message}</Form.Text>
+                  <Form.Control
+                    placeholder="Enter new password"
+                    id="NewPs"
+                    {...register2("NewPs", {
+                      required: "You must specify a new password"
+                    })}
+                  />
+                  <Form.Text className="error">
+                    {errors2.NewPs?.message}
+                  </Form.Text>
                 </Col>
                 <Col>
-                  <Form.Control placeholder="Confirm new password" id="CfNewPs"
+                  <Form.Control
+                    placeholder="Confirm new password"
+                    id="CfNewPs"
                     type="CfNewPs"
-                    {...register2("CfNewPs", { required: "You must specify a confirm new password", validate: value => value === nowChangePassword || "Does not match with new password!" })} />
-                  <Form.Text className='error'>{errors2.CfNewPs?.message}</Form.Text>
+                    {...register2("CfNewPs", {
+                      required: "You must specify a confirm new password",
+                      validate: (value) =>
+                        value === nowChangePassword ||
+                        "Does not match with new password!"
+                    })}
+                  />
+                  <Form.Text className="error">
+                    {errors2.CfNewPs?.message}
+                  </Form.Text>
                 </Col>
               </Row>
-                <Button variant="primary" type='submit' className="btnChangePass">
-                  Submit
-                </Button>
+              <Button variant="primary" type="submit" className="btnChangePass">
+                Submit
+              </Button>
             </Form>
           </Accordion.Body>
         </Accordion.Item>
       </Accordion>
     </Container>
-  )
+  );
 }

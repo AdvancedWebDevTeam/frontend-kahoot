@@ -38,6 +38,7 @@ import { SocketContext } from "../socket/Socket";
 import paragraphImg from "./paragraph.png";
 import Chat from "../chat/Chat";
 import headingImg from "./heading.png";
+import { getLoggedInUserId } from "../../util/ultilis";
 
 ChartJS.register(
   CategoryScale,
@@ -47,11 +48,6 @@ ChartJS.register(
   Tooltip,
   Legend
 );
-
-function getUserId() {
-  const accessToken = localStorage.getItem("accessToken");
-  return JSON.parse(atob(accessToken.split(".")[1])).user.users_id;
-}
 
 export default function Slide() {
   const [listOfSlides, setListOfSlides] = useState([]);
@@ -132,7 +128,7 @@ export default function Slide() {
   }, [isFetch]);
 
   useEffect(() => {
-    setCurrentUserId(getUserId());
+    setCurrentUserId(getLoggedInUserId());
 
     getSlideTypes()
       .then((data) => {
@@ -164,17 +160,16 @@ export default function Slide() {
     setListOfSlides(newList);
   };
 
-  const createSlideClick = () => {
-    addSlide(params.presentId, 0, "").catch((err) => {
-      console.log(err);
-    });
+  const FetchListOfSlide = () => {
     const flag = !isFetch;
     setIsFetch(flag);
   };
 
-  const FetchListOfSlide = () => {
-    const flag = !isFetch;
-    setIsFetch(flag);
+  const createSlideClick = () => {
+    addSlide(params.presentId, 0, "").catch((err) => {
+      console.log(err);
+    });
+    FetchListOfSlide();
   };
 
   function presentSlides() {
@@ -319,9 +314,12 @@ export default function Slide() {
                     {slide.types_id === 2 && (
                       <div>
                         <div>
-                          <img alt="heading image" src={headingImg}></img>
+                          <img alt="heading image" src={headingImg} />
                         </div>
-                        <div className="heading-style" style={{marginTop: "10%"}}>
+                        <div
+                          className="heading-style"
+                          style={{ marginTop: "10%" }}
+                        >
                           {slide.heading}
                         </div>
                         <div className="subheading-style">
@@ -332,14 +330,15 @@ export default function Slide() {
                     {slide.types_id === 3 && (
                       <div>
                         <div>
-                          <img alt="heading image" src={paragraphImg}></img>
+                          <img alt="heading image" src={paragraphImg} />
                         </div>
-                        <div className="heading-style" style={{marginTop: "10%"}}>
+                        <div
+                          className="heading-style"
+                          style={{ marginTop: "10%" }}
+                        >
                           {slide.heading}
                         </div>
-                        <div className="paragraph-style">
-                          {slide.paragraph}
-                        </div>
+                        <div className="paragraph-style">{slide.paragraph}</div>
                       </div>
                     )}
                   </div>

@@ -1,4 +1,9 @@
-import { deleteRequest, getRequest, postRequest, putRequest } from "./httpClient";
+import {
+  deleteRequest,
+  getRequest,
+  postRequest,
+  putRequest
+} from "./httpClient";
 
 export async function getAllPresentationsInGroup(groupId) {
   const url = `${process.env.REACT_APP_API_URL}/presentations/${groupId}`;
