@@ -1,10 +1,17 @@
-import React, {useEffect} from "react";
-import {Modal} from "react-bootstrap";
+import React, { useEffect } from "react";
+import { Modal } from "react-bootstrap";
 import uuid from "react-uuid";
-import {getAllQuestionsOfPresent, requestUpdateQuestions} from "../../fetch/questionsFetch";
+import {
+  getAllQuestionsOfPresent,
+  requestUpdateQuestions
+} from "../../fetch/questionsFetch";
 import Question from "./Question";
 import "./question.css";
-import {getLoggedInUserEmail, getLoggedInUserId, getLoggedInUsername} from "../../util/ultilis";
+import {
+  getLoggedInUserEmail,
+  getLoggedInUserId,
+  getLoggedInUsername
+} from "../../util/ultilis";
 import QuestionInput from "./QuestionInput";
 
 function QuestionModal({ show, handleClose, target }) {

@@ -1,8 +1,8 @@
 import React from "react";
-import {Button} from "react-bootstrap";
+import { Button } from "react-bootstrap";
 import "./question.css";
-import {ImArrowDown, ImArrowUp, ImCheckmark} from "react-icons/im";
-import {getFormattedDateTimeString} from "../../util/ultilis";
+import { ImArrowDown, ImArrowUp, ImCheckmark } from "react-icons/im";
+import { getFormattedDateTimeString } from "../../util/ultilis";
 
 export default function Question({
   question,
