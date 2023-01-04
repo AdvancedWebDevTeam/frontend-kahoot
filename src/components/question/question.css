@@ -70,4 +70,5 @@
 .sorter {
   display: flex;
   gap: .3rem;
+  align-items: center;
 }

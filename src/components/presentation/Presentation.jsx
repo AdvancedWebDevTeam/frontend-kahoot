@@ -6,6 +6,7 @@ import {
   BsEyeFill,
   BsFillCaretLeftFill,
   BsFillTrashFill,
+  BsPatchQuestionFill,
   BsPencilSquare
 } from "react-icons/bs";
 import {
@@ -17,11 +18,9 @@ import {
 } from "../../fetch/presentationFetch";
 import "./Presentation.css";
 import EditPresentationModal from "./EditPresentationModal";
-
-function getUserId() {
-  const accessToken = localStorage.getItem("accessToken");
-  return JSON.parse(atob(accessToken.split(".")[1])).user.users_id;
-}
+import { getLoggedInUserId } from "../../util/ultilis";
+import QuestionModal from "../question/QuestionModal";
+import { getOwnerAndCoOwnersOfGroup } from "../../fetch/groupFetch";
 
 export default function Presentation() {
   const [userInGroup, setUserInGroup] = useState({
@@ -34,6 +33,11 @@ export default function Presentation() {
   const [showAlert, setShowAlert] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [editTarget, setEditTarget] = useState({});
+  const [authorities, setAuthorities] = useState([]);
+
+  // Question Modal states
+  const [showQuestionModal, setShowQuestionModal] = useState(false);
+  const [questionTarget, setQuestionTarget] = useState({});
 
   const navigate = useNavigate();
   const params = useParams();
@@ -50,7 +54,7 @@ export default function Presentation() {
   const handleShow = () => setShowDialog(true);
 
   const onHandleSubmit = async (data) => {
-    const currentUserId = getUserId();
+    const currentUserId = getLoggedInUserId();
     await addNewPresentation(params.groupId, currentUserId, data.presentName);
 
     await getAllPresentationsInGroup(params.groupId)
@@ -76,22 +80,18 @@ export default function Presentation() {
   };
 
   useEffect(() => {
-    const currentUserId = getUserId();
-    getUserRoleInGroup(params.groupId, currentUserId)
-      .then((data) => {
-        setUserInGroup(data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    const currentUserId = getLoggedInUserId();
+    getUserRoleInGroup(params.groupId, currentUserId).then((data) => {
+      setUserInGroup(data);
+    });
 
-    getAllPresentationsInGroup(params.groupId)
-      .then((data) => {
-        setListOfPresent(data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    getAllPresentationsInGroup(params.groupId).then((data) => {
+      setListOfPresent(data);
+    });
+
+    getOwnerAndCoOwnersOfGroup(params.groupId).then((data) => {
+      setAuthorities(data);
+    });
   }, []);
 
   const backToGroupClick = () => {
@@ -119,6 +119,14 @@ export default function Presentation() {
 
       await updatePresentation(editedId, editedPresentation.presents_name);
     }
+  }
+
+  function showQuestionsOfPresent(show, presentation) {
+    setShowQuestionModal(show);
+    setQuestionTarget({
+      ...presentation,
+      collaborators: authorities
+    });
   }
 
   const alert = (
@@ -151,7 +159,7 @@ export default function Presentation() {
             {userInGroup.roles_id !== 3 && (
               <div>
                 <Button
-                  onClick={(e) => viewSlideClick(present.presents_id)}
+                  onClick={() => viewSlideClick(present.presents_id)}
                   variant="success"
                 >
                   <BsEyeFill />
@@ -164,7 +172,14 @@ export default function Presentation() {
                   <BsPencilSquare />
                 </Button>
                 <Button
-                  onClick={(e) => deleteClick(present.presents_id)}
+                  onClick={() => showQuestionsOfPresent(true, present)}
+                  variant="outline-dark"
+                  style={{ marginLeft: "5px" }}
+                >
+                  <BsPatchQuestionFill />
+                </Button>
+                <Button
+                  onClick={() => deleteClick(present.presents_id)}
                   variant="outline-danger"
                   style={{ marginLeft: "5px" }}
                 >
@@ -190,11 +205,19 @@ export default function Presentation() {
         )}
       </div>
 
+      {/* Edit presentation Modals */}
       <EditPresentationModal
         show={showEditModal}
         onHide={() => setShowEditModal(false)}
         target={editTarget}
         onSubmit={submitEditedPresentation}
+      />
+
+      {/* Questions list modal */}
+      <QuestionModal
+        show={showQuestionModal}
+        handleClose={() => showQuestionsOfPresent(false, {})}
+        target={questionTarget}
       />
 
       {/* CREATE NEW PRESENTATION MODEL */}

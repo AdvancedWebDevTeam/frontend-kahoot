@@ -38,6 +38,7 @@ export default function QuestionsSorter({ onSort, labels, attributes }) {
 
   return (
     <div className="sorter">
+      Sort by:
       {labels.map((label, index) => (
         <Button
           key={label}

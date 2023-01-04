@@ -28,3 +28,9 @@ export async function requestKickMember(groupId, userId) {
   const result = await getRequest(url);
   return result.status === 200;
 }
+
+export async function getOwnerAndCoOwnersOfGroup(id) {
+  const url = `${process.env.REACT_APP_API_URL}/groups/${id}/authorities`;
+  const result = await getRequest(url);
+  return result.data;
+}

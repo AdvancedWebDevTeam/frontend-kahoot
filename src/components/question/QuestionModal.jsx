@@ -38,6 +38,11 @@ function QuestionModal({ show, handleClose, target }) {
     }
   }, [target]);
 
+  function setNewQuestionsState(newQuestions) {
+    setQuestions(newQuestions);
+    setOriginalQuestion(newQuestions);
+  }
+
   function handleVote(id, amount) {
     const newQuestions = questions.map((question) => {
       if (question.questions_id === id) {
@@ -48,8 +53,7 @@ function QuestionModal({ show, handleClose, target }) {
       }
       return question;
     });
-    setQuestions(newQuestions);
-    setOriginalQuestion(newQuestions);
+    setNewQuestionsState(newQuestions);
     setHasChange(true);
   }
 
@@ -63,8 +67,7 @@ function QuestionModal({ show, handleClose, target }) {
       }
       return question;
     });
-    setQuestions(newQuestions);
-    setOriginalQuestion(newQuestions);
+    setNewQuestionsState(newQuestions);
     setHasChange(true);
   }
 
@@ -82,8 +85,7 @@ function QuestionModal({ show, handleClose, target }) {
         questions_time: new Date()
       }
     ];
-    setQuestions(newQuestions);
-    setOriginalQuestion(newQuestions);
+    setNewQuestionsState(newQuestions);
     setHasChange(true);
   }
 
@@ -107,6 +109,17 @@ function QuestionModal({ show, handleClose, target }) {
         });
       });
     }
+  }
+
+  function canBeMarkedAsAnswered(question) {
+    const currentUserId = getLoggedInUserId();
+    const collaboratorIds = target.collaborators?.map((collaborator) => {
+      return collaborator.userId;
+    });
+
+    return (
+      currentUserId === ownerId || collaboratorIds?.includes(currentUserId)
+    );
   }
 
   async function onHide() {
@@ -138,7 +151,7 @@ function QuestionModal({ show, handleClose, target }) {
             question={question}
             onVote={(amount) => handleVote(question.questions_id, amount)}
             onMarkAsAnswered={() => handleMarkAsAnswered(question.questions_id)}
-            canMarkAsAnswered={getLoggedInUserId() === ownerId}
+            canMarkAsAnswered={canBeMarkedAsAnswered(question)}
           />
         ))}
         <QuestionInput onSubmit={(question) => handleAddQuestion(question)} />
