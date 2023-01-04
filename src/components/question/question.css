@@ -4,7 +4,7 @@
 }
 
 .question {
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0 3px 8px;
   border-radius: 5px;
   margin: 1rem 0;
   padding: 1rem;
@@ -20,12 +20,13 @@
 }
 
 .question-header h1 {
-  font-size: 1.2rem;
+  font-size: 1rem;
 }
 
 .question-header p {
   font-size: .8rem;
   font-style: italic;
+  color: #606060;
 }
 
 .question-footer {
@@ -35,7 +36,7 @@
   margin-top: .8rem;
 }
 
-.question-footer .btn:last-child {
+.question-footer .btn.last-btn {
   margin-left: auto;
 }
 
@@ -43,4 +44,25 @@
   color: blue;
   font-weight: bolder;
   font-size: .9rem;
+}
+
+.question-input {
+  display: flex;
+  align-items: flex-end;
+  margin: 0;
+  gap: .5rem;
+
+  border-top: 1px solid #c4c4c4;
+  padding-top: .6rem;
+}
+
+.question-input input {
+  min-height: 10%;
+}
+
+.question-input .btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: .5rem;
 }

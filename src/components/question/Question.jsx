@@ -1,10 +1,15 @@
 import React from "react";
-import { Button } from "react-bootstrap";
+import {Button} from "react-bootstrap";
 import "./question.css";
-import { ImArrowDown, ImArrowUp, ImCheckmark } from "react-icons/im";
-import { getFormattedDateTimeString } from "../../util/ultilis";
+import {ImArrowDown, ImArrowUp, ImCheckmark} from "react-icons/im";
+import {getFormattedDateTimeString} from "../../util/ultilis";
 
-export default function Question({ question, onVote, onMarkAsAnswered }) {
+export default function Question({
+  question,
+  onVote,
+  onMarkAsAnswered,
+  canMarkAsAnswered
+}) {
   const [givenVote, setGivenVote] = React.useState(0);
 
   function upvote() {
@@ -54,13 +59,16 @@ export default function Question({ question, onVote, onMarkAsAnswered }) {
           <ImArrowDown />
         </Button>
 
-        <Button
-          onClick={() => onMarkAsAnswered()}
-          variant={markAsAnsweredVariant}
-          size="sm"
-        >
-          {question.is_answer ? <ImCheckmark /> : "Mark as answered"}
-        </Button>
+        {canMarkAsAnswered && (
+          <Button
+            onClick={() => onMarkAsAnswered()}
+            variant={markAsAnsweredVariant}
+            size="sm"
+            className="last-btn"
+          >
+            {question.is_answer ? <ImCheckmark /> : "Mark as answered"}
+          </Button>
+        )}
       </div>
     </div>
   );

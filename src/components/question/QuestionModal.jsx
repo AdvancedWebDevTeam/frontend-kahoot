@@ -1,20 +1,23 @@
-import React, { useEffect } from "react";
-import { Modal } from "react-bootstrap";
-import {
-  getAllQuestionsOfPresent,
-  requestUpdateQuestions
-} from "../../fetch/questionsFetch";
+import React, {useEffect} from "react";
+import {Modal} from "react-bootstrap";
+import uuid from "react-uuid";
+import {getAllQuestionsOfPresent, requestUpdateQuestions} from "../../fetch/questionsFetch";
 import Question from "./Question";
 import "./question.css";
+import {getLoggedInUserEmail, getLoggedInUserId, getLoggedInUsername} from "../../util/ultilis";
+import QuestionInput from "./QuestionInput";
 
 function QuestionModal({ show, handleClose, target }) {
   const presentId = target.presents_id;
   const ownerId = target["user.users_id"];
-  const collaboratorIds = target.collaborators?.map((collaborator) => {
-    return collaborator.userId;
-  });
   const [questions, setQuestions] = React.useState([]);
   const [hasChange, setHasChange] = React.useState(false);
+
+  useEffect(() => {
+    if (show) {
+      setHasChange(false);
+    }
+  }, [show]);
 
   useEffect(() => {
     if (presentId) {
@@ -54,6 +57,25 @@ function QuestionModal({ show, handleClose, target }) {
     setHasChange(true);
   }
 
+  function handleAddQuestion(newQuestionContent) {
+    setQuestions((prevQuestions) => {
+      return [
+        ...prevQuestions,
+        {
+          questions_id: uuid(),
+          content: newQuestionContent,
+          vote: 0,
+          is_answer: false,
+          questionerId: getLoggedInUserId(),
+          questionerName: getLoggedInUsername(),
+          questionerEmail: getLoggedInUserEmail(),
+          questions_time: new Date()
+        }
+      ];
+    });
+    setHasChange(true);
+  }
+
   async function onHide() {
     if (hasChange) {
       await requestUpdateQuestions(target.presents_id, questions);
@@ -76,8 +98,10 @@ function QuestionModal({ show, handleClose, target }) {
             question={question}
             onVote={(amount) => handleVote(question.questions_id, amount)}
             onMarkAsAnswered={() => handleMarkAsAnswered(question.questions_id)}
+            canMarkAsAnswered={getLoggedInUserId() === ownerId}
           />
         ))}
+        <QuestionInput onSubmit={(question) => handleAddQuestion(question)} />
       </Modal.Body>
     </Modal>
   );
