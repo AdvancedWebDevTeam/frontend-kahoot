@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
 import uuid from "react-uuid";
 import {
@@ -13,12 +13,14 @@ import {
   getLoggedInUsername
 } from "../../util/ultilis";
 import QuestionInput from "./QuestionInput";
+import QuestionsSorter from "./QuestionsSorter";
 
 function QuestionModal({ show, handleClose, target }) {
   const presentId = target.presents_id;
   const ownerId = target["user.users_id"];
-  const [questions, setQuestions] = React.useState([]);
-  const [hasChange, setHasChange] = React.useState(false);
+  const [originalQuestions, setOriginalQuestion] = useState([]);
+  const [questions, setQuestions] = useState([]);
+  const [hasChange, setHasChange] = useState(false);
 
   useEffect(() => {
     if (show) {
@@ -26,61 +28,85 @@ function QuestionModal({ show, handleClose, target }) {
     }
   }, [show]);
 
+  // get list of questions
   useEffect(() => {
     if (presentId) {
       getAllQuestionsOfPresent(presentId).then((data) => {
         setQuestions(data);
+        setOriginalQuestion(data);
       });
     }
   }, [target]);
 
   function handleVote(id, amount) {
-    setQuestions((prevQuestions) => {
-      return prevQuestions.map((question) => {
-        if (question.questions_id === id) {
-          return {
-            ...question,
-            vote: question.vote + amount
-          };
-        }
-        return question;
-      });
+    const newQuestions = questions.map((question) => {
+      if (question.questions_id === id) {
+        return {
+          ...question,
+          vote: question.vote + amount
+        };
+      }
+      return question;
     });
+    setQuestions(newQuestions);
+    setOriginalQuestion(newQuestions);
     setHasChange(true);
   }
 
   function handleMarkAsAnswered(id) {
-    setQuestions((prevQuestions) => {
-      return prevQuestions.map((question) => {
-        if (question.questions_id === id) {
-          return {
-            ...question,
-            is_answer: !question.is_answer
-          };
-        }
-        return question;
-      });
+    const newQuestions = questions.map((question) => {
+      if (question.questions_id === id) {
+        return {
+          ...question,
+          is_answer: !question.is_answer
+        };
+      }
+      return question;
     });
+    setQuestions(newQuestions);
+    setOriginalQuestion(newQuestions);
     setHasChange(true);
   }
 
   function handleAddQuestion(newQuestionContent) {
-    setQuestions((prevQuestions) => {
-      return [
-        ...prevQuestions,
-        {
-          questions_id: uuid(),
-          content: newQuestionContent,
-          vote: 0,
-          is_answer: false,
-          questionerId: getLoggedInUserId(),
-          questionerName: getLoggedInUsername(),
-          questionerEmail: getLoggedInUserEmail(),
-          questions_time: new Date()
-        }
-      ];
-    });
+    const newQuestions = [
+      ...questions,
+      {
+        questions_id: uuid(),
+        content: newQuestionContent,
+        vote: 0,
+        is_answer: false,
+        questionerId: getLoggedInUserId(),
+        questionerName: getLoggedInUsername(),
+        questionerEmail: getLoggedInUserEmail(),
+        questions_time: new Date()
+      }
+    ];
+    setQuestions(newQuestions);
+    setOriginalQuestion(newQuestions);
     setHasChange(true);
+  }
+
+  function handleSort(attribute, order) {
+    if (order === "none") {
+      setQuestions(originalQuestions);
+    } else {
+      setQuestions((prevQuestions) => {
+        return [...prevQuestions].sort((a, b) => {
+          let attributeA = a[attribute];
+          let attributeB = b[attribute];
+          if (attribute === "questions_time") {
+            attributeA = Date.parse(a[attribute]);
+            attributeB = Date.parse(b[attribute]);
+          }
+
+          if (order === "asc") {
+            return attributeA - attributeB;
+          }
+          return attributeB - attributeA;
+        });
+      });
+    }
   }
 
   async function onHide() {
@@ -91,7 +117,7 @@ function QuestionModal({ show, handleClose, target }) {
   }
 
   return (
-    <Modal show={show} onHide={onHide}>
+    <Modal show={show} onHide={() => onHide()}>
       <Modal.Header closeButton>
         <div>
           <Modal.Title>Questions</Modal.Title>
@@ -99,6 +125,13 @@ function QuestionModal({ show, handleClose, target }) {
         </div>
       </Modal.Header>
       <Modal.Body>
+        {questions.length > 0 && (
+          <QuestionsSorter
+            labels={["Is Answered", "Total Vote", "Time asked"]}
+            attributes={["is_answer", "vote", "questions_time"]}
+            onSort={(attribute, order) => handleSort(attribute, order)}
+          />
+        )}
         {questions.map((question) => (
           <Question
             key={question.questions_id}
