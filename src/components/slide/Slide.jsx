@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useContext } from "react";
-import { Button, Container, Modal } from "react-bootstrap";
-import { useNavigate, useParams, Link } from "react-router-dom";
+import { Button, Container, Modal, OverlayTrigger, Popover } from "react-bootstrap";
+import { useNavigate, useParams } from "react-router-dom";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { Bar } from "react-chartjs-2";
@@ -36,6 +36,7 @@ import "./Slide.css";
 import TooltipTrigger from "../general/TooltipTrigger";
 import { SocketContext } from "../socket/Socket";
 import paragraphImg from "./paragraph.png";
+import Chat from "../chat/Chat";
 import headingImg from "./heading.png";
 import { getLoggedInUserId } from "../../util/ultilis";
 
@@ -60,6 +61,14 @@ export default function Slide() {
 
   const socket = useContext(SocketContext);
 
+  const popover = (
+    <Popover id="popover-basic">
+      <Popover.Body>
+        <Chat/>
+      </Popover.Body>
+    </Popover>
+  );
+
   const handleClose = () => setIsShowModal(false);
   const handleShow = () => {
     if (presentInfo.groups_id === null) {
@@ -76,6 +85,7 @@ export default function Slide() {
 
   const handleClick = (index) => {
     const data = {
+      presents_id: params.presentId,
       indexSlide: index,
       listOfSlide: listOfSlides
     };
@@ -99,18 +109,16 @@ export default function Slide() {
       });
 
     socket.on("submitSlide", (data) => {
-      console.log(data);
       setListOfSlides(data);
     });
 
     const data = {
-      // bien này có thể là data {}và nó đã
+      presents_id: params.presentId,
       indexSlide: selectedIndex,
       listOfSlide: listOfSlides
     };
 
-    socket.emit("clickedSlide", data); // có thể dòng này gây bug bởi của Ngọc
-    // vì khi ông load component lên chưa chắc state[selectedIndex và listOfSlides] đã được set
+    socket.emit("clickedSlide", data);
 
     return () => {
       socket.off("submitSlide", (data) => {
@@ -214,14 +222,15 @@ export default function Slide() {
   const handleDelete = () => {
     if (selectedIndex < listOfSlides.length && selectedIndex >= 0) {
       deleteSlide(listOfSlides[selectedIndex].slides_id);
-      window.location.reload();
+      FetchListOfSlide();
     }
   };
 
   return (
     <>
       <div className="boxSlide1 slide-header">
-        {params.groupId !== "mypresent" && (
+        
+        {params.groupId !== "mypresent" &&
           <Button
             variant="outline-dark"
             className="back-btn"
@@ -229,7 +238,7 @@ export default function Slide() {
           >
             <BsFillCaretLeftFill />
           </Button>
-        )}
+        }
         <div>
           <h4 className="title">{presentInfo.presents_name}</h4>
           <span className="credit">Created by {presentInfo.users_name}</span>
@@ -238,6 +247,9 @@ export default function Slide() {
       <div className="boxSlide1 slide-toolbar">
         <Button onClick={createSlideClick}>+ New slide</Button>
         <div className="float-right">
+          <OverlayTrigger trigger="click" placement="left" overlay={popover}>
+            <Button variant="success">Box chat</Button>
+          </OverlayTrigger>
           <TooltipTrigger text="Share slides">
             <Button onClick={handleShow}>Share</Button>
           </TooltipTrigger>
@@ -357,9 +369,7 @@ export default function Slide() {
           <Modal.Header closeButton>
             <Modal.Title>My Share Link Slide</Modal.Title>
           </Modal.Header>
-          <Modal.Body>
-            Link: <Link to={linkShare}>{linkShare}</Link>
-          </Modal.Body>
+          <Modal.Body>Link: <a href={linkShare}>{linkShare}</a></Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={handleClose}>
               Close

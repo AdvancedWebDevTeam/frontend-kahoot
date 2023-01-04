@@ -15,7 +15,7 @@ export default function VerifyForm() {
     const token = params.token;
     const exp = JSON.parse(atob(token.split(".")[1])).exp;
     const curtime = Math.floor(Date.now() / 1000);
-    if(curtime - exp > 900) { // lon hon 15 phut hoac 15 * 60 = 900 giay
+    if(curtime > exp) {
       setValidUrl(false);
     }
     else {
