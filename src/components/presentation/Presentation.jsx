@@ -156,37 +156,39 @@ export default function Presentation() {
             <div className="secondary-title">{present["user.users_name"]}</div>
           </div>
           <div className="boxPresentation2" style={{ float: "right" }}>
-            {userInGroup.roles_id !== 3 && (
-              <div>
-                <Button
-                  onClick={() => viewSlideClick(present.presents_id)}
-                  variant="success"
-                >
-                  <BsEyeFill />
-                </Button>
-                <Button
-                  onClick={() => editPresentation(present)}
-                  variant="outline-warning"
-                  style={{ marginLeft: "5px" }}
-                >
-                  <BsPencilSquare />
-                </Button>
-                <Button
-                  onClick={() => showQuestionsOfPresent(true, present)}
-                  variant="outline-dark"
-                  style={{ marginLeft: "5px" }}
-                >
-                  <BsPatchQuestionFill />
-                </Button>
-                <Button
-                  onClick={() => deleteClick(present.presents_id)}
-                  variant="outline-danger"
-                  style={{ marginLeft: "5px" }}
-                >
-                  <BsFillTrashFill />
-                </Button>
-              </div>
-            )}
+            <div>
+              {userInGroup.roles_id !== 3 && (
+                <>
+                  <Button
+                    onClick={() => viewSlideClick(present.presents_id)}
+                    variant="success"
+                  >
+                    <BsEyeFill />
+                  </Button>
+                  <Button
+                    onClick={() => editPresentation(present)}
+                    variant="outline-warning"
+                    style={{ marginLeft: "5px" }}
+                  >
+                    <BsPencilSquare />
+                  </Button>
+                  <Button
+                    onClick={() => deleteClick(present.presents_id)}
+                    variant="outline-danger"
+                    style={{ marginLeft: "5px" }}
+                  >
+                    <BsFillTrashFill />
+                  </Button>
+                </>
+              )}
+              <Button
+                onClick={() => showQuestionsOfPresent(true, present)}
+                variant="outline-dark"
+                style={{ marginLeft: "5px" }}
+              >
+                <BsPatchQuestionFill />
+              </Button>
+            </div>
           </div>
         </div>
       ))}
