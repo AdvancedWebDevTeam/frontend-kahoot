@@ -17,7 +17,7 @@ export async function getAllChat(presentID) {
   return result.data;
 }
 
-export async function getAllMyPresentations(userId){
+export async function getAllMyPresentations(userId) {
   const url = `${process.env.REACT_APP_API_URL}/presentations/mypresent/${userId}`;
   const result = await getRequest(url);
   return result.data;
