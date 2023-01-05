@@ -6,6 +6,8 @@ import { Form } from 'react-bootstrap';
 import "./MemberView.css";
 import { getSlidePresent, submitSlide } from '../../fetch/slideFetch';
 import { useParams } from 'react-router-dom';
+import headingImg from "./heading.png";
+import paragraphImg from "./paragraph.png";
 
 export default function MemberView() {
 
@@ -48,36 +50,58 @@ export default function MemberView() {
 
     const alert = (
         <Alert
-          dismissible
-          onClose={() => setShowAlert(false)}
+            dismissible
+            onClose={() => setShowAlert(false)}
         >
-          Your choice is submitted!
+            Your choice is submitted!
         </Alert>
-      );
+    );
 
     return (
         <>
-        {showAlert && alert}
-        <div className='containerMemberView'>
-            <h1>Multiple Choice</h1>
-            <Form onSubmit={(e) => onSubmit(e)}>
-                {options.map((item) => (
-                    <div className={result === item ? "mb-3 containercbxFocus" : "mb-3 containercbx"} key={`inline-${item}`}>
-                        <Form.Check
-                            onChange={(e) => setResult(e.target.id)}
-                            label={item}
-                            name="group1"
-                            type='radio'
-                            checked={result === item}
-                            id={item}
-                        />
-                    </div>
-                ))}
-                <Button variant="primary" type="submit" className='btnSubmit'>
-                    Submit
-                </Button>
-            </Form>
-        </div>
+            {showAlert && alert}
+            <div className='containerMemberView'>
+                {slide.types_id === 0 ?
+                    (
+                        <>
+                            <h1 className="typeslidetyle">Blank Slide</h1>
+                        </>
+                    ) : slide.types_id === 1 ? (
+                        <>
+                            <h1 className="typeslidetyle">Multiple Choice</h1>
+                            <div className="questionstyle">Question: {slide.question}</div>
+                            <Form onSubmit={(e) => onSubmit(e)}>
+                                {options.map((item) => (
+                                    <div className={result === item ? "mb-3 containercbxFocus" : "mb-3 containercbx"} key={`inline-${item}`}>
+                                        <Form.Check
+                                            onChange={(e) => setResult(e.target.id)}
+                                            label={item}
+                                            name="group1"
+                                            type='radio'
+                                            checked={result === item}
+                                            id={item}
+                                        />
+                                    </div>
+                                ))}
+                                <Button variant="primary" type="submit" className='btnSubmit'>
+                                    Submit
+                                </Button>
+                            </Form>
+                        </>
+                    ) : slide.types_id === 2 ? (
+                        <>
+                            <h2 className="headingstyle">{slide.headingOfHeading}</h2>
+                            <div className="paragraph-style-member">{slide.subheading}</div>
+                            <img className="imageslidestyle" alt="heading image" src={headingImg}></img>
+                        </>
+                    ) : (
+                        <>
+                            <h2 className="headingstyle">{slide.headingOfParagraph}</h2>
+                            <div className="paragraph-style-member">{slide.paragraph}</div>
+                            <img className="imageslidestyle" alt="paragraph image" src={paragraphImg}></img>
+                        </>
+                    )}
+            </div>
         </>
     )
 }

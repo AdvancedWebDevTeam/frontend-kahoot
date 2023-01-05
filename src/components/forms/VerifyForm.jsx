@@ -15,7 +15,7 @@ export default function VerifyForm() {
     const token = params.token;
     const exp = JSON.parse(atob(token.split(".")[1])).exp;
     const curtime = Math.floor(Date.now() / 1000);
-    if(curtime > exp) {
+    if(curtime >= exp) {
       setValidUrl(false);
     }
     else {

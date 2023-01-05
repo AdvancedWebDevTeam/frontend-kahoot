@@ -29,7 +29,7 @@ export default function ResetPasswordForm() {
     const resetToken = params.token;
     const exp = JSON.parse(atob(resetToken.split(".")[1])).exp;
     const curtime = Math.floor(Date.now() / 1000);
-    if(curtime > exp) {
+    if(curtime >= exp) {
       setIsExpire(true);
     }
   }
