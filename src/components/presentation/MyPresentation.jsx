@@ -73,8 +73,9 @@ export default function MyPresentation() {
     navigate(`/slides/mypresent/show/${id}`);
   };
 
-  const deleteClick = (id) => {
-    deletePresentation(id);
+  // TODO: check this function out!
+  const deleteClick = async (id) => {
+    await deletePresentation(id);
     window.location.reload();
   };
 

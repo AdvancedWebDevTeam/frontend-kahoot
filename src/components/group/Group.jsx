@@ -31,6 +31,11 @@ function Group() {
     setGroups([...groups, group]);
   }
 
+  function deleteGroup(groupId) {
+    const newGroups = groups.filter((group) => group.groups_id !== groupId);
+    setGroups(newGroups);
+  }
+
   return (
     <div className="group-container">
       <Tab.Container
@@ -54,7 +59,11 @@ function Group() {
               <Tab.Pane eventKey="my-groups" />
               {groups.map((group) => (
                 <Tab.Pane key={group.groups_id} eventKey={group.groups_id}>
-                  <GroupDetail group={group} roles={availableRoles} />
+                  <GroupDetail
+                    group={group}
+                    roles={availableRoles}
+                    onDeleteGroup={(id) => deleteGroup(id)}
+                  />
                 </Tab.Pane>
               ))}
             </Tab.Content>
