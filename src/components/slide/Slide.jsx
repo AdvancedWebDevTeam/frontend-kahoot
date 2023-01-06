@@ -320,7 +320,7 @@ export default function Slide() {
                           className="heading-style"
                           style={{ marginTop: "10%" }}
                         >
-                          {slide.heading}
+                          {slide.headingOfHeading}
                         </div>
                         <div className="subheading-style">
                           {slide.subheading}
@@ -336,7 +336,7 @@ export default function Slide() {
                           className="heading-style"
                           style={{ marginTop: "10%" }}
                         >
-                          {slide.heading}
+                          {slide.headingOfParagraph}
                         </div>
                         <div className="paragraph-style">{slide.paragraph}</div>
                       </div>

@@ -2,6 +2,26 @@
     margin:  auto;
     width: 50%;
     margin-top: 80px;
+    display: block;
+}
+
+.questionstyle{
+    text-align: center;
+    font-family: 'Times New Roman', Times, serif;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.headingstyle{
+    text-align: center;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-weight: bold;
+    font-size: 40px;
+}
+
+.typeslidetyle{
+    text-align: center;
+    font-weight: bold;
 }
 
 .containercbx{    
@@ -18,4 +38,21 @@
 
 .btnSubmit{
     width: 100%;
+}
+
+.paragraph-style-member{
+    text-align: center;
+    font-size: 25px;
+    display: block;/* or inline-block */
+    text-overflow: ellipsis;
+    word-wrap: break-word;
+    overflow: hidden;
+    max-height: 9em;
+    line-height: 1.8em;
+}
+
+.imageslidestyle{
+    display: block;
+    margin: auto;
+    margin-top: 10px;
 }

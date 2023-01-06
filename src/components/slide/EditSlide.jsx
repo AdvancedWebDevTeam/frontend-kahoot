@@ -18,8 +18,9 @@ export default function EditSlide({
   const [typeId, setTypeId] = useState(0);
   const [options, setOptions] = useState({});
   const [question, setQuestion] = useState("");
-  const [heading, setHeading] = useState("");
+  const [headingOfHeading, setHeadingOfHeading] = useState("");
   const [subheading, setSubheading] = useState("");
+  const [headingOfParagragph, setHeadingOfParagraph] = useState("");
   const [paragraph, setParagraph] = useState("");
 
   const {
@@ -37,8 +38,9 @@ export default function EditSlide({
       setTypeId(listOfSlides[selectedIndex].types_id);
       setOptions(listOfSlides[selectedIndex].options);
       setQuestion(listOfSlides[selectedIndex].question);
-      setHeading(listOfSlides[selectedIndex].heading);
+      setHeadingOfHeading(listOfSlides[selectedIndex].headingOfHeading);
       setSubheading(listOfSlides[selectedIndex].subheading);
+      setHeadingOfParagraph(listOfSlides[selectedIndex].headingOfParagraph);
       setParagraph(listOfSlides[selectedIndex].paragraph);
     }
   }, [len, selectedIndex, listOfSlides]);
@@ -243,7 +245,7 @@ export default function EditSlide({
                       </Form.Text>
                       <InputGroup>
                         <Form.Control
-                          placeholder={heading}
+                          placeholder={headingOfHeading}
                           id="heading2"
                           defaultValue=""
                           as="textarea"
@@ -297,7 +299,7 @@ export default function EditSlide({
                       </Form.Text>
                       <InputGroup>
                         <Form.Control
-                          placeholder={heading}
+                          placeholder={headingOfParagragph}
                           id="heading3"
                           defaultValue=""
                           as="textarea"
