@@ -3,6 +3,11 @@
     margin-bottom: .5rem;
 }
 
+.group-detail .btns {
+    display: flex;
+    gap: .5rem;
+}
+
 .member-list {
     margin-top: 2rem;
 }

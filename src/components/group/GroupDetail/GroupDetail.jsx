@@ -4,13 +4,18 @@ import { useNavigate } from "react-router-dom";
 import MemberList from "./MemberList";
 import {
   getMembersInGroup,
+  requestDeleteGroup,
   requestKickMember
 } from "../../../fetch/groupFetch";
-import { capitalizeFirstLetter } from "../../../util/ultilis";
+import {
+  capitalizeFirstLetter,
+  getLoggedInUserId
+} from "../../../util/ultilis";
 import "./groupDetail.css";
 import { requestMemberRoleChange } from "../../../fetch/roleFetch";
+import DeleteButton from "../../general/DeleteButton";
 
-function GroupDetail({ group, roles }) {
+function GroupDetail({ group, roles, onDeleteGroup }) {
   const [members, setMembers] = React.useState([]);
   const [showAlert, setShowAlert] = React.useState(false);
   const [alertSuccess, setAlertSuccess] = React.useState(false);
@@ -75,6 +80,17 @@ function GroupDetail({ group, roles }) {
       });
   }
 
+  function canDeleteGroup() {
+    return members.some(
+      (member) => member.userId === getLoggedInUserId() && member.roleId === 1
+    );
+  }
+
+  async function removeGroup() {
+    await requestDeleteGroup(group.groups_id);
+    onDeleteGroup(group.groups_id);
+  }
+
   const alert = (
     <Alert
       dismissible
@@ -93,12 +109,24 @@ function GroupDetail({ group, roles }) {
       <MemberList
         members={members}
         groupId={group.groups_id}
-        changeMemberRole={changeMemberRole}
+        changeMemberRole={(userId, newRoleName) =>
+          changeMemberRole(userId, newRoleName)
+        }
         roles={roles}
-        kickMember={kickMember}
+        kickMember={(memberId) => kickMember(memberId)}
       />
-      <div>
+      <div className="btns">
         <Button onClick={viewPresentClick}>View Presentation</Button>
+        {canDeleteGroup() && (
+          <DeleteButton
+            text={
+              <>
+                Confirm remove group <strong>{group.groups_name}</strong>?
+              </>
+            }
+            onDelete={() => removeGroup()}
+          />
+        )}
       </div>
     </div>
   );
