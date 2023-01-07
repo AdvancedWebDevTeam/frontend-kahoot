@@ -21,6 +21,7 @@ import AssignCollaboratorsModal from "./collab/AssignCollaboratorsModal";
 import { updatePresentationCollaborators } from "../../fetch/collab";
 import { getAllUsers } from "../../fetch/userFetch";
 import QuestionModal from "../question/QuestionModal";
+import DeleteButton from "../general/DeleteButton";
 
 export default function MyPresentation() {
   const [listOfPresent, setListOfPresent] = useState([]);
@@ -76,7 +77,9 @@ export default function MyPresentation() {
   // TODO: check this function out!
   const deleteClick = async (id) => {
     await deletePresentation(id);
-    window.location.reload();
+    setListOfPresent((prevList) =>
+      prevList.filter((present) => present.presents_id !== id)
+    );
   };
 
   useEffect(() => {
@@ -206,13 +209,16 @@ export default function MyPresentation() {
                 >
                   <BsPatchQuestionFill />
                 </Button>
-                <Button
-                  onClick={() => deleteClick(present.presents_id)}
-                  variant="outline-danger"
+                <DeleteButton
+                  text={
+                    <>
+                      Remove presentation{" "}
+                      <strong>{present.presents_name}</strong>?
+                    </>
+                  }
+                  onDelete={() => deleteClick(present.presents_id)}
                   style={{ marginLeft: "5px" }}
-                >
-                  <BsFillTrashFill />
-                </Button>
+                />
               </div>
             </div>
           ))}
@@ -229,7 +235,9 @@ export default function MyPresentation() {
         show={showEditModal}
         onHide={() => editPresentation(false, {})}
         target={editTarget}
-        onSubmit={submitEditedPresentation}
+        onSubmit={(hasChange, editedPresentation) =>
+          submitEditedPresentation(hasChange, editedPresentation)
+        }
       />
 
       {/* Assign Colaborators modal */}
@@ -237,7 +245,9 @@ export default function MyPresentation() {
         show={showAssignModal}
         onHide={() => assignCollaborators(false, {})}
         target={assignTarget}
-        onSubmit={submitCollaborators}
+        onSubmit={(hasChange, presentId, newColaborators) =>
+          submitCollaborators(hasChange, presentId, newColaborators)
+        }
         allUsers={allUsers}
       />
 

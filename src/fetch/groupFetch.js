@@ -1,4 +1,4 @@
-import {getRequest, postRequest, putRequest} from "./httpClient";
+import {deleteRequest, getRequest, postRequest, putRequest} from "./httpClient";
 
 export async function getGroupsOfUser(userId) {
   const url = `${process.env.REACT_APP_API_URL}/groups/user/${userId}`;
@@ -18,8 +18,8 @@ export async function postCreateGroupRequest(groupName, ownerId, memberIds) {
 }
 
 export async function requestDeleteGroup(id) {
-  const url = `${process.env.REACT_APP_API_URL}/groups/${id}/delete`;
-  const result = await putRequest(url);
+  const url = `${process.env.REACT_APP_API_URL}/groups/${id}`;
+  const result = await deleteRequest(url);
   return result.status === 200;
 }
 

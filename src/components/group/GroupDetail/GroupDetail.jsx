@@ -1,8 +1,6 @@
 import React, { useEffect } from "react";
-import { Alert, Button, Popover } from "react-bootstrap";
+import { Alert, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { BsTrash } from "react-icons/bs";
-import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import MemberList from "./MemberList";
 import {
   getMembersInGroup,
@@ -15,16 +13,14 @@ import {
 } from "../../../util/ultilis";
 import "./groupDetail.css";
 import { requestMemberRoleChange } from "../../../fetch/roleFetch";
+import DeleteButton from "../../general/DeleteButton";
 
-function GroupDetail({ group, roles, onDeleteGroup}) {
+function GroupDetail({ group, roles, onDeleteGroup }) {
   const [members, setMembers] = React.useState([]);
   const [showAlert, setShowAlert] = React.useState(false);
   const [alertSuccess, setAlertSuccess] = React.useState(false);
   const [alertMessage, setAlertMessage] = React.useState("");
   const navigate = useNavigate();
-
-  // delete btn overlay state
-  const [showConfirm, setShowConfirm] = React.useState(false);
 
   useEffect(() => {
     getMembersInGroup(group.groups_id).then((data) => {
@@ -93,7 +89,6 @@ function GroupDetail({ group, roles, onDeleteGroup}) {
   async function removeGroup() {
     await requestDeleteGroup(group.groups_id);
     onDeleteGroup(group.groups_id);
-    setShowConfirm(false);
   }
 
   const alert = (
@@ -106,43 +101,6 @@ function GroupDetail({ group, roles, onDeleteGroup}) {
     </Alert>
   );
 
-  const popover = (
-    <Popover>
-      <Popover.Body>
-        <p>
-          Remove collaborator <strong>{group.groups_name}</strong>?
-        </p>
-        <Button
-          className="fs-7 m-1"
-          variant="danger"
-          onClick={() => removeGroup()}
-        >
-          Yes
-        </Button>
-        <Button
-          className="fs-7"
-          variant="outline-secondary"
-          onClick={() => setShowConfirm(false)}
-        >
-          No
-        </Button>
-      </Popover.Body>
-    </Popover>
-  );
-
-  const deleteOverlay = (
-    <OverlayTrigger
-      trigger="click"
-      placement="top"
-      overlay={popover}
-      show={showConfirm}
-    >
-      <Button variant="outline-danger" onClick={() => setShowConfirm(true)}>
-        <BsTrash />
-      </Button>
-    </OverlayTrigger>
-  );
-
   return (
     <div className="group-detail">
       {showAlert && alert}
@@ -151,13 +109,24 @@ function GroupDetail({ group, roles, onDeleteGroup}) {
       <MemberList
         members={members}
         groupId={group.groups_id}
-        changeMemberRole={changeMemberRole}
+        changeMemberRole={(userId, newRoleName) =>
+          changeMemberRole(userId, newRoleName)
+        }
         roles={roles}
-        kickMember={kickMember}
+        kickMember={(memberId) => kickMember(memberId)}
       />
       <div className="btns">
         <Button onClick={viewPresentClick}>View Presentation</Button>
-        {canDeleteGroup() && deleteOverlay}
+        {canDeleteGroup() && (
+          <DeleteButton
+            text={
+              <>
+                Confirm remove group <strong>{group.groups_name}</strong>?
+              </>
+            }
+            onDelete={() => removeGroup()}
+          />
+        )}
       </div>
     </div>
   );
