@@ -27,7 +27,7 @@ export default function NotifyChat() {
 
     const notify = () => {
         addNotification({
-            title: "notify",
+            title: "Notify",
             message: message,
             duration: 4000,
             native: true,
@@ -36,6 +36,7 @@ export default function NotifyChat() {
                 setShowNotify(false);
             }
         });
+        setShowNotify(false);
     }
 
   return (

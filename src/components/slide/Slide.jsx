@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useContext } from "react";
-import { Button, Container, Modal, OverlayTrigger, Popover } from "react-bootstrap";
+import { Badge, Button, Container, Modal, OverlayTrigger, Popover } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -58,6 +58,7 @@ export default function Slide() {
   const [isShowModal, setIsShowModal] = useState(false);
   const [linkShare, setLinkShare] = useState(``);
   const [currentUserId, setCurrentUserId] = useState("");
+  const [countMess, setCountMess] = useState(0);
 
   const socket = useContext(SocketContext);
 
@@ -73,11 +74,11 @@ export default function Slide() {
   const handleShow = () => {
     if (presentInfo.groups_id === null) {
       setLinkShare(
-        `${process.env.REACT_APP_FE}/share/public/slide/${params.presentId}`
+        `${process.env.REACT_APP_FE}/share/public/slide/mypresent/${params.presentId}`
       );
     } else {
       setLinkShare(
-        `${process.env.REACT_APP_FE}/share/private/slide/${params.presentId}`
+        `${process.env.REACT_APP_FE}/share/private/slide/${params.groupId}/${params.presentId}`
       );
     }
     setIsShowModal(true);
@@ -108,10 +109,6 @@ export default function Slide() {
         console.log(err);
       });
 
-    socket.on("submitSlide", (data) => {
-      setListOfSlides(data);
-    });
-
     const data = {
       presents_id: params.presentId,
       indexSlide: selectedIndex,
@@ -119,13 +116,22 @@ export default function Slide() {
     };
 
     socket.emit("clickedSlide", data);
+  }, [isFetch]);
+
+  useEffect(() => {
+    socket.on("submitSlide", (data) => {
+      setListOfSlides(data);
+    });
+
+    socket.on("NotifyMessage", () => setCountMess(countMess + 1));
 
     return () => {
       socket.off("submitSlide", (data) => {
         setListOfSlides(data);
       });
+      socket.off("NotifyMessage");
     };
-  }, [isFetch]);
+  }, [socket]);
 
   useEffect(() => {
     setCurrentUserId(getLoggedInUserId());
@@ -248,7 +254,9 @@ export default function Slide() {
         <Button onClick={createSlideClick}>+ New slide</Button>
         <div className="float-right">
           <OverlayTrigger trigger="click" placement="left" overlay={popover}>
-            <Button variant="success">Box chat</Button>
+            <Button variant="success" onClick={() => setCountMess(0)}>
+              Box chat <Badge bg="secondary">{countMess !== 0 && countMess}</Badge>
+            </Button>
           </OverlayTrigger>
           <TooltipTrigger text="Share slides">
             <Button onClick={handleShow}>Share</Button>
