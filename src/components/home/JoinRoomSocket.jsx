@@ -24,7 +24,7 @@ export function JoinRoomSocket({ user }) {
 
   const AttendClicked = () => {
     SetISShow(false);
-    navigate(`/share/private/slide/${data.presents_id}`);
+    navigate(`/share/private/slide/${data.groups_id}/${data.presents_id}`);
   }
   return (
     <div>

@@ -78,7 +78,7 @@ export default function Slide() {
       );
     } else {
       setLinkShare(
-        `${process.env.REACT_APP_FE}/share/private/slide/${params.groupId}/${params.presentId}`
+        `${process.env.REACT_APP_FE}/share/private/slide/${presentInfo.groups_id}/${params.presentId}`
       );
     }
     setIsShowModal(true);

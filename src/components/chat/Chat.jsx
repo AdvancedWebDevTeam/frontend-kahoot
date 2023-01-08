@@ -77,9 +77,10 @@ export default function Chat() {
             </div>
             <div className="chat-body">
                 <ScrollToBottom className="message-container">
-                    {messageList.map((messageContent) => {
+                    {messageList.map((messageContent, index) => {
                         return (
                             <div
+                                key={index}
                                 className="message"
                                 id={userID === messageContent.author ? "you" : "other"}
                             >
