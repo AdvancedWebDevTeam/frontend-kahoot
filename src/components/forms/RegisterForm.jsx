@@ -11,6 +11,7 @@ export default function RegisterForm() {
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors }
   } = useForm();
   const navigate = useNavigate();
@@ -103,7 +104,34 @@ export default function RegisterForm() {
               <div>password is required</div>
             </Form.Text>
           )}
-
+          <Form.Group className="md-3">
+            <Form.Label>Confirm password</Form.Label>
+            <Form.Control
+              id="confirmpassword"
+              type="password"
+              placeholder="Confirm password"
+              {...register("confirmpassword", { 
+                required: true,
+                validate: (val) => {
+                  if (watch("password") !== val) {
+                    return false;
+                  }
+                  return true;
+                } 
+              })}
+            />
+          </Form.Group>
+          {errors.confirmpassword?.type === "required" && (
+            <Form.Text className="text-danger">
+              <div>Required</div>
+            </Form.Text>
+          )}
+          {errors.confirmpassword?.type === "validate" && (
+              <Form.Text className="text-danger">
+                <div>Your passwords do no match</div>
+              </Form.Text>
+          )}
+          
           {status === 401 && (
             <Form.Text className="text-danger">
               <h5>{message}</h5>
