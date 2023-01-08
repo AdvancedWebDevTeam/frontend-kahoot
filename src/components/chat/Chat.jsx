@@ -9,6 +9,9 @@ import "./Chat.css";
 
 function getUserId() {
     const accessToken = localStorage.getItem("accessToken");
+    if (accessToken === null) {
+        return null;
+    }
     return JSON.parse(atob(accessToken.split(".")[1])).user.users_id;
 }
 

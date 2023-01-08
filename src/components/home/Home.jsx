@@ -145,7 +145,7 @@ export default function Home() {
         <Route path="presentations/:groupId" element={<Presentation />} />
         <Route path="slides/:groupId/show/:presentId" element={<Slide />} />
         <Route path="/:presentId/chat" element={<Chat />} />
-        <Route path="share/:access/slide/:presentId" element={<MemberView />} />
+        <Route path="share/:access/slide/:groupId/:presentId" element={<MemberView />} />
         <Route
           path="presentations/mypresent/:userId"
           element={<MyPresentation />}

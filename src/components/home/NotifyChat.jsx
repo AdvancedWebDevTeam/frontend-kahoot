@@ -27,15 +27,15 @@ export default function NotifyChat() {
 
     const notify = () => {
         addNotification({
-            title: "notify",
+            title: "Notify",
             message: message,
             duration: 4000,
             native: true,
             onClick: () => {
-                navigate(`/${presentID}/chat`);
                 setShowNotify(false);
             }
         });
+        setShowNotify(false);
     }
 
   return (
