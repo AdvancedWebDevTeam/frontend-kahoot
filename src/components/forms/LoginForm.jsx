@@ -59,12 +59,12 @@ export default function LoginForm() {
   return (
     <Container fluid>
       <Row
-        className="login-row"
+        className="auth-row"
         style={{ backgroundImage: `url(/login-bg.jpg)` }}
       >
-        <Col className="login-box" md={3}>
+        <Col className="auth-box" md={3}>
           <Form onSubmit={handleSubmit((data) => onHandleSubmit(data))}>
-            <h3 className="login-title">Jump to your study!</h3>
+            <h3 className="auth-title">Jump to your study!</h3>
             <Form.Group className="md-3">
               <Form.Label>Email</Form.Label>
               <Form.Control
@@ -103,9 +103,9 @@ export default function LoginForm() {
               <Link to="/forgotpassword">Forgot password</Link>
             </div>
 
-            <div className="login-btn-group">
+            <div className="auth-btn-group">
               <Button variant="primary" type="submit">
-                Sign in
+                <strong>Sign in</strong>
               </Button>
               <div className="strike">
                 <p>Or you can sign in with...</p>
@@ -132,7 +132,7 @@ export default function LoginForm() {
             </div>
           </Form>
         </Col>
-        <Col className="login-text-container" md={{ span: 5, offset: 2 }}>
+        <Col className="auth-text-container" md={{ span: 5, offset: 2 }}>
           <h1>WELCOME TO</h1>
           <h1>
             <strong>PRESENT & STUDY</strong>

@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { useMutation } from "react-query";
 
 import "./Forms.css";
-import { Form, Button, Container } from "react-bootstrap";
+import { Form, Button, Container, Row, Col } from "react-bootstrap";
 
 export default function EnterEmailForm() {
   const {
@@ -18,30 +18,28 @@ export default function EnterEmailForm() {
 
   useEffect(() => {
     setStatus(0);
-  }, [isValid])
+  }, [isValid]);
 
   const { mutate, isLoading } = useMutation(async (data) => {
     await axios
-    .post(`${process.env.REACT_APP_API_URL}/users/enteremail`, {
-      email: data.email,
-    })
-    .then((res) => {
-      //console.log(res.data);
-      setStatus(res.status);
-    })
-    .catch((error) => {
-      console.log(error);
-      setStatus(error.response.status);
-    });
+      .post(`${process.env.REACT_APP_API_URL}/users/enteremail`, {
+        email: data.email
+      })
+      .then((res) => {
+        setStatus(res.status);
+      })
+      .catch((error) => {
+        setStatus(error.response.status);
+      });
   });
 
   const onHandleSubmit = (data) => {
-   mutate(data);
-  }
+    mutate(data);
+  };
 
-  const buttonLogin_Clicked = () => {
+  const buttonLoginClicked = () => {
     navigate("/login");
-  }
+  };
 
   if (isLoading) {
     return (
@@ -54,55 +52,62 @@ export default function EnterEmailForm() {
   }
 
   return (
-    <Container type="fluid">
-      <div className="box" style={{ marginTop: "10%" }}>
-        <h3>Forgot password</h3>
-        <Form onSubmit={handleSubmit((data) => onHandleSubmit(data))}>
-          <Form.Group className="md-3">
-            <Form.Label>Email address</Form.Label>
-            <Form.Control
-              id="email"
-              type="email"
-              placeholder="Enter email"
-              {...register("email", { required: true })}
-            />
-          </Form.Group>
-          {errors.email?.type === "required" && (
-            <Form.Text className="text-danger" role="alert">
-              <div>Required</div>
-            </Form.Text>
-          )}
-          {status === 405 && (
-            <Form.Text className="text-danger" role="alert">
-              <h5>Email does not exist</h5>
-            </Form.Text>
-          )}
-          {status === 200 && (
-            <Form.Text className="text-success" role="alert">
-              <h5>Visit your email to reset password. Token is about to expire in 15 minute</h5>
-            </Form.Text>
-          )}
-          <div className="allign">
-            <Button
-              variant="primary"
-              type="submit"
-              style={{ marginTop: "10px" }}
-            >
-              Submit
-            </Button>
-          </div>
-          <div className="allign">
-            <Button
-              variant="primary"
-              type="button"
-              style={{ marginTop: "10px" }}
-              onClick={buttonLogin_Clicked}
-            >
-              Sign In
-            </Button>
-          </div>
-        </Form>
-      </div>
+    <Container fluid>
+      <Row
+        className="auth-row"
+        style={{ backgroundImage: `url(/login-bg.jpg)` }}
+      >
+        <Col className="auth-box" md={3}>
+          <Form onSubmit={handleSubmit((data) => onHandleSubmit(data))}>
+            <h3 className="auth-title">Forgot password</h3>
+            <p className="auth-subtitle">
+              Enter the email address you want to recover password.
+            </p>
+            <Form.Group className="md-3">
+              <Form.Control
+                id="email"
+                type="email"
+                placeholder="Your email"
+                {...register("email", { required: true })}
+              />
+            </Form.Group>
+            {errors.email?.type === "required" && (
+              <Form.Text className="text-danger" role="alert">
+                <div>Required</div>
+              </Form.Text>
+            )}
+            {status === 405 && (
+              <Form.Text className="text-danger" role="alert">
+                <h5>Email does not exist</h5>
+              </Form.Text>
+            )}
+            {status === 200 && (
+              <Form.Text className="text-success" role="alert">
+                <h5>
+                  Visit your email to reset password. Token is about to expire
+                  in 15 minute
+                </h5>
+              </Form.Text>
+            )}
+            <div className="auth-btn-group">
+              <Button variant="primary" type="submit">
+                <strong>Submit</strong>
+              </Button>
+              <div className="strike">
+                <p>Or you can go back to sign in</p>
+              </div>
+              <Button
+                variant="outline-primary"
+                type="button"
+                size="sm"
+                onClick={buttonLoginClicked}
+              >
+                Sign In
+              </Button>
+            </div>
+          </Form>
+        </Col>
+      </Row>
     </Container>
   );
 }
