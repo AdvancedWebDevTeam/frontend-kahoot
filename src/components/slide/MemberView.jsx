@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import { useEffect, useState } from 'react';
-import { Alert, Badge, Button, OverlayTrigger, Popover } from 'react-bootstrap';
+import { Alert, Badge, Button, Modal, OverlayTrigger, Popover } from 'react-bootstrap';
 import { SocketContext } from '../socket/Socket';
 import { Form } from 'react-bootstrap';
 import "./MemberView.css";
@@ -10,7 +10,6 @@ import headingImg from "./heading.png";
 import paragraphImg from "./paragraph.png";
 import Chat from '../chat/Chat';
 import { getMembersInGroup } from '../../fetch/groupFetch';
-import { Modal } from 'bootstrap';
 
 function getUserId() {
     const accessToken = localStorage.getItem("accessToken");
@@ -100,28 +99,25 @@ export default function MemberView() {
         </Alert>
     );
 
-    const modal = (
-        <Modal
+    return (
+        <>
+            <Modal
             show={showModal}
             backdrop="static"
             keyboard={false}
-        >
-            <Modal.Header>
-                <Modal.Title>Notification</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-                You are not in this group.
-            </Modal.Body>
-            <Modal.Footer>
-                <Button variant="primary" onClick={onCloseModal}>
-                    Understood
-                </Button>
-            </Modal.Footer>
-      </Modal>
-    );
-
-    return (
-        <>
+            >
+                <Modal.Header>
+                    <Modal.Title>Notification</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    You are not in this group.
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="primary" onClick={onCloseModal}>
+                        Understood
+                    </Button>
+                </Modal.Footer>
+            </Modal>
             {param.access === "private" && token === null && <Navigate to="/login" state={{from: location}}/>}
             {showAlert && alert}
             <div className='containerMemberView'>
