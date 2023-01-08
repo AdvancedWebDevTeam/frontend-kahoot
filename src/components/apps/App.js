@@ -2,6 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "react-query";
 
 import "./App.css";
+import { Notifications } from "react-push-notification";
 import RegisterForm from "../forms/RegisterForm";
 import LoginForm from "../forms/LoginForm";
 import Home from "../home/Home";
@@ -11,7 +12,6 @@ import LoginGoogleFail from "../forms/GoogleFailure";
 import { SocketContext, socket, SocketContextProvider } from "../socket/Socket";
 import ResetPasswordForm from "../forms/ResetPasswordForm";
 import EnterEmailForm from "../forms/EnterEmailForm";
-import { Notifications } from "react-push-notification";
 
 const queryClient = new QueryClient();
 
@@ -32,7 +32,10 @@ function App() {
             />
             <Route path="/login/google/failure" element={<LoginGoogleFail />} />
             <Route path="/forgotpassword" element={<EnterEmailForm />} />
-            <Route path="/resetpassword/:token" element={<ResetPasswordForm />} />
+            <Route
+              path="/resetpassword/:token"
+              element={<ResetPasswordForm />}
+            />
           </Routes>
         </div>
       </QueryClientProvider>

@@ -12,26 +12,25 @@ export default function VerifyForm() {
   const navigate = useNavigate();
 
   const verify = async () => {
-    const token = params.token;
-    const exp = JSON.parse(atob(token.split(".")[1])).exp;
+    const { token } = params;
+    const { exp } = JSON.parse(atob(token.split(".")[1]));
     const curtime = Math.floor(Date.now() / 1000);
-    if(curtime >= exp) {
+    if (curtime >= exp) {
       setValidUrl(false);
-    }
-    else {
+    } else {
       await axios
-      .patch(
-        `${process.env.REACT_APP_API_URL}/users/${params.id}/verify/${params.token}`
-      )
-      .then((res) => {
-        setValidUrl(true);
-        setTimeout(() => {
-          navigate("/login");
-        }, 1000);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+        .patch(
+          `${process.env.REACT_APP_API_URL}/users/${params.id}/verify/${params.token}`
+        )
+        .then((res) => {
+          setValidUrl(true);
+          setTimeout(() => {
+            navigate("/login");
+          }, 1000);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
   };
 

@@ -1,4 +1,9 @@
-import {deleteRequest, getRequest, postRequest, putRequest} from "./httpClient";
+import {
+  deleteRequest,
+  getRequest,
+  postRequest,
+  putRequest
+} from "./httpClient";
 
 export async function getGroupsOfUser(userId) {
   const url = `${process.env.REACT_APP_API_URL}/groups/user/${userId}`;

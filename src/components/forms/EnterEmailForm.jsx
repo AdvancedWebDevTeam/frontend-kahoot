@@ -18,30 +18,30 @@ export default function EnterEmailForm() {
 
   useEffect(() => {
     setStatus(0);
-  }, [isValid])
+  }, [isValid]);
 
   const { mutate, isLoading } = useMutation(async (data) => {
     await axios
-    .post(`${process.env.REACT_APP_API_URL}/users/enteremail`, {
-      email: data.email,
-    })
-    .then((res) => {
-      //console.log(res.data);
-      setStatus(res.status);
-    })
-    .catch((error) => {
-      console.log(error);
-      setStatus(error.response.status);
-    });
+      .post(`${process.env.REACT_APP_API_URL}/users/enteremail`, {
+        email: data.email
+      })
+      .then((res) => {
+        // console.log(res.data);
+        setStatus(res.status);
+      })
+      .catch((error) => {
+        console.log(error);
+        setStatus(error.response.status);
+      });
   });
 
   const onHandleSubmit = (data) => {
-   mutate(data);
-  }
+    mutate(data);
+  };
 
   const buttonLogin_Clicked = () => {
     navigate("/login");
-  }
+  };
 
   if (isLoading) {
     return (
@@ -79,7 +79,10 @@ export default function EnterEmailForm() {
           )}
           {status === 200 && (
             <Form.Text className="text-success" role="alert">
-              <h5>Visit your email to reset password. Token is about to expire in 15 minute</h5>
+              <h5>
+                Visit your email to reset password. Token is about to expire in
+                15 minute
+              </h5>
             </Form.Text>
           )}
           <div className="allign">
