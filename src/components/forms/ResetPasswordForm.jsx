@@ -9,9 +9,7 @@ import "./Forms.css";
 import "./verify.css";
 import errorImage from "./error404.png";
 
-
 export default function ResetPasswordForm() {
-  
   const {
     register,
     handleSubmit,
@@ -27,37 +25,37 @@ export default function ResetPasswordForm() {
 
   const checkIsExpire = () => {
     const resetToken = params.token;
-    const exp = JSON.parse(atob(resetToken.split(".")[1])).exp;
+    const { exp } = JSON.parse(atob(resetToken.split(".")[1]));
     const curtime = Math.floor(Date.now() / 1000);
-    if(curtime >= exp) {
+    if (curtime >= exp) {
       setIsExpire(true);
     }
-  }
-  
+  };
+
   useEffect(() => {
     checkIsExpire();
-  }, [])
+  }, []);
 
   const sendData = async (data, id) => {
     await axios
-    .patch(`${process.env.REACT_APP_API_URL}/users/resetpassword`, {
-      confirmPassword: data.confirmpassword,
-      userId: id
-    })
-    .then((res) => {
-      navigate("/");
-    })
-    .catch((error) => {
-      console.log(error);
-      setStatus(error.response.status);
-    });
-  }
+      .patch(`${process.env.REACT_APP_API_URL}/users/resetpassword`, {
+        confirmPassword: data.confirmpassword,
+        userId: id
+      })
+      .then((res) => {
+        navigate("/");
+      })
+      .catch((error) => {
+        console.log(error);
+        setStatus(error.response.status);
+      });
+  };
 
   const onHandleSubmit = (data) => {
     const resetToken = params.token;
-    const id = JSON.parse(atob(resetToken.split(".")[1])).id;
+    const { id } = JSON.parse(atob(resetToken.split(".")[1]));
     sendData(data, id);
-  }
+  };
 
   return (
     <Container type="fluid">
@@ -85,18 +83,15 @@ export default function ResetPasswordForm() {
                 id="confirmpassword"
                 type="password"
                 placeholder="Enter confirm password"
-                {...register("confirmpassword",
-                  {
-                    required: true,
-                    validate: (val) => {
-                      if(watch("newpassword") !== val) {
-                        return false;
-                      }
-                      else {
-                        return true;
-                      }
+                {...register("confirmpassword", {
+                  required: true,
+                  validate: (val) => {
+                    if (watch("newpassword") !== val) {
+                      return false;
                     }
-                  })}
+                    return true;
+                  }
+                })}
               />
             </Form.Group>
             {errors.confirmpassword?.type === "required" && (

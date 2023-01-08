@@ -1,5 +1,12 @@
 import { useState, useEffect, useCallback, useContext } from "react";
-import { Badge, Button, Container, Modal, OverlayTrigger, Popover } from "react-bootstrap";
+import {
+  Badge,
+  Button,
+  Container,
+  Modal,
+  OverlayTrigger,
+  Popover
+} from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -65,7 +72,7 @@ export default function Slide() {
   const popover = (
     <Popover id="popover-basic">
       <Popover.Body>
-        <Chat/>
+        <Chat />
       </Popover.Body>
     </Popover>
   );
@@ -123,7 +130,9 @@ export default function Slide() {
       setListOfSlides(data);
     });
 
-    socket.on("NotifyMessage", () => setCountMess((prevCount) => prevCount + 1));
+    socket.on("NotifyMessage", () =>
+      setCountMess((prevCount) => prevCount + 1)
+    );
 
     return () => {
       socket.off("submitSlide", (data) => {
@@ -235,8 +244,7 @@ export default function Slide() {
   return (
     <>
       <div className="boxSlide1 slide-header">
-        
-        {params.groupId !== "mypresent" &&
+        {params.groupId !== "mypresent" && (
           <Button
             variant="outline-dark"
             className="back-btn"
@@ -244,7 +252,7 @@ export default function Slide() {
           >
             <BsFillCaretLeftFill />
           </Button>
-        }
+        )}
         <div>
           <h4 className="title">{presentInfo.presents_name}</h4>
           <span className="credit">Created by {presentInfo.users_name}</span>
@@ -255,7 +263,8 @@ export default function Slide() {
         <div className="float-right">
           <OverlayTrigger trigger="click" placement="left" overlay={popover}>
             <Button variant="success" onClick={() => setCountMess(0)}>
-              Box chat <Badge bg="secondary">{countMess !== 0 && countMess}</Badge>
+              Box chat{" "}
+              <Badge bg="secondary">{countMess !== 0 && countMess}</Badge>
             </Button>
           </OverlayTrigger>
           <TooltipTrigger text="Share slides">
@@ -377,7 +386,9 @@ export default function Slide() {
           <Modal.Header closeButton>
             <Modal.Title>My Share Link Slide</Modal.Title>
           </Modal.Header>
-          <Modal.Body>Link: <a href={linkShare}>{linkShare}</a></Modal.Body>
+          <Modal.Body>
+            Link: <a href={linkShare}>{linkShare}</a>
+          </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={handleClose}>
               Close
