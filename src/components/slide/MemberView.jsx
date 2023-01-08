@@ -43,8 +43,7 @@ export default function MemberView() {
             setPresentID(data.listOfSlide[data.indexSlide].presents_id);
         });
         socket.on("NotifyMessage", () => {
-            setCount(count + 1);
-            console.log("abc");
+            setCount((prevCount) => prevCount + 1);
         });
         return () => {
             socket.off("clickedSlide");
@@ -122,7 +121,7 @@ export default function MemberView() {
             {showAlert && alert}
             <div className='containerMemberView'>
                 {token !== null && (
-                    <OverlayTrigger trigger="click" placement="left" overlay={popover} onClick={() => setCount(0)}>
+                    <OverlayTrigger trigger="click" placement="left" overlay={popover}>
                         <Button variant="success" onClick={() => setCount(0)}>
                             Box chat <Badge bg="secondary">{count !== 0 && count}</Badge>
                         </Button>

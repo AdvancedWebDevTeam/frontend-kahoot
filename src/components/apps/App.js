@@ -11,6 +11,7 @@ import LoginGoogleFail from "../forms/GoogleFailure";
 import { SocketContext, socket, SocketContextProvider } from "../socket/Socket";
 import ResetPasswordForm from "../forms/ResetPasswordForm";
 import EnterEmailForm from "../forms/EnterEmailForm";
+import { Notifications } from "react-push-notification";
 
 const queryClient = new QueryClient();
 
@@ -19,6 +20,7 @@ function App() {
     <SocketContextProvider>
       <QueryClientProvider client={queryClient}>
         <div className="App" style={{ backgroundImage: "url(/body-bg.jpg)" }}>
+          <Notifications />
           <Routes>
             <Route path="/*" element={<Home />} />
             <Route path="/login" element={<LoginForm />} />

@@ -123,7 +123,7 @@ export default function Slide() {
       setListOfSlides(data);
     });
 
-    socket.on("NotifyMessage", () => setCountMess(countMess + 1));
+    socket.on("NotifyMessage", () => setCountMess((prevCount) => prevCount + 1));
 
     return () => {
       socket.off("submitSlide", (data) => {

@@ -32,7 +32,6 @@ export default function NotifyChat() {
             duration: 4000,
             native: true,
             onClick: () => {
-                navigate(`/${presentID}/chat`);
                 setShowNotify(false);
             }
         });
