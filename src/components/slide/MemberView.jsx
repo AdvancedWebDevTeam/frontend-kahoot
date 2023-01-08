@@ -1,11 +1,11 @@
-import React, { useContext, useCallback } from 'react'
+import React, { useContext } from 'react'
 import { useEffect, useState } from 'react';
 import { Alert, Button } from 'react-bootstrap';
 import { SocketContext } from '../socket/Socket';
 import { Form } from 'react-bootstrap';
 import "./MemberView.css";
 import { getSlidePresent, submitSlide } from '../../fetch/slideFetch';
-import { useParams } from 'react-router-dom';
+import { Navigate, useLocation, useParams } from 'react-router-dom';
 import headingImg from "./heading.png";
 import paragraphImg from "./paragraph.png";
 
@@ -17,6 +17,8 @@ export default function MemberView() {
     const [result, setResult] = useState("");
     const socket = useContext(SocketContext);
     const [showAlert, setShowAlert] = useState(false);
+    const token = localStorage.getItem("accessToken");
+    const location = useLocation();
 
     const param = useParams();
 
@@ -59,6 +61,7 @@ export default function MemberView() {
 
     return (
         <>
+            {param.access === "private" && token === null && <Navigate to="/login" state={{from: location}}/>}
             {showAlert && alert}
             <div className='containerMemberView'>
                 {slide.types_id === 0 ?
