@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useLocation } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useMutation } from "react-query";
 
@@ -15,6 +15,7 @@ export default function LoginForm() {
     formState: { errors }
   } = useForm();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [status, setStatus] = useState(0);
 
@@ -27,7 +28,11 @@ export default function LoginForm() {
       .then((res) => {
         localStorage.setItem("accessToken", JSON.stringify(res.data));
         setStatus(res.status);
-        navigate("/");
+        if (location.state?.from) {
+          navigate(location.state.from);
+        } else {
+          navigate("/");
+        }
       })
       .catch((error) => {
         setStatus(error.response.status);

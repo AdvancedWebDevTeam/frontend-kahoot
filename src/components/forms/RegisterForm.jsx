@@ -11,6 +11,7 @@ export default function RegisterForm() {
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors }
   } = useForm();
   const navigate = useNavigate();
@@ -118,6 +119,30 @@ export default function RegisterForm() {
                   An email has sent to verify your account. Token is about to
                   expire in 15 minutes
                 </h5>
+              </Form.Text>
+            )}
+            <Form.Group className="md-3">
+              <Form.Label>Confirm password</Form.Label>
+              <Form.Control
+                id="confirmpassword"
+                type="password"
+                placeholder="Confirm password"
+                {...register("confirmpassword", {
+                  required: true,
+                  validate: (val) => {
+                    return watch("password") === val
+                  }
+                })}
+              />
+            </Form.Group>
+            {errors.confirmpassword?.type === "required" && (
+              <Form.Text className="text-danger">
+                <div>Required</div>
+              </Form.Text>
+            )}
+            {errors.confirmpassword?.type === "validate" && (
+              <Form.Text className="text-danger">
+                <div>Your passwords do no match</div>
               </Form.Text>
             )}
 

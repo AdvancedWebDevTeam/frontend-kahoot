@@ -1,5 +1,12 @@
 import { useState, useEffect, useCallback, useContext } from "react";
-import { Button, Container, Modal, OverlayTrigger, Popover } from "react-bootstrap";
+import {
+  Badge,
+  Button,
+  Container,
+  Modal,
+  OverlayTrigger,
+  Popover
+} from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -58,13 +65,14 @@ export default function Slide() {
   const [isShowModal, setIsShowModal] = useState(false);
   const [linkShare, setLinkShare] = useState(``);
   const [currentUserId, setCurrentUserId] = useState("");
+  const [countMess, setCountMess] = useState(0);
 
   const socket = useContext(SocketContext);
 
   const popover = (
     <Popover id="popover-basic">
       <Popover.Body>
-        <Chat/>
+        <Chat />
       </Popover.Body>
     </Popover>
   );
@@ -73,11 +81,11 @@ export default function Slide() {
   const handleShow = () => {
     if (presentInfo.groups_id === null) {
       setLinkShare(
-        `${process.env.REACT_APP_FE}/share/public/slide/${params.presentId}`
+        `${process.env.REACT_APP_FE}/share/public/slide/mypresent/${params.presentId}`
       );
     } else {
       setLinkShare(
-        `${process.env.REACT_APP_FE}/share/private/slide/${params.presentId}`
+        `${process.env.REACT_APP_FE}/share/private/slide/${presentInfo.groups_id}/${params.presentId}`
       );
     }
     setIsShowModal(true);
@@ -108,10 +116,6 @@ export default function Slide() {
         console.log(err);
       });
 
-    socket.on("submitSlide", (data) => {
-      setListOfSlides(data);
-    });
-
     const data = {
       presents_id: params.presentId,
       indexSlide: selectedIndex,
@@ -119,13 +123,24 @@ export default function Slide() {
     };
 
     socket.emit("clickedSlide", data);
+  }, [isFetch]);
+
+  useEffect(() => {
+    socket.on("submitSlide", (data) => {
+      setListOfSlides(data);
+    });
+
+    socket.on("NotifyMessage", () =>
+      setCountMess((prevCount) => prevCount + 1)
+    );
 
     return () => {
       socket.off("submitSlide", (data) => {
         setListOfSlides(data);
       });
+      socket.off("NotifyMessage");
     };
-  }, [isFetch]);
+  }, [socket]);
 
   useEffect(() => {
     setCurrentUserId(getLoggedInUserId());
@@ -229,8 +244,7 @@ export default function Slide() {
   return (
     <>
       <div className="boxSlide1 slide-header">
-        
-        {params.groupId !== "mypresent" &&
+        {params.groupId !== "mypresent" && (
           <Button
             variant="outline-dark"
             className="back-btn"
@@ -238,7 +252,7 @@ export default function Slide() {
           >
             <BsFillCaretLeftFill />
           </Button>
-        }
+        )}
         <div>
           <h4 className="title">{presentInfo.presents_name}</h4>
           <span className="credit">Created by {presentInfo.users_name}</span>
@@ -248,7 +262,10 @@ export default function Slide() {
         <Button onClick={createSlideClick}>+ New slide</Button>
         <div className="float-right">
           <OverlayTrigger trigger="click" placement="left" overlay={popover}>
-            <Button variant="success">Box chat</Button>
+            <Button variant="success" onClick={() => setCountMess(0)}>
+              Box chat{" "}
+              <Badge bg="secondary">{countMess !== 0 && countMess}</Badge>
+            </Button>
           </OverlayTrigger>
           <TooltipTrigger text="Share slides">
             <Button onClick={handleShow}>Share</Button>
@@ -369,7 +386,9 @@ export default function Slide() {
           <Modal.Header closeButton>
             <Modal.Title>My Share Link Slide</Modal.Title>
           </Modal.Header>
-          <Modal.Body>Link: <a href={linkShare}>{linkShare}</a></Modal.Body>
+          <Modal.Body>
+            Link: <a href={linkShare}>{linkShare}</a>
+          </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={handleClose}>
               Close

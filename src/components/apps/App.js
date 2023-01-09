@@ -2,6 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "react-query";
 
 import "./App.css";
+import { Notifications } from "react-push-notification";
 import RegisterForm from "../forms/RegisterForm";
 import LoginForm from "../forms/LoginForm";
 import Home from "../home/Home";
@@ -19,6 +20,7 @@ function App() {
     <SocketContextProvider>
       <QueryClientProvider client={queryClient}>
         <div className="App" style={{ backgroundImage: "url(/body-bg.jpg)" }}>
+          <Notifications />
           <Routes>
             <Route path="/*" element={<Home />} />
             <Route path="/login" element={<LoginForm />} />

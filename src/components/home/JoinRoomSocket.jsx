@@ -1,13 +1,13 @@
 import { useEffect, useState, useContext } from "react";
 import { Alert, Modal, Button } from "react-bootstrap";
-import { socket, SocketContext } from "../socket/Socket";
 import { useNavigate } from "react-router";
+import { socket, SocketContext } from "../socket/Socket";
 
 export function JoinRoomSocket({ user }) {
   const socket = useContext(SocketContext);
   const [data, setData] = useState("");
   const [isShow, SetISShow] = useState(false);
-  
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -24,8 +24,8 @@ export function JoinRoomSocket({ user }) {
 
   const AttendClicked = () => {
     SetISShow(false);
-    navigate(`/share/private/slide/${data.presents_id}`);
-  }
+    navigate(`/share/private/slide/${data.groups_id}/${data.presents_id}`);
+  };
   return (
     <div>
       {isShow && (
@@ -40,7 +40,10 @@ export function JoinRoomSocket({ user }) {
             <Button variant="outline-primary" onClick={AttendClicked}>
               Attend
             </Button>
-            <Button variant="outline-secondary" onClick={() => SetISShow(false)}>
+            <Button
+              variant="outline-secondary"
+              onClick={() => SetISShow(false)}
+            >
               Close
             </Button>
           </Modal.Footer>
