@@ -34,7 +34,7 @@ export default function AppNavBar({ user, buttonSignOutClicked }) {
             </Button>
           </TooltipTrigger>
         </Nav.Link>
-        <Nav.Link style={{ marginLeft: "-.5rem" }}>
+        <Nav.Link>
           <TooltipTrigger text="Sign out">
             <Button variant="outline-danger" onClick={buttonSignOutClicked}>
               <BsBoxArrowRight />
