@@ -1,42 +1,7 @@
-.textstyle{
-    text-decoration: none;
-}
-
-.textstyle:hover{
-    text-decoration: underline;
-}
-
-.textstyledrop{
-    text-decoration-color: white;
-}
-.box1 {
-    padding: 10px;
-    border: 1px transparent;
-    background-color: transparent;
-    border-radius: 10%;
-}
-
-.box1:hover{
-    background-color: black;
-}
-
-.allign1 {
-    display: inline-flex;
-    justify-content: flex-end;
-}
-
-.box5 {
-    padding: 10px;
-    border: 1px transparent;
-    background-color: white;
-    border-radius: 10%;
-    text-decoration-color: white;
-}
-
 .box6 {
-    width: 60%;
-    padding: 20px;
-    border: 1px transparent;
-    margin: auto;
-    background-color: transparent;
-  }
+  width: 60%;
+  padding: 20px;
+  border: 1px transparent;
+  margin: auto;
+  background-color: transparent;
+}
