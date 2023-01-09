@@ -21,6 +21,7 @@ import EditPresentationModal from "./EditPresentationModal";
 import { getLoggedInUserId } from "../../util/ultilis";
 import QuestionModal from "../question/QuestionModal";
 import { getOwnerAndCoOwnersOfGroup } from "../../fetch/groupFetch";
+import DeleteButton from "../general/DeleteButton";
 
 export default function Presentation() {
   const [userInGroup, setUserInGroup] = useState({
@@ -172,13 +173,19 @@ export default function Presentation() {
                   >
                     <BsPencilSquare />
                   </Button>
-                  <Button
-                    onClick={() => deleteClick(present.presents_id)}
+                  <DeleteButton
+                    onDelete={() => deleteClick(present.presents_id)}
                     variant="outline-danger"
                     style={{ marginLeft: "5px" }}
+                    text={
+                      <>
+                        Are you sure to delete{" "}
+                        <strong>{present.presents_name}</strong>?
+                      </>
+                    }
                   >
                     <BsFillTrashFill />
-                  </Button>
+                  </DeleteButton>
                 </>
               )}
               <Button
@@ -192,6 +199,9 @@ export default function Presentation() {
           </div>
         </div>
       ))}
+      {listOfPresent.length === 0 && (
+        <h5>There is no presentation right now</h5>
+      )}
       <div>
         <Button
           onClick={backToGroupClick}

@@ -53,13 +53,15 @@ function AssignCollaboratorsModal({
 
   useEffect(() => {
     setCollaborators(target.collaborators ?? []);
-  }, [target]);
+  }, [target.collaborators]);
 
   function submitCollaborators() {
     const collabList = [...collaborators, ...newCollabs];
     console.debug("submitCollaborators", collabList);
     if (!areEqualCollaboratorsArray(collabList, target.collaborators)) {
       onSubmit(true, target.presents_id, collabList);
+      setNewCollabs([]);
+      setCollaborators([]);
     } else {
       onSubmit(false, null, null);
     }
