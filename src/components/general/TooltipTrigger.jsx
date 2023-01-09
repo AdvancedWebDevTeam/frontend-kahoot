@@ -2,7 +2,7 @@ import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 
 function TooltipTrigger(props) {
-  const { text, children, ...rest } = props;
+  const { text, children } = props;
   const renderTooltip = (props) => (
     <Tooltip id={text} {...props}>
       {text}
