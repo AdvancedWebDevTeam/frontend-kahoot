@@ -17,3 +17,32 @@
 .tag.warning {
   background-color: lightsalmon;
 }
+
+/* NAVBAR */
+
+.nav-link {
+  position: relative;
+}
+
+.nav-link:hover::before,
+.nav-link:active::before {
+  content: "";
+  position: absolute;
+  bottom: 3px;
+  left: 5%;
+  width: 90%;
+  height: 3px;
+  background-color: rgba(0, 0, 0, 0.12);
+  border-radius: 5px;
+}
+
+.nav-link.active::before {
+  content: "";
+  position: absolute;
+  bottom: 3px;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background-color: rgba(0, 0, 0, 0.28);
+  border-radius: 5px;
+}
