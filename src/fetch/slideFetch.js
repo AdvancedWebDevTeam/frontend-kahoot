@@ -69,3 +69,9 @@ export async function submitSlide(presentId, slideId, question, choice, date, us
   const result = await postRequest(url, data);
   return result.data;
 }
+
+export async function getSubmitContent(slideId) {
+  const url = `${process.env.REACT_APP_API_URL}/slides/history/${slideId}`;
+  const result = await getRequest(url);
+  return result.data;
+}

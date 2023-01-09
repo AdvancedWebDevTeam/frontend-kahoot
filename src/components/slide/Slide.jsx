@@ -46,6 +46,7 @@ import paragraphImg from "./paragraph.png";
 import Chat from "../chat/Chat";
 import headingImg from "./heading.png";
 import { getLoggedInUserId } from "../../util/ultilis";
+import MemberChoiceModal from "./MemberChoiceModal";
 
 ChartJS.register(
   CategoryScale,
@@ -66,6 +67,7 @@ export default function Slide() {
   const [linkShare, setLinkShare] = useState(``);
   const [currentUserId, setCurrentUserId] = useState("");
   const [countMess, setCountMess] = useState(0);
+  const [showHistory, setShowHistory] = useState(false);
 
   const socket = useContext(SocketContext);
 
@@ -267,6 +269,9 @@ export default function Slide() {
               <Badge bg="secondary">{countMess !== 0 && countMess}</Badge>
             </Button>
           </OverlayTrigger>
+          <TooltipTrigger text="History Submit">
+            <Button onClick={() => setShowHistory(true)}>History</Button>
+          </TooltipTrigger>
           <TooltipTrigger text="Share slides">
             <Button onClick={handleShow}>Share</Button>
           </TooltipTrigger>
@@ -396,6 +401,10 @@ export default function Slide() {
           </Modal.Footer>
         </Modal>
       </Container>
+      <MemberChoiceModal
+        slideId={listOfSlides[selectedIndex]?.slides_id}
+        show={showHistory} 
+        handleCloseHistory={() => setShowHistory(false)}/>
     </>
   );
 }
