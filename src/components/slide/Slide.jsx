@@ -47,6 +47,7 @@ import Chat from "../chat/Chat";
 import headingImg from "./heading.png";
 import { getLoggedInUserId } from "../../util/ultilis";
 import MemberChoiceModal from "./MemberChoiceModal";
+import DeleteButton from "../general/DeleteButton";
 
 ChartJS.register(
   CategoryScale,
@@ -280,9 +281,16 @@ export default function Slide() {
             <Button onClick={handleShow}>Share</Button>
           </TooltipTrigger>
           <TooltipTrigger text="Delete slide">
-            <Button variant="outline-danger" onClick={handleDelete}>
-              <BsFillTrashFill />
-            </Button>
+            <DeleteButton
+                text={
+                  <>
+                    Remove slide number{" "}
+                    <strong>{selectedIndex}</strong>
+                  </>
+                }
+                onDelete={() => handleDelete()}
+                style={{ marginLeft: "5px" }}
+              />
           </TooltipTrigger>
           <TooltipTrigger text="Present slides">
             <Button variant="outline-success" onClick={presentSlides}>

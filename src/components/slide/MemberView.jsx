@@ -45,6 +45,9 @@ export default function MemberView() {
   useEffect(() => {
     socket.on("clickedSlide", (data) => {
       setSlide(data.listOfSlide[data.indexSlide]);
+      if (data.listOfSlide[data.indexSlide]) {
+        navigate("/");
+      }
       setOptions(
         Object.getOwnPropertyNames(data.listOfSlide[data.indexSlide]?.options)
       );
@@ -71,6 +74,9 @@ export default function MemberView() {
     getSlidePresent(param.presentId)
       .then((data) => {
         setSlide(data.listOfSlides[data.indexSlide.index_slide]);
+        if (data.listOfSlides[data.indexSlide.index_slide]) {
+          navigate("/");
+        }
         getSubmitContent(data.listOfSlides[data.indexSlide.index_slide]?.slides_id)
         .then((data) => {
           const submit = data.find((element) => element.users_id === userID);
