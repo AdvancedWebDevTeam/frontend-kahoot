@@ -10,6 +10,9 @@ function getAccessToken() {
 
 export function getLoggedInUserId() {
   const accessToken = getAccessToken();
+  if (!accessToken) {
+    return null;
+  }
   return JSON.parse(atob(accessToken.split(".")[1])).user.users_id;
 }
 

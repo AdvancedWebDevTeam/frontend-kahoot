@@ -1,42 +1,41 @@
-.textstyle{
-    text-decoration: none;
+.welcome-container {
+  height: 89vh;
 }
 
-.textstyle:hover{
-    text-decoration: underline;
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.textstyledrop{
-    text-decoration-color: white;
-}
-.box1 {
-    padding: 10px;
-    border: 1px transparent;
-    background-color: transparent;
-    border-radius: 10%;
+.flex-display-column {
+  display: flex;
+  flex-direction: column;
 }
 
-.box1:hover{
-    background-color: black;
+.welcome-text-container h1 {
+  font-size: 3rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
 }
 
-.allign1 {
-    display: inline-flex;
-    justify-content: flex-end;
+.welcome-text-container h2 {
+  font-size: 1.4rem;
+  font-weight: 300;
+  margin-bottom: 2rem;
 }
 
-.box5 {
-    padding: 10px;
-    border: 1px transparent;
-    background-color: white;
-    border-radius: 10%;
-    text-decoration-color: white;
+.welcome-text-container p {
+  font-size: 1.5rem;
+  font-weight: 300;
+  margin-bottom: 1rem;
 }
 
-.box6 {
-    width: 60%;
-    padding: 20px;
-    border: 1px transparent;
-    margin: auto;
-    background-color: transparent;
-  }
+.text-underlined {
+  text-decoration: underline;
+}
+
+.welcome-img {
+  border-radius: 10px;
+  box-shadow: rgba(0, 0, 0, 0.25) 0 54px 55px, rgba(0, 0, 0, 0.12) 0 -12px 30px, rgba(0, 0, 0, 0.12) 0 4px 6px, rgba(0, 0, 0, 0.17) 0 12px 13px, rgba(0, 0, 0, 0.09) 0 -3px 5px;
+}
