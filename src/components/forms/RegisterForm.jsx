@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { useMutation } from "react-query";
 
 import "./Forms.css";
-import { Form, Button, Container } from "react-bootstrap";
+import { Form, Button, Container, Row, Col } from "react-bootstrap";
 
 export default function RegisterForm() {
   const {
@@ -33,7 +33,6 @@ export default function RegisterForm() {
         setMessage("");
       })
       .catch((error) => {
-        console.log(error);
         setStatus(error.response.status);
         setMessage(error.response.data);
       });
@@ -43,7 +42,7 @@ export default function RegisterForm() {
     mutate(data);
   };
 
-  const buttonLogin_Clicked = () => {
+  const buttonLoginClicked = () => {
     navigate("/login");
   };
 
@@ -58,114 +57,126 @@ export default function RegisterForm() {
   }
 
   return (
-    <Container type="fluid">
-      <div className="box" style={{ marginTop: "10%" }}>
-        <h3>Registeration form</h3>
-        <Form onSubmit={handleSubmit((data) => onHandleSubmit(data))}>
-          <Form.Group className="md-3">
-            <Form.Label>Username</Form.Label>
-            <Form.Control
-              id="username"
-              type="text"
-              placeholder="Username"
-              {...register("username", { required: true, maxLength: 20 })}
-            />
-          </Form.Group>
-          {errors.username?.type === "required" && (
-            <Form.Text className="text-danger" role="alert">
-              username is required
-            </Form.Text>
-          )}
-          <Form.Group className="md-3">
-            <Form.Label>Email address</Form.Label>
-            <Form.Control
-              id="email"
-              type="email"
-              placeholder="Enter email"
-              {...register("email", { required: true })}
-            />
-          </Form.Group>
-          {errors.email?.type === "required" && (
-            <Form.Text className="text-danger" role="alert">
-              email is required
-            </Form.Text>
-          )}
-          <Form.Group className="md-3">
-            <Form.Label>Password</Form.Label>
-            <Form.Control
-              id="password"
-              type="password"
-              placeholder="Password"
-              {...register("password", { required: true })}
-            />
-          </Form.Group>
-          {errors.password?.type === "required" && (
-            <Form.Text className="text-danger">
-              <div>password is required</div>
-            </Form.Text>
-          )}
-          <Form.Group className="md-3">
-            <Form.Label>Confirm password</Form.Label>
-            <Form.Control
-              id="confirmpassword"
-              type="password"
-              placeholder="Confirm password"
-              {...register("confirmpassword", { 
-                required: true,
-                validate: (val) => {
-                  if (watch("password") !== val) {
-                    return false;
+    <Container fluid>
+      <Row
+        className="auth-row"
+        style={{ backgroundImage: `url(/login-bg.jpg)` }}
+      >
+        <Col className="auth-box" md={3}>
+          <Form onSubmit={handleSubmit((data) => onHandleSubmit(data))}>
+            <h3 className="auth-title">Welcome!</h3>
+            <Form.Group className="md-3">
+              <Form.Label>Username</Form.Label>
+              <Form.Control
+                id="username"
+                type="text"
+                placeholder="Your username"
+                {...register("username", { required: true, maxLength: 20 })}
+              />
+            </Form.Group>
+            {errors.username?.type === "required" && (
+              <Form.Text className="text-danger" role="alert">
+                username is required
+              </Form.Text>
+            )}
+            <Form.Group className="md-3">
+              <Form.Label>Email</Form.Label>
+              <Form.Control
+                id="email"
+                type="email"
+                placeholder="Enter your email"
+                {...register("email", { required: true })}
+              />
+            </Form.Group>
+            {errors.email?.type === "required" && (
+              <Form.Text className="text-danger" role="alert">
+                email is required
+              </Form.Text>
+            )}
+            <Form.Group className="md-3">
+              <Form.Label>Password</Form.Label>
+              <Form.Control
+                id="password"
+                type="password"
+                placeholder="..."
+                {...register("password", { required: true })}
+              />
+            </Form.Group>
+            {errors.password?.type === "required" && (
+              <Form.Text className="text-danger">
+                <div>password is required</div>
+              </Form.Text>
+            )}
+
+            {status === 401 && (
+              <Form.Text className="text-danger">
+                <h5>{message}</h5>
+              </Form.Text>
+            )}
+            {isVerify === 0 && (
+              <Form.Text className="text-success">
+                <h5>
+                  An email has sent to verify your account. Token is about to
+                  expire in 15 minutes
+                </h5>
+              </Form.Text>
+            )}
+            <Form.Group className="md-3">
+              <Form.Label>Confirm password</Form.Label>
+              <Form.Control
+                id="confirmpassword"
+                type="password"
+                placeholder="Confirm password"
+                {...register("confirmpassword", {
+                  required: true,
+                  validate: (val) => {
+                    return watch("password") === val
                   }
-                  return true;
-                } 
-              })}
-            />
-          </Form.Group>
-          {errors.confirmpassword?.type === "required" && (
-            <Form.Text className="text-danger">
-              <div>Required</div>
-            </Form.Text>
-          )}
-          {errors.confirmpassword?.type === "validate" && (
+                })}
+              />
+            </Form.Group>
+            {errors.confirmpassword?.type === "required" && (
+              <Form.Text className="text-danger">
+                <div>Required</div>
+              </Form.Text>
+            )}
+            {errors.confirmpassword?.type === "validate" && (
               <Form.Text className="text-danger">
                 <div>Your passwords do no match</div>
               </Form.Text>
-          )}
-          
-          {status === 401 && (
-            <Form.Text className="text-danger">
-              <h5>{message}</h5>
-            </Form.Text>
-          )}
-          {isVerify === 0 && (
-            <Form.Text className="text-success">
-              <h5>
-                An email has sent to verify your account. Token is about to
-                expire in 15 minutes
-              </h5>
-            </Form.Text>
-          )}
-          <div className="allign">
-            <Button
-              variant="primary"
-              type="submit"
-              style={{ marginTop: "10px" }}
-            >
-              Submit
-            </Button>
-          </div>
-          <div className="allign">
-            <Button
-              variant="primary"
-              type="button"
-              style={{ marginTop: "10px" }}
-              onClick={buttonLogin_Clicked}
-            >
-              Sign In
-            </Button>
-          </div>
-        </Form>
-      </div>
+            )}
+
+            <div className="auth-btn-group">
+              <Button variant="primary" type="submit">
+                <strong>Sign up</strong>
+              </Button>
+
+              <div className="strike">
+                <p>Already have an account?</p>
+              </div>
+              <Button
+                variant="outline-primary"
+                type="button"
+                size="sm"
+                onClick={buttonLoginClicked}
+              >
+                Sign In
+              </Button>
+            </div>
+          </Form>
+        </Col>
+        <Col className="auth-text-container" md={{ span: 5, offset: 2 }}>
+          <h1>WELCOME TO</h1>
+          <h1>
+            <strong>PRESENT & STUDY</strong>
+          </h1>
+          <h2>Learn and share knowledge</h2>
+          <p>
+            Join a group, watch a presentation, ask questions,... You can learn
+            from others as much as others can learn from you.
+          </p>
+        </Col>
+      </Row>
     </Container>
   );
 }

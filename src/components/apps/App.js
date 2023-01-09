@@ -9,7 +9,7 @@ import Home from "../home/Home";
 import VerifyForm from "../forms/VerifyForm";
 import LoginGoogleSuccess from "../forms/GoogleSuccess";
 import LoginGoogleFail from "../forms/GoogleFailure";
-import { SocketContext, socket, SocketContextProvider } from "../socket/Socket";
+import { SocketContextProvider } from "../socket/Socket";
 import ResetPasswordForm from "../forms/ResetPasswordForm";
 import EnterEmailForm from "../forms/EnterEmailForm";
 

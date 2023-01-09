@@ -12,11 +12,6 @@
     }
 }
 
-.allign {
-  margin-right: 10px;
-  display: inline-block;
-}
-
 .center{
   display: flex;
   text-align: center;
@@ -71,4 +66,88 @@
   50%{
     color: rgb(160, 156, 156);
   }
+}
+
+/*
+  *************   AUTHENTICATION FORMS   *************
+*/
+
+.auth-row {
+  align-items: center;
+  height: 100vh;
+  padding-left: 2rem;
+
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: 0 87%;
+  background-blend-mode: multiply;
+  background-color: #bebebe;
+}
+
+.auth-box {
+  background: #fff;
+  border-radius: 5px;
+  box-shadow: rgba(0, 0, 0, 0.35) 0 5px 15px;
+  padding: 1.2rem;
+  margin-left: 5rem;
+  font-size: 1.1rem;
+}
+
+.auth-box .auth-title {
+  font-size: 2rem;
+  font-weight: 300;
+  margin-bottom: 1rem;
+}
+
+.auth-box .auth-subtitle {
+  font-size: 1.2rem;
+  font-weight: 300;
+  margin-bottom: 1rem;
+}
+
+.auth-btn-group {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1rem;
+  gap: .5rem;
+}
+
+.auth-btn-group p {
+  font-size: 1rem;
+  font-weight: 300;
+  margin-bottom: 0;
+  color: gray;
+  text-align: center;
+}
+
+.auth-btn-group .strike{
+  width: 100%;
+  border-top: 1px solid gray;
+  margin: 1rem 0 0;
+}
+
+.auth-btn-group .btn:first-child {
+  width: 100%;
+}
+
+.login-btn-google {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding:.8rem .8rem;
+  border-radius: 50%;
+}
+
+.auth-text-container h2 {
+  font-size: 1.8rem;
+  font-weight: 300;
+  margin-bottom: 1rem;
+}
+
+.auth-text-container p {
+  font-size: 1.2rem;
+  width: 85%;
+  text-shadow: 0 0 5px #c4c4c4;
 }
