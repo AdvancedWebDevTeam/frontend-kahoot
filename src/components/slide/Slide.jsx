@@ -68,6 +68,7 @@ export default function Slide() {
   const [currentUserId, setCurrentUserId] = useState("");
   const [countMess, setCountMess] = useState(0);
   const [showHistory, setShowHistory] = useState(false);
+  const [countHistory, setCountHistory] = useState(0);
 
   const socket = useContext(SocketContext);
 
@@ -130,6 +131,7 @@ export default function Slide() {
   useEffect(() => {
     socket.on("submitSlide", (data) => {
       setListOfSlides(data);
+      setCountHistory((prevCount) => prevCount + 1);
     });
 
     socket.on("NotifyMessage", () =>
@@ -137,9 +139,7 @@ export default function Slide() {
     );
 
     return () => {
-      socket.off("submitSlide", (data) => {
-        setListOfSlides(data);
-      });
+      socket.off("submitSlide");
       socket.off("NotifyMessage");
     };
   }, [socket]);
@@ -270,7 +270,11 @@ export default function Slide() {
             </Button>
           </OverlayTrigger>
           <TooltipTrigger text="History Submit">
-            <Button onClick={() => setShowHistory(true)}>History</Button>
+            <Button onClick={() => {setShowHistory(true);
+                                    setCountHistory(0)}}>
+              History{" "}
+              <Badge bg="secondary">{countHistory !== 0 && countHistory}</Badge>
+            </Button>
           </TooltipTrigger>
           <TooltipTrigger text="Share slides">
             <Button onClick={handleShow}>Share</Button>
@@ -403,8 +407,9 @@ export default function Slide() {
       </Container>
       <MemberChoiceModal
         slideId={listOfSlides[selectedIndex]?.slides_id}
-        show={showHistory} 
-        handleCloseHistory={() => setShowHistory(false)}/>
+        show={showHistory}
+        handleCloseHistory={() => setShowHistory(false)}
+        countHistory={countHistory}/>
     </>
   );
 }
