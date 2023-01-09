@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useParams, useNavigate } from "react-router-dom";
 
-import { Form, Button, Container } from "react-bootstrap";
+import { Form, Button, Container, Row, Col } from "react-bootstrap";
 
 import "./Forms.css";
 import "./verify.css";
@@ -26,8 +26,8 @@ export default function ResetPasswordForm() {
   const checkIsExpire = () => {
     const resetToken = params.token;
     const { exp } = JSON.parse(atob(resetToken.split(".")[1]));
-    const curtime = Math.floor(Date.now() / 1000);
-    if (curtime >= exp) {
+    const currentTime = Math.floor(Date.now() / 1000);
+    if (currentTime >= exp) {
       setIsExpire(true);
     }
   };
@@ -42,11 +42,10 @@ export default function ResetPasswordForm() {
         confirmPassword: data.confirmpassword,
         userId: id
       })
-      .then((res) => {
+      .then(() => {
         navigate("/");
       })
       .catch((error) => {
-        console.log(error);
         setStatus(error.response.status);
       });
   };
@@ -58,82 +57,94 @@ export default function ResetPasswordForm() {
   };
 
   return (
-    <Container type="fluid">
+    <Container fluid>
       {isExpire === false ? (
-        <div className="box" style={{ marginTop: "10%" }}>
-          <h3>Reset password</h3>
-          <Form onSubmit={handleSubmit((data) => onHandleSubmit(data))}>
-            <Form.Group className="md-3">
-              <Form.Label>New password</Form.Label>
-              <Form.Control
-                id="newpassword"
-                type="password"
-                placeholder="Enter new password"
-                {...register("newpassword", { required: true })}
-              />
-            </Form.Group>
-            {errors.newpassword?.type === "required" && (
-              <Form.Text className="text-danger" role="alert">
-                Required
-              </Form.Text>
-            )}
-            <Form.Group className="md-3">
-              <Form.Label>Confirm password</Form.Label>
-              <Form.Control
-                id="confirmpassword"
-                type="password"
-                placeholder="Enter confirm password"
-                {...register("confirmpassword", {
-                  required: true,
-                  validate: (val) => {
-                    if (watch("newpassword") !== val) {
-                      return false;
+        <Row
+          className="auth-row"
+          style={{ backgroundImage: `url(/login-bg.jpg)` }}
+        >
+          <Col className="auth-box" md={3}>
+            <Form onSubmit={handleSubmit((data) => onHandleSubmit(data))}>
+              <h3 className="auth-title">Reset your password</h3>
+              <Form.Group className="md-3">
+                <Form.Label>New password</Form.Label>
+                <Form.Control
+                  id="newpassword"
+                  type="password"
+                  placeholder="Enter new password"
+                  {...register("newpassword", { required: true })}
+                />
+              </Form.Group>
+              {errors.newpassword?.type === "required" && (
+                <Form.Text className="text-danger" role="alert">
+                  Required
+                </Form.Text>
+              )}
+              <Form.Group className="md-3">
+                <Form.Label>Confirm password</Form.Label>
+                <Form.Control
+                  id="confirmpassword"
+                  type="password"
+                  placeholder="Enter confirm password"
+                  {...register("confirmpassword", {
+                    required: true,
+                    validate: (val) => {
+                      return watch("newpassword") === val;
                     }
-                    return true;
-                  }
-                })}
-              />
-            </Form.Group>
-            {errors.confirmpassword?.type === "required" && (
-              <Form.Text className="text-danger">
-                <div>Required</div>
-              </Form.Text>
-            )}
-            {errors.confirmpassword?.type === "validate" && (
-              <Form.Text className="text-danger">
-                <div>Your passwords do no match</div>
-              </Form.Text>
-            )}
-            {status === 405 && (
-              <Form.Text className="text-danger">
-                <h5>Fail to reset password</h5>
-              </Form.Text>
-            )}
-            <div>
-              <Button
-                variant="primary"
-                type="submit"
-                style={{ marginTop: "10px" }}
-              >
-                Submit
-              </Button>
-            </div>
-          </Form>
-        </div>
+                  })}
+                />
+              </Form.Group>
+              {errors.confirmpassword?.type === "required" && (
+                <Form.Text className="text-danger">
+                  <div>Required</div>
+                </Form.Text>
+              )}
+              {errors.confirmpassword?.type === "validate" && (
+                <Form.Text className="text-danger">
+                  <div>Your passwords do no match</div>
+                </Form.Text>
+              )}
+              {status === 405 && (
+                <Form.Text className="text-danger">
+                  <h5>Fail to reset password</h5>
+                </Form.Text>
+              )}
+
+              <div className="auth-btn-group">
+                <Button variant="primary" type="submit">
+                  Reset
+                </Button>
+              </div>
+            </Form>
+          </Col>
+          <Col className="auth-text-container" md={{ span: 5, offset: 2 }}>
+            <h1>WELCOME BACK TO</h1>
+            <h1>
+              <strong>PRESENT & STUDY</strong>
+            </h1>
+            <h2>Learn and share knowledge</h2>
+            <p>
+              Join a group, watch a presentation, ask questions,... You can
+              learn from others as much as others can learn from you.
+            </p>
+          </Col>
+        </Row>
       ) : (
-        <div className="box-verify" style={{ marginTop: "10%" }}>
-          <img
-            src={errorImage}
-            style={{
-              height: "200px",
-              width: "200px",
-              margin: "0px auto",
-              display: "block"
-            }}
-            alt="error404_img"
-          />
-          <h1 style={{ textAlign: "center" }}>404 Not Found</h1>
-        </div>
+        <Row>
+          <Col>
+            <img
+              src={errorImage}
+              style={{
+                height: "200px",
+                width: "200px",
+                margin: "6rem auto 1rem",
+                display: "block"
+              }}
+              alt="error404_img"
+            />
+            <h1 style={{ textAlign: "center" }}>404 Not Found</h1>
+          </Col>
+        </Row>
       )}
     </Container>
   );
