@@ -4,25 +4,18 @@ import { useParams } from "react-router-dom";
 import ScrollToBottom from "react-scroll-to-bottom";
 import { getAllChat } from "../../fetch/presentationFetch";
 import { getNameAndCreator } from "../../fetch/slideFetch";
+import { getLoggedInUserId, getLoggedInUsername } from "../../util/ultilis";
 import { SocketContext } from "../socket/Socket";
 import "./Chat.css";
-
-function getUserId() {
-  const accessToken = localStorage.getItem("accessToken");
-  if (accessToken === null) {
-    return null;
-  }
-  return JSON.parse(atob(accessToken.split(".")[1])).user.users_id;
-}
 
 export default function Chat() {
   const [currentMessage, setCurrentMessage] = useState("");
   const [messageList, setMessageList] = useState([]);
-  const [username, setUsername] = useState("");
   const [presentInfo, setPresentInfo] = useState([]);
   const socket = useContext(SocketContext);
-  const userID = getUserId();
+  const userID = getLoggedInUserId();
   const param = useParams();
+  const username = getLoggedInUsername();
 
   const sendMessage = async () => {
     if (currentMessage !== "") {
@@ -55,12 +48,6 @@ export default function Chat() {
     getAllChat(param.presentId)
       .then((data) => {
         setMessageList(data);
-        for (let i = 0; i < data.length; i++) {
-          if (data[i].author === userID) {
-            setUsername(data[i].name);
-            break;
-          }
-        }
       })
       .catch((error) => console.log(error));
     getNameAndCreator(param.presentId)

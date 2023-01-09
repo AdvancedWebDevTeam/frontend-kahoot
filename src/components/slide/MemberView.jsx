@@ -12,7 +12,7 @@ import {
 
 import { SocketContext } from "../socket/Socket";
 import "./MemberView.css";
-import { getSlidePresent, submitSlide } from "../../fetch/slideFetch";
+import { getSlidePresent, getSubmitContent, submitSlide } from "../../fetch/slideFetch";
 import {
   Navigate,
   useLocation,
@@ -23,14 +23,7 @@ import headingImg from "./heading.png";
 import paragraphImg from "./paragraph.png";
 import Chat from "../chat/Chat";
 import { getMembersInGroup } from "../../fetch/groupFetch";
-
-function getUserId() {
-  const accessToken = localStorage.getItem("accessToken");
-  if (accessToken === null) {
-    return null;
-  }
-  return JSON.parse(atob(accessToken.split(".")[1])).user.users_id;
-}
+import { getLoggedInUserId } from "../../util/ultilis";
 
 export default function MemberView() {
   const [slide, setSlide] = useState([]);
@@ -40,21 +33,25 @@ export default function MemberView() {
   const [count, setCount] = useState(0);
   const [showAlert, setShowAlert] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const socket = useContext(SocketContext);
   const token = localStorage.getItem("accessToken");
   const location = useLocation();
-  const userID = getUserId();
+  const userID = getLoggedInUserId();
   const navigate = useNavigate();
   const param = useParams();
 
   useEffect(() => {
     socket.on("clickedSlide", (data) => {
       setSlide(data.listOfSlide[data.indexSlide]);
+      if (data.listOfSlide[data.indexSlide]) {
+        navigate("/");
+      }
       setOptions(
-        Object.getOwnPropertyNames(data.listOfSlide[data.indexSlide].options)
+        Object.getOwnPropertyNames(data.listOfSlide[data.indexSlide]?.options)
       );
-      setPresentID(data.listOfSlide[data.indexSlide].presents_id);
+      setPresentID(data.listOfSlide[data.indexSlide]?.presents_id);
     });
     socket.on("NotifyMessage", () => {
       setCount((prevCount) => prevCount + 1);
@@ -77,12 +74,22 @@ export default function MemberView() {
     getSlidePresent(param.presentId)
       .then((data) => {
         setSlide(data.listOfSlides[data.indexSlide.index_slide]);
+        if (data.listOfSlides[data.indexSlide.index_slide]) {
+          navigate("/");
+        }
+        getSubmitContent(data.listOfSlides[data.indexSlide.index_slide]?.slides_id)
+        .then((data) => {
+          const submit = data.find((element) => element.users_id === userID);
+          if (submit && userID !== null) {
+            setIsSubmitted(true);
+          }
+        });
         setOptions(
           Object.getOwnPropertyNames(
-            data.listOfSlides[data.indexSlide.index_slide].options
+            data.listOfSlides[data.indexSlide.index_slide]?.options
           )
         );
-        setPresentID(data.indexSlide.presents_id);
+        setPresentID(data.indexSlide?.presents_id);
       })
       .catch((err) => console.log(err));
   }, []);
@@ -90,9 +97,10 @@ export default function MemberView() {
   const onSubmit = (e) => {
     e.preventDefault();
     if (result !== "") {
-      submitSlide(presentId, slide.slides_id, slide.question, result);
+      submitSlide(presentId, slide.slides_id, slide.question, result, new Date(), userID).then(data => console.log(data));
       setResult("");
       setShowAlert(true);
+      setIsSubmitted(true);
     }
   };
 
@@ -166,9 +174,10 @@ export default function MemberView() {
                   />
                 </div>
               ))}
-              <Button variant="primary" type="submit" className="btnSubmit">
+              <Button variant="primary" type="submit" className="btnSubmit" disabled={isSubmitted}>
                 Submit
               </Button>
+              {isSubmitted && <Form.Text>You have already submitted!</Form.Text>}
             </Form>
           </>
         ) : slide.types_id === 2 ? (
