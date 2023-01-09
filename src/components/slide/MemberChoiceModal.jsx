@@ -14,7 +14,7 @@ export default function MemberChoiceModal({ slideId, show, handleCloseHistory, c
 
     useEffect(() => {
         getSubmitContent(slideId).then((data) => {
-            setListChoice(data);
+            setListChoice(data.reverse());
         });
     }, [slideId, countHistory]);
 
@@ -22,7 +22,7 @@ export default function MemberChoiceModal({ slideId, show, handleCloseHistory, c
         socket.on("submitSlide", (data) => {
             const slide = data.find((element) => element?.slides_id === slideId);
             getSubmitContent(slide?.slides_id).then((data) => {
-                setListChoice(data);
+                setListChoice(data.reverse());
             });
         })
     }, [socket])
@@ -33,7 +33,7 @@ export default function MemberChoiceModal({ slideId, show, handleCloseHistory, c
                 <Modal.Header closeButton>Submit-Content</Modal.Header>
                 <Modal.Body>
                     {listChoice.length === 0 && "There is no submitted"}
-                    {listChoice.reverse().map((item) => (
+                    {listChoice.map((item) => (
                         <div className="history">
                             <div className="history-content">
                                 <div>
