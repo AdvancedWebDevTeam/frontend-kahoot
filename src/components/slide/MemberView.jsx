@@ -40,6 +40,7 @@ export default function MemberView() {
   const [count, setCount] = useState(0);
   const [showAlert, setShowAlert] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const socket = useContext(SocketContext);
   const token = localStorage.getItem("accessToken");
@@ -90,7 +91,7 @@ export default function MemberView() {
   const onSubmit = (e) => {
     e.preventDefault();
     if (result !== "") {
-      submitSlide(presentId, slide.slides_id, slide.question, result);
+      submitSlide(presentId, slide.slides_id, slide.question, result, new Date(), userID);
       setResult("");
       setShowAlert(true);
     }

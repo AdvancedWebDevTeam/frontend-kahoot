@@ -58,11 +58,13 @@ export async function deleteSlide(slideId) {
   return result.data;
 }
 
-export async function submitSlide(presentId, slideId, question, choice) {
+export async function submitSlide(presentId, slideId, question, choice, date, userID) {
   const url = `${process.env.REACT_APP_API_URL}/slides/submit/${presentId}/${slideId}`;
   const data = {
     question,
-    choice
+    choice,
+    date,
+    userID
   };
   const result = await postRequest(url, data);
   return result.data;
