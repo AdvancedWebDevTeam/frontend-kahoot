@@ -104,7 +104,7 @@ export default function MemberView() {
         setPresentID(data.indexSlide?.presents_id);
       })
       .catch((err) => console.log(err));
-  }, [slide.types_id, options]);
+  }, []);
 
   const onSubmit = (e) => {
     e.preventDefault();

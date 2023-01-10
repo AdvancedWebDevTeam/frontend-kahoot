@@ -116,18 +116,17 @@ export default function Slide() {
     getAllSlides(params.presentId)
       .then((data) => {
         setListOfSlides(data);
+        const result = {
+          presents_id: params.presentId,
+          indexSlide: selectedIndex,
+          listOfSlide: data
+        };
+    
+        socket.emit("clickedSlide", result);
       })
       .catch((err) => {
         console.log(err);
       });
-
-    const data = {
-      presents_id: params.presentId,
-      indexSlide: selectedIndex,
-      listOfSlide: listOfSlides
-    };
-
-    socket.emit("clickedSlide", data);
   }, [isFetch]);
 
   useEffect(() => {
