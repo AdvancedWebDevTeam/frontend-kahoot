@@ -179,8 +179,12 @@ export default function Slide() {
   };
 
   const FetchListOfSlide = () => {
-    const flag = !isFetch;
-    setIsFetch(flag);
+    if(isFetch === false){
+      setIsFetch(true);
+    }
+    else{
+      setIsFetch(false);
+    }
   };
 
   const createSlideClick = () => {
@@ -290,11 +294,10 @@ export default function Slide() {
                 text={
                   <>
                     Remove slide number{" "}
-                    <strong>{selectedIndex}</strong>
+                    <strong>{selectedIndex + 1}</strong>
                   </>
                 }
                 onDelete={() => handleDelete()}
-                style={{ marginLeft: "5px" }}
               />
           </TooltipTrigger>
           <TooltipTrigger text="Present slides">
