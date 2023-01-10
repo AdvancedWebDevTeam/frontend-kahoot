@@ -3,14 +3,13 @@ import { Button, Modal } from "react-bootstrap";
 import CollaboratorCard from "./CollaboratorCard";
 import NewCollaboratorForm from "./NewCollaboratorForm";
 import { getLoggedInUserId } from "../../../util/ultilis";
-import { getAllUsers } from "../../../fetch/userFetch";
 
 function areEqualCollaboratorsArray(arr1, arr2) {
   if (arr1.length !== arr2.length) {
     return false;
   }
 
-  for (let i = 0; i < arr1.length; i++) {
+  for (let i = 0; i < arr1.length; i += 1) {
     if (arr1[i].userId !== arr2[i].userId) {
       return false;
     }
@@ -53,13 +52,15 @@ function AssignCollaboratorsModal({
 
   useEffect(() => {
     setCollaborators(target.collaborators ?? []);
-  }, [target]);
+  }, [target.collaborators]);
 
   function submitCollaborators() {
     const collabList = [...collaborators, ...newCollabs];
     console.debug("submitCollaborators", collabList);
     if (!areEqualCollaboratorsArray(collabList, target.collaborators)) {
       onSubmit(true, target.presents_id, collabList);
+      setNewCollabs([]);
+      setCollaborators([]);
     } else {
       onSubmit(false, null, null);
     }
@@ -89,12 +90,12 @@ function AssignCollaboratorsModal({
               key={collaborator.userId}
               collaborator={collaborator}
               allowDelete={target["user.users_id"] === getLoggedInUserId()}
-              onRemoveCollaborator={removeCollaborator}
+              onRemoveCollaborator={(userId) => removeCollaborator(userId)}
             />
           ))}
           <NewCollaboratorForm
             options={potentialCollabOptions}
-            onAdd={addCollaborators}
+            onAdd={(collabs) => addCollaborators(collabs)}
           />
         </div>
       </Modal.Body>
@@ -103,7 +104,7 @@ function AssignCollaboratorsModal({
         <Button variant="outline-secondary" onClick={onHide}>
           Cancel
         </Button>
-        <Button variant="primary" onClick={submitCollaborators}>
+        <Button variant="primary" onClick={() => submitCollaborators()}>
           Save
         </Button>
       </Modal.Footer>

@@ -197,6 +197,9 @@ export default function Presentation() {
           </div>
         </div>
       ))}
+      {listOfPresent.length === 0 && (
+        <h5>There is no presentation right now</h5>
+      )}
       <div>
         <Button
           onClick={backToGroupClick}

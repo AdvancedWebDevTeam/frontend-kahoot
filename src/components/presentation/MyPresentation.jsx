@@ -4,7 +4,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import {
   BsEyeFill,
-  BsFillTrashFill,
   BsPatchQuestionFill,
   BsPencilSquare,
   BsPeopleFill
@@ -74,7 +73,6 @@ export default function MyPresentation() {
     navigate(`/slides/mypresent/show/${id}`);
   };
 
-  // TODO: check this function out!
   const deleteClick = async (id) => {
     await deletePresentation(id);
     setListOfPresent((prevList) =>
@@ -136,16 +134,17 @@ export default function MyPresentation() {
     setAssignTarget({});
 
     if (hasChange) {
-      const newListOfPresent = listOfPresent.map((item) => {
-        if (item.presents_id === presentId) {
-          return {
-            ...item,
-            collaborators: newColaborators
-          };
-        }
-        return item;
+      setListOfPresent((prevList) => {
+        return prevList.map((item) => {
+          if (item.presents_id === presentId) {
+            return {
+              ...item,
+              collaborators: newColaborators
+            };
+          }
+          return item;
+        });
       });
-      setListOfPresent(newListOfPresent);
 
       await updatePresentationCollaborators(presentId, newColaborators);
     }

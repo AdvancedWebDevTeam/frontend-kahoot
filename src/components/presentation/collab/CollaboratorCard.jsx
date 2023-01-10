@@ -22,7 +22,7 @@ export default function CollaboratorCard({
         <Button
           className="fs-7 m-1"
           variant="danger"
-          onClick={removeCollaborator}
+          onClick={() => removeCollaborator()}
         >
           Yes
         </Button>

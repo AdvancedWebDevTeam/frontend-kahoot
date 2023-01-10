@@ -4,7 +4,7 @@ import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import { BsTrash } from "react-icons/bs";
 
 export default function DeleteButton(props) {
-  const { text, onDelete, style } = props;
+  const { text, onDelete, style, ...restOfProps } = props;
   // use ref to force click button to hide popover. useState does not work
   const deleteBtnRef = useRef(null);
 
@@ -47,7 +47,12 @@ export default function DeleteButton(props) {
       rootClose
       overlay={popover}
     >
-      <Button variant="outline-danger" style={style} ref={deleteBtnRef}>
+      <Button
+        variant="outline-danger"
+        style={style}
+        ref={deleteBtnRef}
+        {...restOfProps}
+      >
         <BsTrash />
       </Button>
     </OverlayTrigger>

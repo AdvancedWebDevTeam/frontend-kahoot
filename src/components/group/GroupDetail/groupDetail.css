@@ -1,26 +1,38 @@
 .group-detail .title {
-    font-weight: bold;
-    margin-bottom: .5rem;
+  font-weight: bold;
+  margin-bottom: .5rem;
 }
 
 .group-detail .btns {
-    display: flex;
-    gap: .5rem;
+  display: flex;
+  gap: .5rem;
 }
 
 .member-list {
-    margin-top: 2rem;
+  margin-top: 2rem;
 }
 
 .member-list .title {
-    font-size: 1.5em;
-    font-weight: bold;
-    margin-bottom: .5rem;
+  font-size: 1.5em;
+  font-weight: bold;
+  margin-bottom: .5rem;
 }
 
 .member-list .button {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: .5em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: .5em;
+}
+
+.edit-role-body h3 {
+  font-size: 1.6rem;
+  font-weight: 500;
+}
+
+.edit-role-subtitle {
+  font-size: 1rem;
+  font-weight: 300;
+  font-style: italic;
+  margin-bottom: .5rem;
 }

@@ -105,7 +105,7 @@ function GroupDetail({ group, roles, onDeleteGroup }) {
     <div className="group-detail">
       {showAlert && alert}
       <h1 className="title">{capitalizeFirstLetter(group.groups_name)}</h1>
-      <p>Số lượng thành viên: {members.length}</p>
+      <p>Number of members: {members.length}</p>
       <MemberList
         members={members}
         groupId={group.groups_id}
@@ -116,7 +116,7 @@ function GroupDetail({ group, roles, onDeleteGroup }) {
         kickMember={(memberId) => kickMember(memberId)}
       />
       <div className="btns">
-        <Button onClick={viewPresentClick}>View Presentation</Button>
+        <Button onClick={viewPresentClick}>Group's Presentation</Button>
         {canDeleteGroup() && (
           <DeleteButton
             text={

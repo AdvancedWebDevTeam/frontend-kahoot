@@ -4,6 +4,7 @@ import { BsFillTrashFill, BsPencilFill } from "react-icons/bs";
 import EditRoleModal from "./EditRoleModal";
 import Tag from "../../general/Tag";
 import { getLoggedInUserId } from "../../../util/ultilis";
+import DeleteButton from "../../general/DeleteButton";
 
 function getTbody(
   members,
@@ -24,9 +25,10 @@ function getTbody(
             ? "warning"
             : null;
         const isCurrentUser = member.userId === getLoggedInUserId();
-        const hasLowerRole = member.roleId < currentUserRoleId;
+        const hasLowerOrEqualRole = member.roleId <= currentUserRoleId;
         const canBeKicked = member.roleId > currentUserRoleId;
-        const canBeEdited = canEditRole && !isCurrentUser && !hasLowerRole;
+        const canBeEdited =
+          canEditRole && !isCurrentUser && !hasLowerOrEqualRole;
 
         function kick() {
           kickMember(member.userId);
@@ -54,14 +56,16 @@ function getTbody(
             </td>
             <td>
               {canBeKicked && (
-                <Button
+                <DeleteButton
+                  text={
+                    <>
+                      Are you sure you want to kick{" "}
+                      <strong>{member.username}</strong>?
+                    </>
+                  }
+                  onDelete={() => kick()}
                   size="sm"
-                  className="button"
-                  variant="outline-danger"
-                  onClick={kick}
-                >
-                  <BsFillTrashFill />
-                </Button>
+                />
               )}
             </td>
           </tr>
@@ -116,7 +120,6 @@ function MemberList({ members, groupId, changeMemberRole, roles, kickMember }) {
 
   return (
     <div className="member-list">
-      <h2 className="title">Danh sách thành viên</h2>
       <Table striped>
         <thead>
           <th>#</th>
@@ -140,8 +143,10 @@ function MemberList({ members, groupId, changeMemberRole, roles, kickMember }) {
         show={showEditModal}
         groupId={groupId}
         member={editingMember}
-        close={closeEditModal}
-        changeRole={saveRoleChange}
+        close={() => closeEditModal()}
+        changeRole={(userId, newRoleName) =>
+          saveRoleChange(userId, newRoleName)
+        }
         roles={roles}
       />
     </div>

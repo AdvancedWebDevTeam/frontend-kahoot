@@ -51,7 +51,7 @@ export default function AppNavBar({ user, buttonSignOutClicked }) {
   const activeKey = getActiveKey(location.pathname);
 
   return (
-    <Navbar collapseOnSelect expand="md" bg="light" variant="light">
+    <Navbar collapseOnSelect expand="md" bg="light" variant="light" className="app-nav">
       <Container>
         <Navbar.Brand href="/">
           <img

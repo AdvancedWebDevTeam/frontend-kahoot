@@ -33,10 +33,10 @@ function EditRoleModal({
       <Modal.Header closeButton>
         <Modal.Title>Change member's role</Modal.Title>
       </Modal.Header>
-      <Modal.Body>
+      <Modal.Body className="edit-role-body">
         <h3>{member.username}</h3>
-        <p>{member.userId}</p>
-        <p>{member.email}</p>
+        <p className="edit-role-subtitle">{member.userId}</p>
+        <p>Email: {member.email}</p>
 
         <p style={{ marginTop: ".5rem" }}>Role:</p>
         <Form.Select value={roleName} onChange={handleChange}>
