@@ -44,18 +44,29 @@ export default function MemberView() {
 
   useEffect(() => {
     socket.on("clickedSlide", (data) => {
-      setSlide(data.listOfSlide[data.indexSlide]);
-      if (data.listOfSlide[data.indexSlide]) {
+      if (data.listOfSlide[data.indexSlide] === undefined) {
         navigate("/");
       }
+      setSlide(data.listOfSlide[data.indexSlide]);
+      getSubmitContent(data.listOfSlide[data.indexSlide]?.slides_id)
+        .then((data) => {
+          const submit = data.find((element) => element.users_id === userID);
+          if (submit && userID !== null) {
+            setIsSubmitted(true);
+          } else {
+            setIsSubmitted(false);
+          }
+        });
       setOptions(
         Object.getOwnPropertyNames(data.listOfSlide[data.indexSlide]?.options)
       );
       setPresentID(data.listOfSlide[data.indexSlide]?.presents_id);
     });
+
     socket.on("NotifyMessage", () => {
       setCount((prevCount) => prevCount + 1);
     });
+
     return () => {
       socket.off("clickedSlide");
       socket.off("NotifyMessage");
@@ -71,12 +82,13 @@ export default function MemberView() {
         }
       });
     }
+    
     getSlidePresent(param.presentId)
       .then((data) => {
-        setSlide(data.listOfSlides[data.indexSlide.index_slide]);
-        if (data.listOfSlides[data.indexSlide.index_slide]) {
+        if (data.listOfSlides[data.indexSlide.index_slide] === undefined) {
           navigate("/");
         }
+        setSlide(data.listOfSlides[data.indexSlide.index_slide]);
         getSubmitContent(data.listOfSlides[data.indexSlide.index_slide]?.slides_id)
         .then((data) => {
           const submit = data.find((element) => element.users_id === userID);
@@ -92,12 +104,12 @@ export default function MemberView() {
         setPresentID(data.indexSlide?.presents_id);
       })
       .catch((err) => console.log(err));
-  }, []);
+  }, [slide.types_id, options]);
 
   const onSubmit = (e) => {
     e.preventDefault();
     if (result !== "") {
-      submitSlide(presentId, slide.slides_id, slide.question, result, new Date(), userID).then(data => console.log(data));
+      submitSlide(presentId, slide.slides_id, slide.question, result, new Date(), userID);
       setResult("");
       setShowAlert(true);
       setIsSubmitted(true);

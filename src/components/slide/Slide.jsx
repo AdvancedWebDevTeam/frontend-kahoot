@@ -48,6 +48,7 @@ import headingImg from "./heading.png";
 import { getLoggedInUserId } from "../../util/ultilis";
 import MemberChoiceModal from "./MemberChoiceModal";
 import DeleteButton from "../general/DeleteButton";
+import { set } from "react-hook-form";
 
 ChartJS.register(
   CategoryScale,
@@ -239,8 +240,13 @@ export default function Slide() {
 
   const handleDelete = () => {
     if (selectedIndex < listOfSlides.length && selectedIndex >= 0) {
-      deleteSlide(listOfSlides[selectedIndex].slides_id);
-      FetchListOfSlide();
+      const slideDelete = listOfSlides[selectedIndex];
+      deleteSlide(slideDelete.slides_id);
+      if (selectedIndex === listOfSlides.length - 1) {
+        setSelectedIndex((prev) => prev - 1);
+      }
+      setListOfSlides((prevList) =>
+        prevList.filter((slide) => slide.slides_id !== slideDelete.slides_id));
     }
   };
 
