@@ -48,7 +48,6 @@ import headingImg from "./heading.png";
 import { getLoggedInUserId } from "../../util/ultilis";
 import MemberChoiceModal from "./MemberChoiceModal";
 import DeleteButton from "../general/DeleteButton";
-import { set } from "react-hook-form";
 
 ChartJS.register(
   CategoryScale,
@@ -64,7 +63,6 @@ export default function Slide() {
   const [presentInfo, setPresentInfo] = useState([]);
   const [listOfSlideTypes, setListofSlideTypes] = useState([]);
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const [isFetch, setIsFetch] = useState(false);
   const [isShowModal, setIsShowModal] = useState(false);
   const [linkShare, setLinkShare] = useState(``);
   const [currentUserId, setCurrentUserId] = useState("");
@@ -127,7 +125,7 @@ export default function Slide() {
       .catch((err) => {
         console.log(err);
       });
-  }, [isFetch]);
+  }, []);
 
   useEffect(() => {
     socket.on("submitSlide", (data) => {
@@ -178,17 +176,13 @@ export default function Slide() {
     setListOfSlides(newList);
   };
 
-  const FetchListOfSlide = () => {
-    if(isFetch === false){
-      setIsFetch(true);
-    }
-    else{
-      setIsFetch(false);
-    }
+  const FetchListOfSlide = async () => {
+    const data = await getAllSlides(params.presentId);
+    setListOfSlides(data);
   };
 
-  const createSlideClick = () => {
-    addSlide(params.presentId, 0, "").catch((err) => {
+  const createSlideClick = async () => {
+    await addSlide(params.presentId, 0, "").catch((err) => {
       console.log(err);
     });
     FetchListOfSlide();

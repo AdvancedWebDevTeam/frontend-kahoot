@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { Button, Form, InputGroup } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { BiSave } from "react-icons/bi";
-import { BsArrowCounterclockwise } from "react-icons/bs";
 import { updateSlide } from "../../fetch/slideFetch";
 import "./Slide.css";
 import TooltipTrigger from "../general/TooltipTrigger";
@@ -57,12 +56,12 @@ export default function EditSlide({
     onChangeType(e.target.options.selectedIndex, e.target.value);
   };
 
-  const onHandleSubmit = (data) => {
+  const onHandleSubmit = async (data) => {
     const newData = { ...data };
 
     switch (typeId) {
       case 0: {
-        updateSlide(
+        await updateSlide(
           listOfSlides[selectedIndex].slides_id,
           listOfSlides[selectedIndex].presents_id,
           typeId,
@@ -84,7 +83,7 @@ export default function EditSlide({
           }
         });
 
-        updateSlide(
+        await updateSlide(
           listOfSlides[selectedIndex].slides_id,
           listOfSlides[selectedIndex].presents_id,
           typeId,
@@ -99,7 +98,7 @@ export default function EditSlide({
         const content = {};
         content.heading = heading2;
         content.subheading = Subheading;
-        updateSlide(
+        await updateSlide(
           listOfSlides[selectedIndex].slides_id,
           listOfSlides[selectedIndex].presents_id,
           typeId,
@@ -114,7 +113,7 @@ export default function EditSlide({
         const content = {};
         content.heading = heading3;
         content.paragraph = Paragraph;
-        updateSlide(
+        await updateSlide(
           listOfSlides[selectedIndex].slides_id,
           listOfSlides[selectedIndex].presents_id,
           typeId,
