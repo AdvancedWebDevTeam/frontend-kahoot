@@ -16,6 +16,9 @@ import { JoinRoomSocket } from "./JoinRoomSocket";
 import Chat from "../chat/Chat";
 import NotifyChat from "./NotifyChat";
 import AppNavBar from "../general/AppNavbar";
+import { useContext } from "react";
+import { SocketContext } from "../socket/Socket";
+import { getLoggedInUserId } from "../../util/ultilis";
 
 export default function Home() {
   const [user, setUser] = useState({
@@ -24,6 +27,7 @@ export default function Home() {
     email: ""
   });
   const navigate = useNavigate();
+  const socket = useContext(SocketContext);
 
   const buttonSignOutClicked = () => {
     const newUser = {
@@ -33,6 +37,7 @@ export default function Home() {
     };
     setUser(newUser);
     localStorage.removeItem("accessToken");
+    socket.emit("LogOut", getLoggedInUserId());
     navigate("/");
   };
 
