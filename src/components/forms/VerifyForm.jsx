@@ -26,7 +26,7 @@ export default function VerifyForm() {
           setValidUrl(true);
           setTimeout(() => {
             navigate("/login");
-          }, 1000);
+          }, 1500);
         });
     }
   };
@@ -39,7 +39,7 @@ export default function VerifyForm() {
     <Container fluid>
       <Row>
         <Col>
-          {validUrl === false ? (
+          {validUrl === true ? (
             <div className="box-verify" style={{ marginTop: "10%" }}>
               <img
                 src={successImage}

@@ -1,16 +1,17 @@
 import "./verify.css";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import successImage from "./success.png";
 
 export default function LoginGoogleSuccess() {
   const params = useParams();
+  const navigate = useNavigate();
   useEffect(() => {
     localStorage.setItem("accessToken", JSON.stringify(params.token));
-    // setTimeout(() => {
-    //   navigate("/");
-    // }, 1000);
+    setTimeout(() => {
+      navigate("/");
+    }, 1000);
   }, []);
   return (
     <Container fluid>

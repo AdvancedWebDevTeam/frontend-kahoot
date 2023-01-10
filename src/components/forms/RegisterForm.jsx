@@ -107,20 +107,6 @@ export default function RegisterForm() {
                 <div>password is required</div>
               </Form.Text>
             )}
-
-            {status === 401 && (
-              <Form.Text className="text-danger">
-                <h5>{message}</h5>
-              </Form.Text>
-            )}
-            {isVerify === 0 && (
-              <Form.Text className="text-success">
-                <h5>
-                  An email has sent to verify your account. Token is about to
-                  expire in 15 minutes
-                </h5>
-              </Form.Text>
-            )}
             <Form.Group className="md-3">
               <Form.Label>Confirm password</Form.Label>
               <Form.Control
@@ -143,6 +129,20 @@ export default function RegisterForm() {
             {errors.confirmpassword?.type === "validate" && (
               <Form.Text className="text-danger">
                 <div>Your passwords do no match</div>
+              </Form.Text>
+            )}
+            
+            {status === 401 && (
+              <Form.Text className="text-danger">
+                <h5>{message}</h5>
+              </Form.Text>
+            )}
+            {isVerify === 0 && (
+              <Form.Text className="text-success">
+                <h5>
+                  An email has sent to verify your account. Token is about to
+                  expire in 15 minutes
+                </h5>
               </Form.Text>
             )}
 
