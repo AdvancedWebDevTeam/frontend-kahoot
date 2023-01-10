@@ -43,7 +43,7 @@ export default function ResetPasswordForm() {
         userId: id
       })
       .then(() => {
-        navigate("/");
+        navigate("/login");
       })
       .catch((error) => {
         setStatus(error.response.status);
