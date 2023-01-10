@@ -75,9 +75,10 @@ export default function Presentation() {
     navigate(`/slides/${params.groupId}/show/${id}`);
   };
 
-  const deleteClick = (id) => {
-    deletePresentation(id);
-    window.location.reload();
+  const deleteClick = async (id) => {
+    await deletePresentation(id);
+    setListOfPresent((prevList) =>
+      prevList.filter((present) => present.presents_id !== id));
   };
 
   useEffect(() => {
@@ -174,18 +175,15 @@ export default function Presentation() {
                     <BsPencilSquare />
                   </Button>
                   <DeleteButton
-                    onDelete={() => deleteClick(present.presents_id)}
-                    variant="outline-danger"
-                    style={{ marginLeft: "5px" }}
                     text={
                       <>
-                        Are you sure to delete{" "}
+                        Remove presentation{" "}
                         <strong>{present.presents_name}</strong>?
                       </>
                     }
-                  >
-                    <BsFillTrashFill />
-                  </DeleteButton>
+                    onDelete={() => deleteClick(present.presents_id)}
+                    style={{ marginLeft: "5px" }}
+                  />
                 </>
               )}
               <Button

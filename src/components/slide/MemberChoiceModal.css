@@ -1,0 +1,22 @@
+.history {
+    box-shadow: rgba(0, 0, 0, 0.24) 0 3px 8px;
+    border-radius: 5px;
+    margin: 1rem 0;
+    padding: 1rem;
+}
+
+.history-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.history-content h1 {
+    font-size: 1rem;
+}
+
+.history-content p {
+    font-size: .8rem;
+    font-style: italic;
+    color: #606060;
+}
