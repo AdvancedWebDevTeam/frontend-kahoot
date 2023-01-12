@@ -179,6 +179,13 @@ export default function Slide() {
   const FetchListOfSlide = async () => {
     const data = await getAllSlides(params.presentId);
     setListOfSlides(data);
+    const result = {
+      presents_id: params.presentId,
+      indexSlide: selectedIndex,
+      listOfSlide: data
+    };
+
+    socket.emit("clickedSlide", result);
   };
 
   const createSlideClick = async () => {
