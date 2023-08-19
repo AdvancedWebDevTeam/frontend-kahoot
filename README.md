@@ -1,3 +1,9 @@
+# Link website
+https://vercel.com/khoa2212/frontend-kahoot-7xgk
+
+# Demo
+https://drive.google.com/file/d/1jJhk6g-ZSosJj9MZ_r_sh7kQlsRNG3fw/view?usp=sharing
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
